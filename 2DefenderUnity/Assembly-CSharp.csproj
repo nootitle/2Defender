@@ -53,33 +53,33 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Player.cs" />
-    <Compile Include="Assets\SkillSlotController.cs" />
-    <Compile Include="Assets\LoadData.cs" />
-    <Compile Include="Assets\SlotController.cs" />
-    <Compile Include="Assets\billboard.cs" />
+    <Compile Include="Assets\Player\Player.cs" />
+    <Compile Include="Assets\Player\SkillSlotController.cs" />
+    <Compile Include="Assets\Player\LoadData.cs" />
+    <Compile Include="Assets\Player\SlotController.cs" />
+    <Compile Include="Assets\Asset\Script\etc\MoveBackground.cs" />
+    <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\Lighting.cs" />
+    <Compile Include="Assets\Asset\Map\UnderwaterFantasy\Scripts\Perspective2DSortMode.cs" />
+    <Compile Include="Assets\Asset\Script\etc\Sensor_HeroKnight.cs" />
+    <Compile Include="Assets\Player\billboard.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\PrototypeHero.cs" />
-    <Compile Include="Assets\DragController.cs" />
+    <Compile Include="Assets\Player\DragController.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\ColorSwap\ColorSwap_Prototype.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\Dust_DestroyEvent.cs" />
     <Compile Include="Assets\Asset\Material\Effect\SelfDestruct.cs" />
-    <Compile Include="Assets\CameraController.cs" />
+    <Compile Include="Assets\Player\CameraController.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\PrototypeHeroAnimEvents.cs" />
+    <Compile Include="Assets\Asset\Script\etc\HeroKnight.cs" />
+    <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\ConGUI.cs" />
     <Compile Include="Assets\Asset\Material\Effect\AnimationHelper.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\Sensor_Prototype.cs" />
-    <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\AudioManager_PrototypeHero.cs" />
-    <Compile Include="Assets\PlayerController.cs" />
-    <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\GrabableLedge.cs" />
-    <Compile Include="Assets\SkillInvenController.cs" />
-    <Compile Include="Assets\Asset\Script\etc\MoveBackground.cs" />
     <Compile Include="Assets\Asset\Shader\ColorSwap\ColorSwap_HeroKnight.cs" />
-    <Compile Include="Assets\Asset\Script\etc\HeroKnight.cs" />
-    <Compile Include="Assets\Asset\Script\etc\DestroyEvent_HeroKnight.cs" />
-    <Compile Include="Assets\Asset\Script\etc\Sensor_HeroKnight.cs" />
-    <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\ConGUI.cs" />
-    <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\Lighting.cs" />
-    <Compile Include="Assets\Asset\Map\UnderwaterFantasy\Scripts\Perspective2DSortMode.cs" />
     <Compile Include="Assets\Asset\Map\UnderwaterFantasy\Scripts\Done_BGScroller.cs" />
+    <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\AudioManager_PrototypeHero.cs" />
+    <Compile Include="Assets\Player\PlayerController.cs" />
+    <Compile Include="Assets\Asset\Script\etc\DestroyEvent_HeroKnight.cs" />
+    <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\GrabableLedge.cs" />
+    <Compile Include="Assets\Player\SkillInvenController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />
