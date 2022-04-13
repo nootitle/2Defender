@@ -19,6 +19,7 @@ public class Skeleton_Melee : MonoBehaviour
     bool _jumpTrigger = false;
     bool _isAttacking = false;
     bool _isStun = false;
+    bool _isDie = false;
     Coroutine _stunCo;
     Coroutine _extraHitCo;
 
@@ -45,6 +46,7 @@ public class Skeleton_Melee : MonoBehaviour
     {
         //jump();
 
+        if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
 
@@ -150,16 +152,50 @@ public class Skeleton_Melee : MonoBehaviour
     {
         _pc.DamagedAnim();
         _hp -= value;
-        _isStun = true;
-        if (_stunCo != null) StopCoroutine(_stunCo);
-        _stunCo = StartCoroutine("Stun");
+        if (_hp <= 0)
+            Die();
+        else
+        {
+            _isStun = true;
+            if (_stunCo != null) StopCoroutine(_stunCo);
+            _stunCo = StartCoroutine("Stun");
+        }
+    }
+
+    void Die()
+    {
+        _pc.DieAnim();
+        _isDie = true;
+        StartCoroutine(SelfDestroy());
+    }
+
+    IEnumerator SelfDestroy()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        EnemyManager.Instance.deathCount();
+        this.gameObject.SetActive(false);
+    }
+
+    public void respawn()
+    {
+        _isDie = false;
+        _isStun = false;
+    }
+
+    public bool GetDead()
+    {
+        return _isDie;
     }
 
     IEnumerator Stun()
     {
         yield return new WaitForSeconds(_stun);
 
-        _isStun = false;
-        _pc.MoveAnim(false, _rb.velocity.x);
+        if (!_isDie)
+        {
+            _isStun = false;
+            _pc.MoveAnim(false, _rb.velocity.x);
+        }
     }
 }

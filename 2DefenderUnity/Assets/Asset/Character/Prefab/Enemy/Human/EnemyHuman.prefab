@@ -262,15 +262,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 100
-  _jumpPower: 5
+  _jumpPower: 70
   _walkSpeed: 5
   _sprintSpeed: 10
   _patrolRange: 10
-  _attackDistance: 1
+  _chaseRange: 4
+  _attackDistance: 4
   _attackDelay: 2
   _attackDamage: 2
   _stun: 0.5
-  _mapInterval: 30
   _pc: {fileID: 3668552796115643126}
   _target: {fileID: 0}
 --- !u!114 &3668552796289543808

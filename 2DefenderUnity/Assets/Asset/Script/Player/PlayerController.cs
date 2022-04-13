@@ -8,7 +8,9 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _sr;
     Rigidbody2D _rb;
     bool _isjumping = false;
+    bool _isRunning = false;
     public bool flip;
+    [SerializeField] bool _joyStickMode = true;
 
     void Start()
     {
@@ -20,17 +22,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
+        if(!_joyStickMode)
+        {
+            float x = Input.GetAxis("Horizontal");
+            float y = Input.GetAxis("Vertical");
 
-        if (x < 0)
-            _sr.flipX = true;
-        else if(x > 0)
-            _sr.flipX = false;
-        flip = _sr.flipX;
+            if (x < 0)
+                _sr.flipX = true;
+            else if (x > 0)
+                _sr.flipX = false;
+            flip = _sr.flipX;
 
-        jump();
-        Move(x, y);        
+            if (Input.GetKeyDown(KeyCode.Space))
+                jump();
+            Move(x, y);
+        }  
     }
 
     private void Move(float x, float y)
@@ -61,17 +67,53 @@ public class PlayerController : MonoBehaviour
         _animator.SetFloat("Speed", x);
     }
 
-    private void jump()
+    public void MoveForJoyStick(float Hor)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (_isjumping) return;
+
+        if (Hor != 0.0f && _isRunning)
         {
-            if(!_isjumping)
+            _animator.ResetTrigger("Walk");
+            _animator.ResetTrigger("Idle");
+            _animator.SetTrigger("Run");
+        }
+        else
+        {
+            _animator.ResetTrigger("Run");
+            if (Hor != 0.0f)
             {
-                _isjumping = true;
-                _animator.SetTrigger("jump");
-                _animator.SetBool("isjumping", true);
-                resetMoveTrigger();
+                _animator.SetTrigger("Walk");
+                _animator.ResetTrigger("Idle");
             }
+            else
+            {
+                _animator.ResetTrigger("Walk");
+                _animator.SetTrigger("Idle");
+            }
+        }
+
+        _animator.SetFloat("Speed", Hor);
+
+        if (Hor < 0)
+            _sr.flipX = true;
+        else if (Hor > 0)
+            _sr.flipX = false;
+        flip = _sr.flipX;
+    }
+
+    public void sprintForButton()
+    {
+        _isRunning = !_isRunning;
+    }
+
+    public void jump()
+    {
+        if (!_isjumping)
+        {
+            _isjumping = true;
+            _animator.SetTrigger("jump");
+            _animator.SetBool("isjumping", true);
+            resetMoveTrigger();
         }
     }
 
@@ -91,6 +133,12 @@ public class PlayerController : MonoBehaviour
         _animator.SetTrigger("Attack_Normal");
     }
 
+    public void Stomp()
+    {
+        resetMoveTrigger();
+        _animator.SetTrigger("stomp");
+    }
+
     void resetMoveTrigger()
     {
         _animator.ResetTrigger("Run");
@@ -101,5 +149,11 @@ public class PlayerController : MonoBehaviour
     public void DamagedAnim()
     {
         _animator.SetTrigger("Damaged");
+    }
+
+    public void DieAnim()
+    {
+        _animator.SetBool("Die", true);
+        _animator.SetTrigger("DieOnce");
     }
 }

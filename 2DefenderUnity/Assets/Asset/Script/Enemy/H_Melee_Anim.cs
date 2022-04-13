@@ -50,7 +50,7 @@ public class H_Melee_Anim : MonoBehaviour
         _animator.SetFloat("Speed", speed);
     }
 
-    private void jumpAnim()
+    public void jumpAnim()
     {
         if (!_isjumping)
         {
@@ -77,6 +77,12 @@ public class H_Melee_Anim : MonoBehaviour
         _animator.SetTrigger("Attack_Normal");
     }
 
+    public void Stomp()
+    {
+        resetMoveTrigger();
+        _animator.SetTrigger("stomp");
+    }
+
     void resetMoveTrigger()
     {
         _animator.ResetTrigger("Run");
@@ -93,5 +99,11 @@ public class H_Melee_Anim : MonoBehaviour
     public void setFlip(bool value)
     {
         _sr.flipX = value;
+    }
+
+    public void DieAnim()
+    {
+        _animator.SetBool("Die", true);
+        _animator.SetTrigger("DieOnce");
     }
 }

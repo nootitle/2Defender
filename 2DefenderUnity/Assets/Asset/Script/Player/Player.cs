@@ -19,17 +19,25 @@ public class Player : MonoBehaviour
 
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
-    Coroutine _sprintCo;
+    bool _isDie = false;
 
     private bool skillListCheck;
     private Rigidbody2D _rb = null;
 
     [SerializeField] GameObject _bg = null;
+    [SerializeField] bool _bgExtension = false;
     private float pointX = 0;
     [SerializeField] PlayerController _pc = null;
     [SerializeField] FootStepSE _se = null;
     [SerializeField] MeleeSE _se_Melee = null;
     [SerializeField] DamagedSE _se_damaged = null;
+
+    //UI
+
+    [SerializeField] GameObject _hpBar = null;
+    [SerializeField] GameObject _skillSlot = null;
+    [SerializeField] Joystick _joyStick = null;
+    [SerializeField] bool _joyStickMode = true;
 
     //스킬 프리펩
 
@@ -45,13 +53,46 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        float Hor = Input.GetAxis("Horizontal");
-        //float Ver = Input.GetAxis("Vertical");
-        //GetAxisRaw : -1, 0, 1만 출력
+        if (_isDie) return;
 
-        Attack();
-        jump();
-        sprint();
+        float Hor;
+        if(_joyStickMode)
+        {
+            float Joy = _joyStick.GetSpeed();
+            if (Joy < 0)
+                Hor = -0.8f;
+            else if (Joy > 0)
+                Hor = 0.8f;
+            else
+                Hor = 0.0f;
+        }
+        else
+        {
+            Hor = Input.GetAxis("Horizontal");
+        }
+
+        //클릭으로 공격, 스킬 사용하는 부분은 SkillSlot들을 찾아갈 것
+        //기본공격(키보드) 
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _skillSlot.transform.GetChild(0).GetComponent<SkillSlotController>().StartCooldown();
+            Attack();
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            _skillSlot.transform.GetChild(1).GetComponent<SkillSlotController>().StartCooldown();
+            stomping();
+        }
+
+        if (!_joyStickMode)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+                jump();
+            if (Input.GetKey(KeyCode.LeftShift))
+                sprint();
+            else
+                sprintStop();
+        }
 
         if (Hor >= 0.2f || Hor <= -0.2f)
         {
@@ -60,35 +101,36 @@ public class Player : MonoBehaviour
             else if (!_jumpTrigger && _sprintTrigger)
                 _se.PlayRun();
         }
-
-
+          
         if(!_sprintTrigger)
             transform.Translate(Hor * 5.0f * Time.deltaTime, 0.0f, 0.0f);
         else
             transform.Translate(Hor * _sprintSpeed * Time.deltaTime, 0.0f, 0.0f);
-        //Camera.main.GetComponent<CameraController>().setX(Hor * 0.025f * Time.deltaTime);
-        //float xlimit = Camera.main.transform.position.x +
-        //Camera.main.aspect * Camera.main.orthographicSize;
-        //Vector2 limit = Camera.main.GetComponent<CameraController>().GetCameraEdge(0);
+        if (_joyStickMode) _pc.MoveForJoyStick(Hor);
 
         if (Input.GetKeyDown(KeyCode.Tab))
             SkillListInvisible();
 
-        if (transform.position.x > pointX - _mapInterval)
+        if(_bgExtension)
         {
-            GameObject Obj = Instantiate(_bg);
-            Vector3 vPos = new Vector3(pointX + _mapInterval, 0.0f, 0.0f);
-            pointX += _mapInterval;
-            Obj.transform.position = vPos;
+            if (transform.position.x > pointX - _mapInterval)
+            {
+                GameObject Obj = Instantiate(_bg);
+                Vector3 vPos = new Vector3(pointX + _mapInterval, 0.0f, 0.0f);
+                pointX += _mapInterval;
+                Obj.transform.position = vPos;
+            }
         }
 
-        //스킬 실험
-        fireBall();
+        //스킬(키보드)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _skillSlot.transform.GetChild(2).GetComponent<SkillSlotController>().StartCooldown();
+            fireBall();
+        }
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
-
-
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -102,32 +144,34 @@ public class Player : MonoBehaviour
         SkillList.SetActive(skillListCheck);
     }
 
-    private void jump()
+    public void jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (!_jumpTrigger)
         {
-            if(!_jumpTrigger)
-            {
-                _se.PlayJump();
-                _jumpTrigger = true;
-                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
-            }
+            _se.PlayJump();
+            _jumpTrigger = true;
+            _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
 
     private void sprint()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (!_sprintTrigger)
-                _sprintCo = StartCoroutine(sprintTerm());
-        }
-        else
-        {
-            if(_sprintCo != null)
-                StopCoroutine(_sprintCo);
+        if (!_sprintTrigger)
+            _sprintTrigger = true;
+    }
+
+    private void sprintStop()
+    {
+        if (_sprintTrigger)
             _sprintTrigger = false;
-        }
+    }
+
+    public void sprintForButton()
+    {
+        if (_sprintTrigger)
+            sprintStop();
+        else
+            sprint();
     }
 
     void jumpCoolDown()
@@ -140,68 +184,103 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator sprintTerm()
+    public void Attack()
     {
-        yield return new WaitForSeconds(0.5f);
+        if (_delayCount >= _attackDelay)
+        {
+            _pc.Attack();
+            _se_Melee.bladeSE();
+            _delayCount = 0.0f;
+            Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), _attackDistance);
 
-        _sprintTrigger = true;
+            foreach (Collider2D c in co)
+            {
+                Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
+                if (EH != null)
+                    EH.Hit(_attackDamage);
+            }
+        }
     }
 
-    void Attack()
+    public void stomping()
     {
-        if(Input.GetKeyDown(KeyCode.F))
+        if (_delayCount >= _attackDelay)
         {
-            if (_delayCount >= _attackDelay)
-            {
-                _pc.Attack();
-                _se_Melee.bladeSE();
-                _delayCount = 0.0f;
-                Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), _attackDistance);
+            _pc.Stomp();
+            _se_Melee.bladeSE();
+            _delayCount = 0.0f;
 
-                foreach (Collider2D c in co)
-                {
-                    H_Melee HM = c.gameObject.GetComponent<H_Melee>();
-                    if (HM != null)
-                        HM.Damaged(_attackDamage);
-                }
+            Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y + 1.0f), _attackDistance);
+
+            foreach (Collider2D c in co)
+            {
+                Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
+                if (EH != null)
+                    EH.Hit(_attackDamage * 1.5f);
             }
         }
     }
 
     public void Damaged(float value)
     {
+        if (_isDie) return;
+
         _pc.DamagedAnim();
         _hp -= value;
+        if (_hpBar != null)
+            _hpBar.GetComponent<HpBar>().setHpBar(-value);
         _se_damaged.PlayDamaged();
-        Debug.Log(_hp);
+        if (_hp <= 0)
+            Die();
+    }
+
+    void Die()
+    {
+        _pc.DieAnim();
+        _isDie = true;
     }
 
     //스킬 작업중
 
-    void fireBall()
+    public void GetSkill(int id)
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        Skill_Info.Instance.AddSkill(id);
+    }
+
+    public void fireBall()
+    {
+        if (_fireBall != null)
         {
-            if(_fireBall != null)
+            if (_delayCount >= _attackDelay)
             {
-                if (_delayCount >= _attackDelay)
+                _pc.Attack();
+                GameObject gm = Instantiate(_fireBall);
+                gm.GetComponent<Bullet_straight>().setAlies(true);
+                if (_pc.flip)
                 {
-                    _pc.Attack();
-                    GameObject gm = Instantiate(_fireBall);
-                    gm.GetComponent<Bullet_straight>().setAlies(true);
-                    if(_pc.flip)
-                    {
-                        gm.GetComponent<Bullet_straight>().setDirection(Vector3.left);
-                        gm.transform.position = this.transform.position + Vector3.up * 2.0f + Vector3.left * 2.0f;
-                    }
-                    else
-                    {
-                        gm.GetComponent<Bullet_straight>().setDirection(Vector3.right);
-                        gm.transform.position = this.transform.position + Vector3.up * 2.0f + Vector3.right;
-                    }                  
-                    _delayCount = 0.0f;
+                    gm.GetComponent<Bullet_straight>().setDirection(Vector3.left);
+                    gm.transform.position = this.transform.position + Vector3.up * 2.0f + Vector3.left * 2.0f;
                 }
+                else
+                {
+                    gm.GetComponent<Bullet_straight>().setDirection(Vector3.right);
+                    gm.transform.position = this.transform.position + Vector3.up * 2.0f + Vector3.right;
+                }
+                _delayCount = 0.0f;
             }
+        }
+    } 
+
+
+    //기본공격, 스킬 통합 호출 함수
+
+    public void CallSkill(int id)
+    {
+        switch(id)
+        {
+            case 0: Attack(); break;
+            case 1: stomping(); break;
+            case 2: fireBall(); break;
         }
     }
 }

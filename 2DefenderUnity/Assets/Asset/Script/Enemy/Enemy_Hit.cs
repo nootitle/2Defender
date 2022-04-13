@@ -22,8 +22,31 @@ public class Enemy_Hit : MonoBehaviour
         {
             case 0:
                 {
-                    this.GetComponent<H_Melee>().Damaged(value);
-                    Debug.Log("투사체 적중");
+                    if(!this.GetComponent<H_Melee>().GetDead())
+                        this.GetComponent<H_Melee>().Damaged(value);
+                    break;
+                }
+            case 1:
+                {
+                    if(!this.GetComponent<Skeleton_Melee>().GetDead())
+                        this.GetComponent<Skeleton_Melee>().Damaged(value);
+                    break;
+                }
+        }
+    }
+
+    public void respawn()
+    {
+        switch (_type)
+        {
+            case 0:
+                {
+                    this.GetComponent<H_Melee>().respawn();
+                    break;
+                }
+            case 1:
+                {
+                    this.GetComponent<Skeleton_Melee>().respawn();
                     break;
                 }
         }

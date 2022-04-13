@@ -83,4 +83,10 @@ public class Skeleton_Melee_Anim : MonoBehaviour
     {
         _sr.flipX = value;
     }
+
+    public void DieAnim()
+    {
+        _animator.SetBool("Die", true);
+        _animator.SetTrigger("DieOnce");
+    }
 }

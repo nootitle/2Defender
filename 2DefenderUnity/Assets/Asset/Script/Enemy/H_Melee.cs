@@ -20,6 +20,7 @@ public class H_Melee : MonoBehaviour
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
     bool _isStun = false;
+    bool _isDie = false;
     Coroutine _sprintCo;
     Coroutine _stunCo;
 
@@ -46,10 +47,16 @@ public class H_Melee : MonoBehaviour
     {
         //jump();
         //sprint();
+        if (_isDie) return;
         if (_isStun) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
-            Attack();
+        {
+            if (_target.transform.position.y > this.transform.position.y)
+                stomping();
+            else
+                Attack();
+        }
         else if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
@@ -71,6 +78,10 @@ public class H_Melee : MonoBehaviour
             transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
         else
             transform.Translate(direction * _sprintSpeed * Time.deltaTime, 0.0f, 0.0f);
+
+        int rnd = Random.Range(0, 1000);
+        if(rnd < 5)
+            jump();
     }
 
     private void chasing()
@@ -108,6 +119,9 @@ public class H_Melee : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jumpCoolDown();
+
+        if (collision.gameObject.tag.Contains("Enemy"))
+            jump();
     }
 
     private void jump()
@@ -115,6 +129,7 @@ public class H_Melee : MonoBehaviour
         if (!_jumpTrigger)
         {
             _jumpTrigger = true;
+            _pc.jumpAnim();
             _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
@@ -166,20 +181,70 @@ public class H_Melee : MonoBehaviour
             _pc.MoveAnim(false, false, 0);
     }
 
+    void stomping()
+    {
+        if (_delayCount >= _attackDelay)
+        {
+            _pc.Stomp();
+            if (_target.transform.position.x - this.transform.position.x > 0)
+                _pc.setFlip(false);
+            else
+                _pc.setFlip(true);
+            _player.Damaged(_attackDamage);
+            _delayCount = 0.0f;
+        }
+    }
+
     public void Damaged(float value)
     {
+        if (_isDie) return;
+
         _pc.DamagedAnim();
         _hp -= value;
-        _isStun = true;
-        if (_stunCo != null) StopCoroutine(_stunCo);
-        _stunCo = StartCoroutine("Stun");
+        if (_hp <= 0)
+            Die();
+        else
+        {
+            _isStun = true;
+            if (_stunCo != null) StopCoroutine(_stunCo);
+            _stunCo = StartCoroutine("Stun");
+        }
+    }
+
+    void Die()
+    {
+        _pc.DieAnim();
+        _isDie = true;
+        StartCoroutine(SelfDestroy());
+    }
+
+    IEnumerator SelfDestroy()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        EnemyManager.Instance.deathCount();
+        this.gameObject.SetActive(false);
+    }
+
+    public void respawn()
+    {
+        _isDie = false;
+        _isStun = false;
+    }
+
+    public bool GetDead()
+    {
+        return _isDie;
     }
 
     IEnumerator Stun()
     {
         yield return new WaitForSeconds(_stun);
 
-        _isStun = false;
-        _pc.MoveAnim(_sprintTrigger, false, _rb.velocity.x);
+        if(!_isDie)
+        {
+            _isStun = false;
+            _pc.MoveAnim(_sprintTrigger, false, _rb.velocity.x);
+        }
     }
 }

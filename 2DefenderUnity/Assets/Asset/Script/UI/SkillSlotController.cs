@@ -9,19 +9,23 @@ public class SkillSlotController : MonoBehaviour
     [SerializeField] private Image SlotSprite;
     [SerializeField] private GameObject SlotFx;
     [SerializeField] private float CoolTime = 4.0f;
+    [SerializeField] int _id = 0;
+    Player _player = null;
     private bool SkillOn;
     Coroutine co = null;
 
     void Start()
     {
+        _player = this.transform.parent.GetComponent<Skill_Info>().GetPlayer();
         SkillOn = false;
         if (CoolTime <= 0)
             CoolTime = 1.0f;
     }
 
-    void Update()
+    public void setID(int id, float coolTime = 0.5f)
     {
-
+        _id = id;
+        CoolTime = coolTime;
     }
 
     public void StartCooldown()
@@ -30,11 +34,7 @@ public class SkillSlotController : MonoBehaviour
         if (co != null) StopCoroutine(co);
         co = StartCoroutine(SkillCooldown());
         SkillOn = true;
-    }
-
-    private void StopCooldown()
-    {
-        
+        _player.CallSkill(_id);
     }
 
     IEnumerator SkillCooldown()
