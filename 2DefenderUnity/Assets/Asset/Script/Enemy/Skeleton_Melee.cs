@@ -49,6 +49,7 @@ public class Skeleton_Melee : MonoBehaviour
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
+        if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
             Attack();
@@ -181,6 +182,7 @@ public class Skeleton_Melee : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _hp = _maxHp;
     }
 
     public bool GetDead()

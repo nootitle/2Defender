@@ -9,7 +9,7 @@ public class SkillSlotController : MonoBehaviour
     [SerializeField] private Image SlotSprite;
     [SerializeField] private GameObject SlotFx;
     [SerializeField] private float CoolTime = 4.0f;
-    [SerializeField] int _id = 0;
+    [SerializeField] int _id = -1;
     Player _player = null;
     private bool SkillOn;
     Coroutine co = null;
@@ -20,6 +20,7 @@ public class SkillSlotController : MonoBehaviour
         SkillOn = false;
         if (CoolTime <= 0)
             CoolTime = 1.0f;
+        _id = -1;
     }
 
     public void setID(int id, float coolTime = 0.5f)
@@ -30,6 +31,7 @@ public class SkillSlotController : MonoBehaviour
 
     public void StartCooldown()
     {
+        if (_id == -1) return;
         if (SkillOn) return;
         if (co != null) StopCoroutine(co);
         co = StartCoroutine(SkillCooldown());

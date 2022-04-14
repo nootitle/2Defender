@@ -10,11 +10,14 @@ public class Bullet_straight : MonoBehaviour
     [SerializeField] bool _isAlies = true;
     [SerializeField] GameObject _hitEffect = null;
     [SerializeField] AudioSource _SE = null;
+    [SerializeField] float _lifeTime = 5.0f;
 
     void Start()
     {
         if (_SE != null)
             _SE.Play();
+
+        StartCoroutine(selfDestroy());
     }
 
     void Update()
@@ -22,9 +25,9 @@ public class Bullet_straight : MonoBehaviour
         Moving();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject gm = collision.collider.transform.gameObject;
+        GameObject gm = collision.transform.gameObject;
         if(_isAlies)
         {
             if(gm.tag.Contains("Enemy"))
@@ -56,8 +59,24 @@ public class Bullet_straight : MonoBehaviour
             this.transform.eulerAngles = new Vector3(0.0f, 0.0f, -90.0f);
     }
 
+    public void setDirection(Vector3 dir, Vector3 angle)
+    {
+        Direction = dir;
+        Vector3 _angle = angle;
+        if (dir.x < 0)
+            _angle *= -1.0f;
+        this.transform.eulerAngles = _angle;
+    }
+
     public void setAlies(bool value)
     {
         _isAlies = value;
+    }
+
+    IEnumerator selfDestroy()
+    {
+        yield return new WaitForSeconds(_lifeTime);
+
+        Destroy(this.gameObject);
     }
 }

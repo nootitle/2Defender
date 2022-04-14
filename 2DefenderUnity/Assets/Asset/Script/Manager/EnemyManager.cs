@@ -10,6 +10,20 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] List<GameObject> SpawnPoints = null;
     [SerializeField] int maxEnemy = 5;
     int EnemyNum;
+    int spawnLevel;
+    public int getSpawnLevel() { return spawnLevel; }
+    public void setSpawnLevel(int level)
+    {
+        if(level <= EnemyList.Count)
+            spawnLevel = level;
+    }
+    public int getMaxEnemy() { return maxEnemy; }
+    public void setMaxEnemy(int value)
+    {
+        if (value <= EnemyList.Count &&
+            value <= spawnLevel)
+            maxEnemy = value;
+    }
 
     private void Awake()
     {
@@ -21,7 +35,8 @@ public class EnemyManager : MonoBehaviour
     {
         if (maxEnemy > EnemyList.Count)
             maxEnemy = EnemyList.Count;
-        EnemyNum = maxEnemy;
+        EnemyNum = 0;
+        spawnLevel = 1;
     }
 
     void Update()
@@ -33,15 +48,17 @@ public class EnemyManager : MonoBehaviour
     {
         if(EnemyNum < maxEnemy)
         {
-            foreach(GameObject gm in EnemyList)
+            for (int i = 0; i < spawnLevel; ++i)
             {
-                if (!gm.activeSelf)
+                if (!EnemyList[i].activeSelf)
                 {
                     ++EnemyNum;
-                    gm.SetActive(true);
-                    gm.GetComponent<Enemy_Hit>().respawn();
+                    EnemyList[i].SetActive(true);
+                    EnemyList[i].GetComponent<Enemy_Hit>().respawn();
                     int rnd = Random.Range(0, SpawnPoints.Count - 1);
-                    gm.transform.position = SpawnPoints[rnd].transform.position;
+                    EnemyList[i].transform.position = SpawnPoints[rnd].transform.position;
+                    if (EnemyNum >= maxEnemy)
+                        break;
                 }
             }
         }
@@ -50,5 +67,6 @@ public class EnemyManager : MonoBehaviour
     public void deathCount()
     {
         --EnemyNum;
+        StageManager.Instance.setKillCount(1);
     }
 }

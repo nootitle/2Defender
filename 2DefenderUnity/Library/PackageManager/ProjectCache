@@ -5,21 +5,72 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637846603125829797
-    m_Hash: 3495392058
+      ticks: 637854999937234884
+    m_Hash: 393778197
   m_LockFileStatus:
     m_FilePath: E:/2Defender/2Defender/2DefenderUnity/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637846603202209783
-    m_Hash: 894664828
+      ticks: 637854999937496641
+    m_Hash: 2661817469
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
   m_Packages:
     m_ResolvedPackages:
+    - packageId: com.unity.2d.sprite@1.0.0
+      testable: 0
+      isDirectDependency: 1
+      version: 1.0.0
+      source: 2
+      resolvedPath: E:\2Defender\2Defender\2DefenderUnity\Library\PackageCache\com.unity.2d.sprite@1.0.0
+      assetPath: Packages/com.unity.2d.sprite
+      name: com.unity.2d.sprite
+      displayName: 2D Sprite
+      author:
+        name: 
+        email: 
+        url: 
+      category: 2D
+      type: 
+      description: Use Unity Sprite Editor Window to create and edit Sprite asset
+        properties like pivot, borders and Physics shape
+      status: 4
+      errors: []
+      versions:
+        all:
+        - 1.0.0
+        compatible:
+        - 1.0.0
+        verified: 1.0.0
+      dependencies: []
+      resolvedDependencies: []
+      keywords:
+      - 2d
+      - sprite
+      - sprite editor window
+      registry:
+        id: 
+        name: 
+        url: 
+        scopes: []
+        isDefault: 0
+        capabilities: 0
+      hasRegistry: 0
+      hideInEditor: 1
+      entitlements:
+        isAllowed: 1
+      isAssetStorePackage: 0
+      datePublishedTicks: 0
+      documentationUrl: 
+      hasRepository: 0
+      repository:
+        type: 
+        url: 
+        revision: 
+        path: 
     - packageId: com.unity.collab-proxy@1.15.4
       testable: 0
       isDirectDependency: 1
@@ -77,6 +128,7 @@ m_PackageAssets:
         - 1.14.12
         - 1.14.13
         - 1.14.15
+        - 1.14.16
         - 1.15.1
         - 1.15.4
         - 1.15.7
@@ -84,6 +136,7 @@ m_PackageAssets:
         - 1.15.12
         - 1.15.13
         - 1.15.15
+        - 1.15.16
         - 2.0.0-preview.6
         - 2.0.0-preview.8
         - 2.0.0-preview.15
@@ -101,6 +154,7 @@ m_PackageAssets:
         - 1.15.12
         - 1.15.13
         - 1.15.15
+        - 1.15.16
         - 2.0.0-preview.6
         - 2.0.0-preview.8
         - 2.0.0-preview.15
@@ -111,7 +165,7 @@ m_PackageAssets:
         - 2.1.0-preview.3
         - 2.1.0-preview.5
         - 2.1.0-preview.6
-        verified: 1.15.15
+        verified: 1.15.16
       dependencies:
       - name: com.unity.nuget.newtonsoft-json
         version: 2.0.0
@@ -312,6 +366,7 @@ m_PackageAssets:
         - 2.0.11
         - 2.0.12
         - 2.0.14
+        - 2.0.15
         compatible:
         - 1.0.2
         - 1.0.3
@@ -330,7 +385,8 @@ m_PackageAssets:
         - 2.0.11
         - 2.0.12
         - 2.0.14
-        verified: 2.0.14
+        - 2.0.15
+        verified: 2.0.15
       dependencies:
       - name: com.unity.test-framework
         version: 1.1.9
@@ -2777,6 +2833,7 @@ m_PackageAssets:
         - 2.0.1-preview.1
         - 2.0.2
         - 3.0.1
+        - 3.0.2
         compatible:
         - 1.0.0-preview.2
         - 1.0.0-preview.3
@@ -2790,6 +2847,7 @@ m_PackageAssets:
         - 2.0.1-preview.1
         - 2.0.2
         - 3.0.1
+        - 3.0.2
         verified: 2.0.2
       dependencies: []
       resolvedDependencies: []
@@ -2847,6 +2905,7 @@ m_PackageAssets:
         - 1.1.0-pre.41
         - 1.1.0-pre.69
         - 1.2.0
+        - 1.3.1
         compatible:
         - 1.0.1
         - 1.1.0-pre.7
@@ -2857,6 +2916,7 @@ m_PackageAssets:
         - 1.1.0-pre.41
         - 1.1.0-pre.69
         - 1.2.0
+        - 1.3.1
         verified: 1.0.1
       dependencies:
       - name: com.unity.modules.unitywebrequest

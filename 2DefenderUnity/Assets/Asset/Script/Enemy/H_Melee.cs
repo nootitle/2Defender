@@ -49,6 +49,7 @@ public class H_Melee : MonoBehaviour
         //sprint();
         if (_isDie) return;
         if (_isStun) return;
+        if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
         {
@@ -230,6 +231,7 @@ public class H_Melee : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _hp = _maxHp;
     }
 
     public bool GetDead()
