@@ -19437,7 +19437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261f79bbe11f5d54c8092225b3bcaf34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _splashDamage: 10
+  _splashDamage: 20
   _radius: 10
   _explosionDelay: 2
   _hitFx: {fileID: 6192724089161036641, guid: da80c0619ebb8d94588a561cc2bb095b, type: 3}

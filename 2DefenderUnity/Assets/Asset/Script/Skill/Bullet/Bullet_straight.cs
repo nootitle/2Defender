@@ -73,6 +73,11 @@ public class Bullet_straight : MonoBehaviour
         _isAlies = value;
     }
 
+    public void addExtraDamage(float value)
+    {
+        _attackPower += value;
+    }
+
     IEnumerator selfDestroy()
     {
         yield return new WaitForSeconds(_lifeTime);

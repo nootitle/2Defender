@@ -100,9 +100,13 @@
     <Compile Include="Assets\Asset\Script\Player\PlayerController.cs" />
     <Compile Include="Assets\Asset\Script\etc\DestroyEvent_HeroKnight.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\GrabableLedge.cs" />
+    <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_Explosion.cs" />
     <Compile Include="Assets\Asset\Script\Player\SkillInvenController.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_Explosion.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Slime.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Slime_Anim.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\BOD.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\BOD_Anim.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />

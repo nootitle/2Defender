@@ -35,8 +35,8 @@ public class EnemyManager : MonoBehaviour
     {
         if (maxEnemy > EnemyList.Count)
             maxEnemy = EnemyList.Count;
-        EnemyNum = 0;
-        spawnLevel = 1;
+        EnemyNum = maxEnemy;
+        spawnLevel = maxEnemy;
     }
 
     void Update()

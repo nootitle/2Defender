@@ -33,16 +33,14 @@ public class StageManager : MonoBehaviour
         if (killCount != 0 && killCount % 20 == 0)
         {
             EnemyManager.Instance.setSpawnLevel(EnemyManager.Instance.getSpawnLevel() + 1);
-        }
-        if(killCount != 0 && killCount % 40 == 0)
-        {
             EnemyManager.Instance.setMaxEnemy(EnemyManager.Instance.getMaxEnemy() + 1);
+            killCount = 0;
         }
     }
 
     public void showRewardWindow()
     {
-        if(killCount != 0 && killCount % 3 == 0)
+        if(killCount != 0 && killCount % 5 == 0)
         {
             if (!_rewardWindow.activeSelf)
                 _rewardWindow.SetActive(true);

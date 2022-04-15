@@ -81,7 +81,7 @@ public class H_Melee : MonoBehaviour
             transform.Translate(direction * _sprintSpeed * Time.deltaTime, 0.0f, 0.0f);
 
         int rnd = Random.Range(0, 1000);
-        if(rnd < 5)
+        if(!_jumpTrigger && rnd < 5)
             jump();
     }
 
@@ -121,8 +121,8 @@ public class H_Melee : MonoBehaviour
     {
         jumpCoolDown();
 
-        if (collision.gameObject.tag.Contains("Enemy"))
-            jump();
+        //if (collision.gameObject.tag.Contains("Enemy"))
+            //jump();
     }
 
     private void jump()

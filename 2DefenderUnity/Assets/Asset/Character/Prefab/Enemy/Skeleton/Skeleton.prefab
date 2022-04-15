@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2728808273700875026}
   - component: {fileID: 658791365332131759}
   - component: {fileID: 4317064280078062504}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.03, y: 1.65}
+  m_Offset: {x: -2.05, y: 2.26}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 100
-  _jumpPower: 5
+  _jumpPower: 40
   _walkSpeed: 5
   _patrolRange: 10
   _chaseRange: 4
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 6885050502096861662}
   - component: {fileID: 1783579800112997000}
   - component: {fileID: 2885839468925559948}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Skeleton_Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2885839468925559947}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2.56, z: 0}
+  m_LocalPosition: {x: -1.84, y: 2.56, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children: []
   m_Father: {fileID: 315080622545999033}
@@ -263,8 +263,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5bdd6c37d70a73048840f49b5f4c1587, type: 3}
-  m_Color: {r: 1, g: 0.47224185, b: 0.28627455, a: 1}
-  m_FlipX: 1
+  m_Color: {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 1}
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 3.125, y: 2.5}

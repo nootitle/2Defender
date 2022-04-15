@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class SetSkill : MonoBehaviour
 {
     [SerializeField] List<GameObject> Chocie = null;
-    [SerializeField] List<GameObject> name = null;
+    [SerializeField] List<GameObject> names = null;
     [SerializeField] List<GameObject> description = null;
 
     private void OnEnable()
@@ -21,11 +21,13 @@ public class SetSkill : MonoBehaviour
     public void SetSkillChoice()
     {
         List<int> set = new List<int>();
+        if (Skill_Info.Instance == null || Skill_Info.Instance.GetSkillMaxNum() == 0)
+            return;
 
         for (int j = 0; j < Chocie.Count; ++j)
         {
             bool flag = false;
-            int rnd = Random.Range(0, Skill_Info.Instance.GetSkillMaxNum() - 1);
+            int rnd = Random.Range(0, Skill_Info.Instance.GetSkillMaxNum());
 
             for (int i = 0; i < set.Count; ++i)
                 if (set[i] == rnd)
@@ -41,7 +43,7 @@ public class SetSkill : MonoBehaviour
 
             set.Add(rnd);
             Chocie[j].GetComponent<Image>().sprite = Skill_Info.Instance._iconSource[rnd];
-            name[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._name[rnd];
+            names[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._name[rnd];
             description[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._description[rnd];
             Chocie[j].GetComponent<GetSkill>().setID(rnd);
         }

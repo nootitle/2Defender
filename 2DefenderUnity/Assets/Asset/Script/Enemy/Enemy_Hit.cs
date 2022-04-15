@@ -6,16 +6,6 @@ public class Enemy_Hit : MonoBehaviour
 {
     [SerializeField] int _type = 0;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void Hit(float value)
     {
         switch(_type)
@@ -30,6 +20,18 @@ public class Enemy_Hit : MonoBehaviour
                 {
                     if(!this.GetComponent<Skeleton_Melee>().GetDead())
                         this.GetComponent<Skeleton_Melee>().Damaged(value);
+                    break;
+                }
+            case 2:
+                {
+                    if (!this.GetComponent<Skeleton_Melee>().GetDead())
+                        this.GetComponent<Skeleton_Melee>().Damaged(value);
+                    break;
+                }
+            case 3:
+                {
+                    if (!this.GetComponent<Slime>().GetDead())
+                        this.GetComponent<Slime>().Damaged(value);
                     break;
                 }
         }
@@ -47,6 +49,16 @@ public class Enemy_Hit : MonoBehaviour
             case 1:
                 {
                     this.GetComponent<Skeleton_Melee>().respawn();
+                    break;
+                }
+            case 2:
+                {
+                    this.GetComponent<Skeleton_Melee>().respawn();
+                    break;
+                }
+            case 3:
+                {
+                    this.GetComponent<Slime>().respawn();
                     break;
                 }
         }

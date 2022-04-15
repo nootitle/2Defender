@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3668552796115643112}
   - component: {fileID: 3668552796115643113}
   - component: {fileID: 3668552796115643126}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: H_Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 3668552796289543821}
   - component: {fileID: 3668552796289543823}
   - component: {fileID: 3668552796289543808}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnemyHuman
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 100
-  _jumpPower: 70
+  _jumpPower: 40
   _walkSpeed: 5
   _sprintSpeed: 10
   _patrolRange: 10

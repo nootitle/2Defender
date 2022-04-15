@@ -15,11 +15,16 @@ public class Player : MonoBehaviour
     [SerializeField] float _attackDistance = 2.0f;
     [SerializeField] float _attackDelay = 2.0f;
     [SerializeField] float _attackDamage = 2.0f;
+    [SerializeField] float _stun = 2.0f;
+    [SerializeField] GameObject _stunFx = null;
+    Coroutine _stunCo = null;
+    float _extraDamage = 0.0f;
     float _delayCount = 0.0f;
 
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
     bool _isDie = false;
+    bool _isStun = false;
 
     private bool skillListCheck;
     private Rigidbody2D _rb = null;
@@ -41,21 +46,18 @@ public class Player : MonoBehaviour
 
     //스킬 프리펩
     [SerializeField] GameObject _fireBall = null;
-    float _fireBallDelay = 0.5f;
-    float fireBallDelay = 0.0f;
 
     [SerializeField] GameObject _healFx = null;
-    float _healDelay = 0.5f;
-    float healDelay = 0.0f;
 
     [SerializeField] GameObject _bulletsObject = null;
-    float _bullets = 0.5f;
-    float bullets = 0.0f;
     Coroutine _spreadProcessCo = null;
 
     [SerializeField] GameObject _throwingStoneObject = null;
-    float _throwingStone = 0.5f;
-    float throwingStone = 0.0f;
+
+    [SerializeField] GameObject _sharpShooterFx = null;
+    [SerializeField] float _sharpShooterDuration = 5.0f;
+    [SerializeField] float _extraDamage_sharpShooter = 5.0f;
+    Coroutine _sharpShooterCo = null;
 
     void Start()
     {
@@ -63,17 +65,17 @@ public class Player : MonoBehaviour
         SkillList.SetActive(false);
         _rb = this.GetComponent<Rigidbody2D>();
         _hp = _maxHp;
-
-        _fireBallDelay = Skill_Info.Instance._coolTime[2];
-        _healDelay = Skill_Info.Instance._coolTime[3];
-        _bullets = Skill_Info.Instance._coolTime[4];
-        _throwingStone = Skill_Info.Instance._coolTime[5];
     }
 
     void Update()
     {
         if (_isDie) return;
-        if (StageManager.Instance.pause) return;
+        if (_isStun) return;
+        if (StageManager.Instance.pause)
+        {
+            jumpCoolDown();
+            return;
+        }
 
         float Hor;
         if(_joyStickMode)
@@ -151,7 +153,7 @@ public class Player : MonoBehaviour
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
-        updateSkillCoolDown();
+        //updateSkillCoolDown();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -255,6 +257,17 @@ public class Player : MonoBehaviour
             Die();
     }
 
+    public void StunStart()
+    {
+        if (!_isDie && !_isStun)
+        {
+            _isStun = true;
+            if (_stunCo != null) StopCoroutine(_stunCo);
+            _stunFx.SetActive(true);
+            _stunCo = StartCoroutine(Stun());
+        }
+    }
+
     public void healed(float value)
     {
         if (_isDie) return;
@@ -265,6 +278,18 @@ public class Player : MonoBehaviour
             _hpBar.GetComponent<HpBar>().setHpBar(temp);
     }
 
+    IEnumerator Stun()
+    {
+        yield return new WaitForSeconds(_stun);
+
+        if (!_isDie)
+        {
+            _isStun = false;
+            _stunFx.SetActive(false);
+            _pc.MoveForJoyStick(0.0f);
+        }
+    }
+
     void Die()
     {
         _pc.DieAnim();
@@ -272,18 +297,6 @@ public class Player : MonoBehaviour
     }
 
     //스킬 작업중
-
-    void updateSkillCoolDown()
-    {
-        if (fireBallDelay < _fireBallDelay)
-            fireBallDelay += Time.deltaTime;
-        if (healDelay < _healDelay)
-            healDelay += Time.deltaTime;
-        if (bullets < _bullets)
-            bullets += Time.deltaTime;
-        if (throwingStone < _throwingStone)
-            throwingStone += Time.deltaTime;
-    }
 
     public void GetSkill(int id)
     {
@@ -294,22 +307,20 @@ public class Player : MonoBehaviour
     {
         if (_fireBall != null)
         {
-            if (fireBallDelay >= _fireBallDelay)
+            _pc.Attack();
+            GameObject gm = Instantiate(_fireBall);
+            gm.GetComponent<Bullet_straight>().setAlies(true);
+            if (_extraDamage > 0)
+                gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
+            if (_pc.flip)
             {
-                _pc.Attack();
-                GameObject gm = Instantiate(_fireBall);
-                gm.GetComponent<Bullet_straight>().setAlies(true);
-                if (_pc.flip)
-                {
-                    gm.GetComponent<Bullet_straight>().setDirection(Vector3.left);
-                    gm.transform.position = this.transform.position + Vector3.left;
-                }
-                else
-                {
-                    gm.GetComponent<Bullet_straight>().setDirection(Vector3.right);
-                    gm.transform.position = this.transform.position + Vector3.right;
-                }
-                fireBallDelay = 0.0f;
+                gm.GetComponent<Bullet_straight>().setDirection(Vector3.left);
+                gm.transform.position = this.transform.position + Vector3.left;
+            }
+            else
+            {
+                gm.GetComponent<Bullet_straight>().setDirection(Vector3.right);
+                gm.transform.position = this.transform.position + Vector3.right;
             }
         }
     }
@@ -318,12 +329,8 @@ public class Player : MonoBehaviour
     {
         if (_healFx != null)
         {
-            if (healDelay >= _healDelay)
-            {
-                healed(5.0f);
-                GameObject gm = Instantiate(_healFx);
-                healDelay = 0.0f;
-            }
+            healed(5.0f);
+            GameObject gm = Instantiate(_healFx);
         }
     }
 
@@ -331,13 +338,9 @@ public class Player : MonoBehaviour
     {
         if (_bulletsObject != null)
         {
-            if (bullets >= _bullets)
-            {
-                _pc.Attack();
-                if (_spreadProcessCo != null) StopCoroutine(_spreadProcessCo);
-                _spreadProcessCo = StartCoroutine(spreadBulletProcess());              
-                bullets = 0.0f;
-            }
+            _pc.Attack();
+            if (_spreadProcessCo != null) StopCoroutine(_spreadProcessCo);
+            _spreadProcessCo = StartCoroutine(spreadBulletProcess());
         }
     }
 
@@ -367,6 +370,8 @@ public class Player : MonoBehaviour
 
             GameObject gm = Instantiate(_bulletsObject);
             gm.GetComponent<Bullet_straight>().setAlies(true);
+            if (_extraDamage > 0)
+                gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
             if (_pc.flip)
             {
                 gm.GetComponent<Bullet_straight>().setDirection(-_dir, -_angle);
@@ -384,24 +389,45 @@ public class Player : MonoBehaviour
     {
         if (_throwingStoneObject != null)
         {
-            if (throwingStone >= _throwingStone)
+            _pc.Attack();
+            GameObject gm = Instantiate(_throwingStoneObject);
+            gm.GetComponent<Bullet_straight>().setAlies(true);
+            if(_extraDamage > 0)
+                gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
+            if (_pc.flip)
             {
-                _pc.Attack();
-                GameObject gm = Instantiate(_throwingStoneObject);
-                gm.GetComponent<Bullet_straight>().setAlies(true);
-                if (_pc.flip)
-                {
-                    gm.GetComponent<Bullet_straight>().setDirection(Vector3.left, new Vector3(0.0f, 0.0f, -180.0f));
-                    gm.transform.position = this.transform.position + Vector3.left;
-                }
-                else
-                {
-                    gm.GetComponent<Bullet_straight>().setDirection(Vector3.right);
-                    gm.transform.position = this.transform.position + Vector3.right;
-                }
-                throwingStone = 0.0f;
+                gm.GetComponent<Bullet_straight>().setDirection(Vector3.left, new Vector3(0.0f, 0.0f, -180.0f));
+                gm.transform.position = this.transform.position + Vector3.left;
             }
+            else
+            {
+                gm.GetComponent<Bullet_straight>().setDirection(Vector3.right);
+                gm.transform.position = this.transform.position + Vector3.right;
+            }
+            
         }
+    }
+
+    public void sharpShooter()
+    {
+        if(_sharpShooterFx != null)
+        {
+            if (_sharpShooterCo != null) 
+                StopCoroutine(_sharpShooterCo);
+
+            _pc.Stomp();
+            _sharpShooterFx.SetActive(true);
+            _extraDamage += _extraDamage_sharpShooter;
+            _sharpShooterCo = StartCoroutine(sharpShooterCoolDown());
+        }
+    }
+
+    IEnumerator sharpShooterCoolDown()
+    {
+        yield return new WaitForSeconds(_sharpShooterDuration);
+
+        _sharpShooterFx.SetActive(false);
+        _extraDamage -= _extraDamage_sharpShooter;
     }
 
     //기본공격, 스킬 통합 호출 함수
@@ -416,6 +442,7 @@ public class Player : MonoBehaviour
             case 3: heal(); break;
             case 4: spreadBullets(); break;
             case 5: ThrowingStone(); break;
+            case 6: sharpShooter(); break;
         }
     }
 }
