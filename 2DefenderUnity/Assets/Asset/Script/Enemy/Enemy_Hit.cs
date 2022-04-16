@@ -34,6 +34,12 @@ public class Enemy_Hit : MonoBehaviour
                         this.GetComponent<Slime>().Damaged(value);
                     break;
                 }
+            case 4:
+                {
+                    if (!this.GetComponent<BOD>().GetDead())
+                        this.GetComponent<BOD>().Damaged(value);
+                    break;
+                }
         }
     }
 
@@ -59,6 +65,11 @@ public class Enemy_Hit : MonoBehaviour
             case 3:
                 {
                     this.GetComponent<Slime>().respawn();
+                    break;
+                }
+            case 4:
+                {
+                    this.GetComponent<BOD>().respawn();
                     break;
                 }
         }

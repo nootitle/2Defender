@@ -17,11 +17,9 @@ public class BOD : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
-    bool _isAttacking = false;
     bool _isStun = false;
     bool _isDie = false;
     Coroutine _stunCo;
-    Coroutine _extraHitCo;
 
     private Rigidbody2D _rb = null;
     [SerializeField] BOD_Anim _pc = null;
@@ -29,6 +27,11 @@ public class BOD : MonoBehaviour
 
     [SerializeField] GameObject _target = null;
     Player _player = null;
+
+    [SerializeField] GameObject _castFxLeft = null;
+    [SerializeField] GameObject _castFxRight = null;
+    [SerializeField] float _duration = 5.0f;
+    Coroutine _castCo = null;
 
     void Start()
     {
@@ -48,11 +51,16 @@ public class BOD : MonoBehaviour
 
         if (_isDie) return;
         if (_isStun) return;
-        if (_isAttacking) return;
         if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
-            Attack();
+        {
+            int rnd = Random.Range(0, 100);
+            if (rnd < 25)
+                casting();
+            else
+                Attack();
+        }
         else if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _chaseRange)
             chasing();
         else
@@ -128,25 +136,45 @@ public class BOD : MonoBehaviour
             _pc.Attack();
             _player.Damaged(_attackDamage);
             if (_target.transform.position.x - this.transform.position.x > 0)
-                _pc.setFlip(false);
-            else
                 _pc.setFlip(true);
-            _isAttacking = true;
+            else
+                _pc.setFlip(false);
+            
             _delayCount = 0.0f;
-            if (_extraHitCo != null) StopCoroutine(_extraHitCo);
-            _extraHitCo = StartCoroutine(ExtraHit());
         }
         else
             _pc.MoveAnim(false, 0);
     }
 
-    IEnumerator ExtraHit()
+    void casting()
     {
-        yield return new WaitForSeconds(0.5f);
+        if (_delayCount >= _attackDelay)
+        {
+            _pc.casting();
+            if (_target.transform.position.x - this.transform.position.x > 0)
+            {
+                _castFxRight.SetActive(true);
+                _pc.setFlip(true);
+            }
+            else
+            {
+                _castFxLeft.SetActive(true);
+                _pc.setFlip(false);
+            }
+            _delayCount = 0.0f;
+            if (_castCo != null) StopCoroutine(_castCo);
+            _castCo = StartCoroutine(castOff());
+        }
+        else
+            _pc.MoveAnim(false, 0);
+    }
 
-        _player.Damaged(_attackDamage);
-        _isAttacking = false;
-        _pc.MoveAnim(false, 0);
+    IEnumerator castOff()
+    {
+        yield return new WaitForSeconds(_duration);
+
+        _castFxRight.SetActive(false);
+        _castFxLeft.SetActive(false);
     }
 
     public void Damaged(float value)

@@ -34,9 +34,9 @@ public class BOD_Anim : MonoBehaviour
         }
 
         if (speed < 0)
-            _sr.flipX = true;
-        else if (speed > 0)
             _sr.flipX = false;
+        else if (speed > 0)
+            _sr.flipX = true;
         _animator.SetFloat("Speed", speed);
     }
 
@@ -65,6 +65,12 @@ public class BOD_Anim : MonoBehaviour
     {
         resetMoveTrigger();
         _animator.SetTrigger("Attack_Normal");
+    }
+
+    public void casting()
+    {
+        resetMoveTrigger();
+        _animator.SetTrigger("Cast");
     }
 
     void resetMoveTrigger()
