@@ -6,23 +6,25 @@ public class MeleeSE : MonoBehaviour
 {
     [SerializeField] List<AudioSource> blade = null;
     int rnd_blade;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    Coroutine _co = null;
 
     public void bladeSE()
     {
-        if(blade.Count > 0 && !blade[rnd_blade].isPlaying)
+        if(blade.Count > 0)
         {
-            rnd_blade = Random.Range(0, blade.Count - 1);
-            blade[rnd_blade].Play();
+            int temp = Random.Range(0, blade.Count - 1);
+            if (temp == rnd_blade)
+            {
+                if(temp == 0)
+                    blade[++temp].Play();
+                else
+                    blade[--temp].Play();
+            }
+            else
+            {
+                blade[temp].Play();
+            }
+            rnd_blade = temp;
         }
     }
 }

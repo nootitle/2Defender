@@ -14,10 +14,6 @@ public class SetSkill : MonoBehaviour
         SetSkillChoice();
     }
 
-    void Update()
-    {
-    }
-
     public void SetSkillChoice()
     {
         List<int> set = new List<int>();
@@ -41,11 +37,22 @@ public class SetSkill : MonoBehaviour
                 continue;
             }
 
-            set.Add(rnd);
-            Chocie[j].GetComponent<Image>().sprite = Skill_Info.Instance._iconSource[rnd];
-            names[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._name[rnd];
-            description[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._description[rnd];
-            Chocie[j].GetComponent<GetSkill>().setID(rnd);
+            bool flag2 = false;
+            for(int i = 0; i < Skill_Info.Instance.allowSkill.Count; ++i)
+                if(Skill_Info.Instance.allowSkill[i] == j)
+                {
+                    flag2 = true;
+                    break;
+                }
+
+            if(flag2)
+            {
+                set.Add(rnd);
+                Chocie[j].GetComponent<Image>().sprite = Skill_Info.Instance._iconSource[rnd];
+                names[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._name[rnd];
+                description[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._description[rnd];
+                Chocie[j].GetComponent<GetSkill>().setID(rnd);
+            }
         }
     }
 }

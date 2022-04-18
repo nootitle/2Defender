@@ -7,18 +7,14 @@ public class HpBar : MonoBehaviour
 {
     [SerializeField] Slider _hpBar = null;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void setHpBar(float damage)
     {
-        _hpBar.value += damage;
+        _hpBar.value = damage;
+    }
+
+    public void setMaxHpBar(float value)
+    {
+        this.transform.GetComponent<RectTransform>().sizeDelta += new Vector2(value, 0.0f);
+        _hpBar.maxValue += value;
     }
 }

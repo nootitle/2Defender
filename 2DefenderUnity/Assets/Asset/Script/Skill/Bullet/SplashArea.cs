@@ -6,7 +6,6 @@ public class SplashArea : MonoBehaviour
 {
     [SerializeField] float _splashDamage = 10.0f;
     [SerializeField] float _radius = 10.0f;
-    [SerializeField] float _explosionDelay = 1.0f;
     [SerializeField] GameObject _hitFx = null;
     [SerializeField] bool _hitFxExist = false;
     [SerializeField] bool _isAlies = true;

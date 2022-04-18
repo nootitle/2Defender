@@ -10,9 +10,11 @@ public class SkillSlotController : MonoBehaviour
     [SerializeField] private GameObject SlotFx;
     [SerializeField] private float CoolTime = 4.0f;
     [SerializeField] int _id = -1;
+    [SerializeField] public List<GameObject> _levelIcon = null;
     Player _player = null;
     private bool SkillOn;
     Coroutine co = null;
+    int level = 1;
 
     void Start()
     {
@@ -27,6 +29,12 @@ public class SkillSlotController : MonoBehaviour
     {
         _id = id;
         CoolTime = coolTime;
+    }
+
+    public void setLevelIcon()
+    {
+        _levelIcon[level - 1].SetActive(true);
+        ++level;
     }
 
     public void StartCooldown()

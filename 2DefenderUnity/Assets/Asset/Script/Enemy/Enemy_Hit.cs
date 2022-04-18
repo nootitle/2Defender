@@ -40,6 +40,12 @@ public class Enemy_Hit : MonoBehaviour
                         this.GetComponent<BOD>().Damaged(value);
                     break;
                 }
+            case 5:
+                {
+                    if (!this.GetComponent<Archor>().GetDead())
+                        this.GetComponent<Archor>().Damaged(value);
+                    break;
+                }
         }
     }
 
@@ -70,6 +76,11 @@ public class Enemy_Hit : MonoBehaviour
             case 4:
                 {
                     this.GetComponent<BOD>().respawn();
+                    break;
+                }
+            case 5:
+                {
+                    this.GetComponent<Archor>().respawn();
                     break;
                 }
         }

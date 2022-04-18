@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -11,14 +12,17 @@ public class Player : MonoBehaviour
     [SerializeField] float _sprintSpeed = 10.0f;
     [SerializeField] float _mapInterval = 30.0f;
     [SerializeField] float _maxHp = 100.0f;
-    float _hp = 100.0f;
+    public float _hp = 100.0f;
     [SerializeField] float _attackDistance = 2.0f;
     [SerializeField] float _attackDelay = 2.0f;
     [SerializeField] float _attackDamage = 2.0f;
     [SerializeField] float _stun = 2.0f;
     [SerializeField] GameObject _stunFx = null;
+    [SerializeField] public List<int> _SkillLevelList = null;
     Coroutine _stunCo = null;
+    Coroutine _extraAttackCo = null;
     float _extraDamage = 0.0f;
+    public float _extraHeal = 0.0f;
     float _delayCount = 0.0f;
 
     bool _jumpTrigger = false;
@@ -33,6 +37,9 @@ public class Player : MonoBehaviour
     [SerializeField] bool _bgExtension = false;
     private float pointX = 0;
     [SerializeField] PlayerController _pc = null;
+    [SerializeField] GameObject _normalMode = null;
+    [SerializeField] GameObject _swordMode = null;
+    int _modeID = 0;
     [SerializeField] FootStepSE _se = null;
     [SerializeField] MeleeSE _se_Melee = null;
     [SerializeField] DamagedSE _se_damaged = null;
@@ -59,12 +66,20 @@ public class Player : MonoBehaviour
     [SerializeField] float _extraDamage_sharpShooter = 5.0f;
     Coroutine _sharpShooterCo = null;
 
+    [SerializeField] List<GameObject> _trap = null;
+
     void Start()
     {
         skillListCheck = false;
         SkillList.SetActive(false);
         _rb = this.GetComponent<Rigidbody2D>();
         _hp = _maxHp;
+
+        if(_SkillLevelList.Count == 0)
+        {
+            for (int i = 0; i <= Skill_Info.Instance._iconSource.Count; ++i)
+                _SkillLevelList.Add(1);
+        }
     }
 
     void Update()
@@ -74,6 +89,7 @@ public class Player : MonoBehaviour
         if (StageManager.Instance.pause)
         {
             jumpCoolDown();
+            _pc.MoveForJoyStick(0.0f);
             return;
         }
 
@@ -153,7 +169,6 @@ public class Player : MonoBehaviour
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
-        //updateSkillCoolDown();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -213,15 +228,38 @@ public class Player : MonoBehaviour
         {
             _pc.Attack();
             _se_Melee.bladeSE();
-            _delayCount = 0.0f;
+            if(_modeID == 0)
+                _delayCount = 0.0f;
             Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), _attackDistance);
 
             foreach (Collider2D c in co)
             {
                 Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
                 if (EH != null)
-                    EH.Hit(_attackDamage);
+                    EH.Hit(_attackDamage * _SkillLevelList[0]);
             }
+
+            if (_modeID == 1)
+            {
+                if (_extraAttackCo != null) StopCoroutine(_extraAttackCo);
+                _extraAttackCo = StartCoroutine(extraAttack());
+            }
+        }
+    }
+
+    IEnumerator extraAttack()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        _se_Melee.bladeSE();
+        _delayCount = 0.0f;
+        Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), _attackDistance);
+
+        foreach (Collider2D c in co)
+        {
+            Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
+            if (EH != null)
+                EH.Hit(_attackDamage * _SkillLevelList[0]);
         }
     }
 
@@ -233,13 +271,19 @@ public class Player : MonoBehaviour
             _se_Melee.bladeSE();
             _delayCount = 0.0f;
 
-            Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y + 1.0f), _attackDistance);
+            Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - 1.0f, transform.position.y + 2.0f), _attackDistance);
 
             foreach (Collider2D c in co)
             {
                 Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
                 if (EH != null)
-                    EH.Hit(_attackDamage * 1.5f);
+                {
+                    if (_modeID == 0)
+                        EH.Hit(_attackDamage * 1.5f * _SkillLevelList[1]);
+                    else if(_modeID == 1)
+                        EH.Hit(_attackDamage * 2.0f * _SkillLevelList[1]);
+                }
+
             }
         }
     }
@@ -251,7 +295,7 @@ public class Player : MonoBehaviour
         _pc.DamagedAnim();
         _hp -= value;
         if (_hpBar != null)
-            _hpBar.GetComponent<HpBar>().setHpBar(-value);
+            _hpBar.GetComponent<HpBar>().setHpBar(_hp);
         _se_damaged.PlayDamaged();
         if (_hp <= 0)
             Die();
@@ -273,7 +317,7 @@ public class Player : MonoBehaviour
         if (_isDie) return;
 
         float temp = Mathf.Min(_hp + value, _maxHp);
-        _hp += temp;
+        _hp = temp;
         if (_hpBar != null)
             _hpBar.GetComponent<HpBar>().setHpBar(temp);
     }
@@ -303,6 +347,11 @@ public class Player : MonoBehaviour
         Skill_Info.Instance.AddSkill(id);
     }
 
+    public void setExtraDamage(int id, int level)
+    {
+        _SkillLevelList[id] += level;
+    }
+
     public void fireBall()
     {
         if (_fireBall != null)
@@ -310,6 +359,7 @@ public class Player : MonoBehaviour
             _pc.Attack();
             GameObject gm = Instantiate(_fireBall);
             gm.GetComponent<Bullet_straight>().setAlies(true);
+            gm.GetComponent<Bullet_straight>().setExtraDamage(_SkillLevelList[2]);
             if (_extraDamage > 0)
                 gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
             if (_pc.flip)
@@ -329,7 +379,7 @@ public class Player : MonoBehaviour
     {
         if (_healFx != null)
         {
-            healed(5.0f);
+            healed(5.0f * _SkillLevelList[3] + _extraHeal);
             GameObject gm = Instantiate(_healFx);
         }
     }
@@ -370,6 +420,7 @@ public class Player : MonoBehaviour
 
             GameObject gm = Instantiate(_bulletsObject);
             gm.GetComponent<Bullet_straight>().setAlies(true);
+            gm.GetComponent<Bullet_straight>().setExtraDamage(_SkillLevelList[4]);
             if (_extraDamage > 0)
                 gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
             if (_pc.flip)
@@ -392,7 +443,8 @@ public class Player : MonoBehaviour
             _pc.Attack();
             GameObject gm = Instantiate(_throwingStoneObject);
             gm.GetComponent<Bullet_straight>().setAlies(true);
-            if(_extraDamage > 0)
+            gm.GetComponent<Bullet_straight>().setExtraDamage(_SkillLevelList[5]);
+            if (_extraDamage > 0)
                 gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
             if (_pc.flip)
             {
@@ -417,7 +469,7 @@ public class Player : MonoBehaviour
 
             _pc.Stomp();
             _sharpShooterFx.SetActive(true);
-            _extraDamage += _extraDamage_sharpShooter;
+            _extraDamage += _extraDamage_sharpShooter * _SkillLevelList[6];
             _sharpShooterCo = StartCoroutine(sharpShooterCoolDown());
         }
     }
@@ -427,7 +479,25 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(_sharpShooterDuration);
 
         _sharpShooterFx.SetActive(false);
-        _extraDamage -= _extraDamage_sharpShooter;
+        _extraDamage -= _extraDamage_sharpShooter * _SkillLevelList[6];
+    }
+
+    //이하 스킬은 추가 해금되는 스킬
+
+    public void setTrap()
+    {
+        for(int i = 0; i < _trap.Count; ++i)
+        {
+            if(!_trap[i].activeSelf)
+            {
+                _trap[i].SetActive(true);
+                if(_pc.flip)
+                    _trap[i].transform.position = this.transform.position + Vector3.right * 3.0f;
+                else
+                    _trap[i].transform.position = this.transform.position + Vector3.left * 3.0f;
+                break;
+            }
+        }
     }
 
     //기본공격, 스킬 통합 호출 함수
@@ -443,6 +513,55 @@ public class Player : MonoBehaviour
             case 4: spreadBullets(); break;
             case 5: ThrowingStone(); break;
             case 6: sharpShooter(); break;
+            case 7: setTrap(); break;
         }
+    }
+
+    //패시브
+
+    public void setMaxHp(float value)
+    {
+        _maxHp += value;
+        _hpBar.GetComponent<HpBar>().setMaxHpBar(5.0f);
+    }
+
+    public void UpgradeMelee(float value)
+    {
+        _attackDamage += value;
+    }
+
+    public void UpgradeMagic(float value)
+    {
+        _extraDamage += value;
+    }
+
+    public void UpgradeHeal(float value)
+    {
+        _extraHeal += value;
+    }
+
+    public void useSwordMode()
+    {
+        if(_modeID != 1)
+        {
+            _swordMode.SetActive(true);
+            _normalMode.SetActive(false);
+            _pc = _swordMode.GetComponent<PlayerController>();
+            _attackDistance += 1.0f;
+            _modeID = 1;
+        }
+        else
+        {
+            _swordMode.SetActive(false);
+            _normalMode.SetActive(true);
+            _pc = _normalMode.GetComponent<PlayerController>();
+            _attackDistance -= 1.0f;
+            _modeID = 0;
+        }
+    }
+
+    public void AddNewSkillOnList(int id)
+    {
+        Skill_Info.Instance.allowSkill.Add(id);
     }
 }

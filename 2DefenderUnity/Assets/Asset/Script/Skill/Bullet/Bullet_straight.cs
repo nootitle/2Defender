@@ -11,6 +11,7 @@ public class Bullet_straight : MonoBehaviour
     [SerializeField] GameObject _hitEffect = null;
     [SerializeField] AudioSource _SE = null;
     [SerializeField] float _lifeTime = 5.0f;
+    float _extraDamage = 0.0f;
 
     void Start()
     {
@@ -32,7 +33,7 @@ public class Bullet_straight : MonoBehaviour
         {
             if(gm.tag.Contains("Enemy"))
             {
-                gm.GetComponent<Enemy_Hit>().Hit(_attackPower);
+                gm.GetComponent<Enemy_Hit>().Hit(_attackPower + _extraDamage);
                 if(_hitEffect != null)
                 {
                     GameObject fx = Instantiate(_hitEffect);
@@ -43,7 +44,26 @@ public class Bullet_straight : MonoBehaviour
         }
         else
         {
+            if (gm.tag.Contains("Player"))
+            {
+                gm.GetComponent<Player>().Damaged(_attackPower + _extraDamage);
+                if (_hitEffect != null)
+                {
+                    GameObject fx = Instantiate(_hitEffect);
+                    fx.transform.position = this.transform.position;
+                }
+                Destroy(this.gameObject);
+            }
+        }
+    }
 
+    public void setExtraDamage(int _level)
+    {
+        switch(_level)
+        {
+            case 1: _extraDamage = 0.0f; break;
+            case 2: _extraDamage = 5.0f; break;
+            case 3: _extraDamage = 10.0f; break;
         }
     }
     
@@ -54,9 +74,9 @@ public class Bullet_straight : MonoBehaviour
 
     public void setDirection(Vector3 dir)
     {
-        Direction = dir;
+        Direction = dir.normalized;
         if (dir.x < 0)
-            this.transform.eulerAngles = new Vector3(0.0f, 0.0f, -90.0f);
+            this.transform.eulerAngles = this.transform.eulerAngles * -1;
     }
 
     public void setDirection(Vector3 dir, Vector3 angle)

@@ -12,6 +12,8 @@ public class Skill_Info : MonoBehaviour
     [SerializeField] public List<string> _name = null;
     [SerializeField] public List<string> _description = null;
     [SerializeField] GameObject _player = null;
+    [SerializeField] GameObject _goldTextWindow = null;
+    [SerializeField] public List<int> allowSkill = null;
     public List<int> _alreadyHave = null;
     public int IDCount = 0;
 
@@ -34,6 +36,9 @@ public class Skill_Info : MonoBehaviour
                 this.transform.GetChild(i).GetComponent<SkillSlotController>().setID(i, _coolTime[i]);
         }
         IDCount = 2;
+
+        for (int i = 0; i < 7; ++i)
+            allowSkill.Add(i);
     }
 
     public Player GetPlayer()
@@ -48,7 +53,20 @@ public class Skill_Info : MonoBehaviour
         for(int i = 0; i < _alreadyHave.Count; ++i)
             if(_alreadyHave[i] == id)
             {
-                Debug.Log("중복된 스킬");
+                if(_player.transform.GetComponent<Player>()._SkillLevelList[id] <= 3)
+                {
+                    _player.transform.GetComponent<Player>().setExtraDamage(id, 1);
+                    this.transform.GetChild(i).GetComponent<SkillSlotController>().setLevelIcon();
+                }
+                else
+                {
+                    StorageManager.Instance.setGold(100);
+                    if(!_goldTextWindow.activeSelf)
+                    {
+                        _goldTextWindow.SetActive(true);
+                        _goldTextWindow.GetComponent<WindowDisappear>().triggerOn();
+                    }
+                }
                 return;
             }
 
@@ -63,6 +81,11 @@ public class Skill_Info : MonoBehaviour
 
     public int GetSkillMaxNum()
     {
-        return _iconSource.Count;
+        return allowSkill.Count;
+    }
+
+    public void AddNewSkillOnList(int id)
+    {
+        allowSkill.Add(id);
     }
 }

@@ -56,6 +56,7 @@
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\randomParticleRotation.cs" />
     <Compile Include="Assets\Asset\Script\UI\SetSkill.cs" />
     <Compile Include="Assets\Asset\Script\Player\Player.cs" />
+    <Compile Include="Assets\Asset\Script\UI\WindowDisappear.cs" />
     <Compile Include="Assets\Asset\Script\Player\FootStepSE.cs" />
     <Compile Include="Assets\Asset\Script\Skill\GetSkill.cs" />
     <Compile Include="Assets\Asset\Script\UI\SkillSlotController.cs" />
@@ -81,12 +82,16 @@
     <Compile Include="Assets\Asset\Script\Enemy\Enemy_Hit.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\Dust_DestroyEvent.cs" />
     <Compile Include="Assets\Asset\Material\Effect\SelfDestruct.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Archor.cs" />
     <Compile Include="Assets\Asset\Script\Player\CameraController.cs" />
+    <Compile Include="Assets\Asset\Script\Skill\Bullet\SplashArea.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Archor_Anim.cs" />
     <Compile Include="Assets\Asset\Script\Player\DamagedSE.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\PrototypeHeroAnimEvents.cs" />
     <Compile Include="Assets\Asset\Script\Manager\StageManager.cs" />
     <Compile Include="Assets\Asset\Script\UI\ButtonChange.cs" />
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\ReverseNormals.cs" />
+    <Compile Include="Assets\Asset\Script\Manager\StorageManager.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\H_Melee_Anim.cs" />
     <Compile Include="Assets\Asset\Script\etc\HeroKnight.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_straight.cs" />
@@ -107,11 +112,11 @@
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_Explosion.cs" />
     <Compile Include="Assets\Asset\Script\Player\SkillInvenController.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\Skill\Bullet\SplashArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />
     <None Include="Assets\Asset\Map\2D_Background_SunshineForest\2D_Horizontal_battle_Enviroment_05\Get full backgrounds pack.txt" />
+    <None Include="Assets\Asset\Animation\SpriteSheets\Trap.txt" />
     <None Include="Assets\Asset\Effect\Particle Ribbon by Moonflower Carnivore\readme_Simple_Particle_Ribbon.txt" />
     <None Include="Assets\Asset\Animation\Warrior free set\License.txt" />
     <None Include="Assets\Asset\Sound\ShootingSound\ReadMe.txt" />
