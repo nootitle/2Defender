@@ -188,4 +188,22 @@ public class Archor : MonoBehaviour
             _pc.MoveAnim(false, _rb.velocity.x);
         }
     }
+
+    public void CallStun(float duration)
+    {
+        _isStun = true;
+        if (_stunCo != null) StopCoroutine(_stunCo);
+        _stunCo = StartCoroutine(exitCallStunFunction(duration));
+    }
+
+    IEnumerator exitCallStunFunction(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        if (!_isDie)
+        {
+            _isStun = false;
+            _pc.MoveAnim(false, _rb.velocity.x);
+        }
+    }
 }

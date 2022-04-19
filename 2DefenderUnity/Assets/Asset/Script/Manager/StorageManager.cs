@@ -19,16 +19,6 @@ public class StorageManager : MonoBehaviour
             Instance = this;
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void setGold(int gold)
     {
         _gold += gold;

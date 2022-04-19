@@ -68,6 +68,21 @@ public class Player : MonoBehaviour
 
     [SerializeField] List<GameObject> _trap = null;
 
+    [SerializeField] List<GameObject> _trackingBullets = null;
+    [SerializeField] GameObject _trackingCastFx = null;
+    [SerializeField] float _trackingAreaRadius = 5.0f;
+
+    [SerializeField] GameObject _shieldBar = null;
+    [SerializeField] GameObject _shieldFx = null;
+    [SerializeField] AudioSource _shieldSE = null;
+    [SerializeField] float _shieldMax = 100.0f;
+    float _shield = 0.0f;
+
+    [SerializeField] float _durationSliding = 2.0f;
+    [SerializeField] AudioSource _slidingSE = null;
+    Coroutine _slidingCo = null;
+    bool _isSliding = false;
+
     void Start()
     {
         skillListCheck = false;
@@ -86,6 +101,7 @@ public class Player : MonoBehaviour
     {
         if (_isDie) return;
         if (_isStun) return;
+ 
         if (StageManager.Instance.pause)
         {
             jumpCoolDown();
@@ -174,6 +190,19 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jumpCoolDown();
+
+        if(_isSliding)
+        {
+            if(collision.transform.gameObject.tag.Contains("Enemy"))
+            {
+                Enemy_Hit EH = collision.gameObject.GetComponent<Enemy_Hit>();
+                if (EH != null)
+                {
+                    _slidingSE.Play();
+                    EH.Hit(_attackDamage * _SkillLevelList[10]);
+                }
+            }
+        }
     }
 
     public void SkillListInvisible()
@@ -291,9 +320,29 @@ public class Player : MonoBehaviour
     public void Damaged(float value)
     {
         if (_isDie) return;
+        if (_isSliding) return;
+
+        float temp = value;
+        if(_shield > 0)
+            _shieldSE.Play();
+
+        if (_shield >= temp)
+        {
+            _shield -= temp;
+            _shieldBar.GetComponent<HpBar>().setHpBar(_shield);
+            return;
+        }
+        else
+        {
+            temp -= _shield;
+            _shieldBar.GetComponent<HpBar>().setHpBar(_shield);
+            _hp -= value;
+        }
+
+        if (_shield <= 0)
+            _shieldFx.SetActive(false);
 
         _pc.DamagedAnim();
-        _hp -= value;
         if (_hpBar != null)
             _hpBar.GetComponent<HpBar>().setHpBar(_hp);
         _se_damaged.PlayDamaged();
@@ -336,20 +385,19 @@ public class Player : MonoBehaviour
 
     void Die()
     {
+        _hpBar.GetComponent<HpBar>().setHpBar(0);
         _pc.DieAnim();
         _isDie = true;
     }
 
     //스킬 작업중
 
-    public void GetSkill(int id)
+    public void setSkillLevel(int id, int level)
     {
-        Skill_Info.Instance.AddSkill(id);
-    }
-
-    public void setExtraDamage(int id, int level)
-    {
-        _SkillLevelList[id] += level;
+        if (id == -1)
+            _SkillLevelList[id] = 1;
+        else
+            _SkillLevelList[id] += level;
     }
 
     public void fireBall()
@@ -486,18 +534,67 @@ public class Player : MonoBehaviour
 
     public void setTrap()
     {
-        for(int i = 0; i < _trap.Count; ++i)
+        for (int i = 0; i < _trap.Count; ++i)
         {
             if(!_trap[i].activeSelf)
             {
                 _trap[i].SetActive(true);
+                _trap[i].GetComponent<BearTrap>().UpgradeDuration(_SkillLevelList[7]);
                 if(_pc.flip)
-                    _trap[i].transform.position = this.transform.position + Vector3.right * 3.0f;
+                    _trap[i].transform.position = this.transform.position + new Vector3(-3.0f, 3.0f, 0.0f);
                 else
-                    _trap[i].transform.position = this.transform.position + Vector3.left * 3.0f;
+                    _trap[i].transform.position = this.transform.position + new Vector3(3.0f, 3.0f, 0.0f);
                 break;
             }
         }
+    }
+
+    public void trackingBullet()
+    {
+        GameObject gm = Instantiate(_trackingCastFx);
+        gm.transform.position = this.transform.position;
+        Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _trackingAreaRadius);
+        int idx = 0;
+
+        foreach (Collider2D c in co)
+        {
+            if (c.transform.gameObject.tag.Contains("Enemy"))
+            {
+                if (!_trackingBullets[idx].activeSelf)
+                {
+                    _trackingBullets[idx].SetActive(true);
+                    _trackingBullets[idx].GetComponent<TrackingBullet>().Upgrade(_SkillLevelList[8]);
+                    _trackingBullets[idx].GetComponent<TrackingBullet>().startTracking(c.transform.gameObject);
+
+                }
+                ++idx;
+            }
+            if (idx == _trackingBullets.Count)
+                break;
+        }
+    }
+
+    public void MakeShield()
+    {
+        _shieldSE.Play();
+        _shieldFx.SetActive(true);
+        _shield = _shieldMax * _SkillLevelList[9];
+        _shieldBar.GetComponent<HpBar>().setHpBar(_shield);
+    }
+
+    public void Sliding()
+    {
+        _pc.slidingAnim();
+        _isSliding = true;
+        if (_slidingCo != null) StopCoroutine(_slidingCo);
+        _slidingCo = StartCoroutine(ExitSliding());
+    }
+
+    IEnumerator ExitSliding()
+    {
+        yield return new WaitForSeconds(_durationSliding);
+
+        _isSliding = false;
     }
 
     //기본공격, 스킬 통합 호출 함수
@@ -514,6 +611,9 @@ public class Player : MonoBehaviour
             case 5: ThrowingStone(); break;
             case 6: sharpShooter(); break;
             case 7: setTrap(); break;
+            case 8: trackingBullet(); break;
+            case 9: MakeShield(); break;
+            case 10: Sliding(); break;
         }
     }
 
@@ -562,6 +662,6 @@ public class Player : MonoBehaviour
 
     public void AddNewSkillOnList(int id)
     {
-        Skill_Info.Instance.allowSkill.Add(id);
+        Skill_Info.Instance.AddNewSkillOnList(id);
     }
 }

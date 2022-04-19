@@ -24,7 +24,6 @@ public class StageManager : MonoBehaviour
 
     void Update()
     {
-        showRewardWindow();
         stage1();
     }
 
@@ -34,18 +33,16 @@ public class StageManager : MonoBehaviour
         {
             EnemyManager.Instance.setSpawnLevel(EnemyManager.Instance.getSpawnLevel() + 1);
             EnemyManager.Instance.setMaxEnemy(EnemyManager.Instance.getMaxEnemy() + 1);
+            showRewardWindow();
             killCount = 0;
         }
     }
 
     public void showRewardWindow()
     {
-        if(killCount != 0 && killCount % 5 == 0)
-        {
-            if (!_rewardWindow.activeSelf)
-                _rewardWindow.SetActive(true);
-            pause = true;
-        }
+        if (!_rewardWindow.activeSelf)
+            _rewardWindow.SetActive(true);
+        pause = true;
     }
 
     public void offRewardWindow()

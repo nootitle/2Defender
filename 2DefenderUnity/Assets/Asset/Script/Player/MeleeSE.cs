@@ -6,7 +6,6 @@ public class MeleeSE : MonoBehaviour
 {
     [SerializeField] List<AudioSource> blade = null;
     int rnd_blade;
-    Coroutine _co = null;
 
     public void bladeSE()
     {

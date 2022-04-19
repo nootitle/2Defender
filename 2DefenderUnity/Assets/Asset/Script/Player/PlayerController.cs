@@ -156,4 +156,9 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("Die", true);
         _animator.SetTrigger("DieOnce");
     }
+
+    public void slidingAnim()
+    {
+        _animator.SetTrigger("Sliding");
+    }
 }

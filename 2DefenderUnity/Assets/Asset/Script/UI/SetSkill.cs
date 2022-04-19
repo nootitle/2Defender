@@ -23,7 +23,7 @@ public class SetSkill : MonoBehaviour
         for (int j = 0; j < Chocie.Count; ++j)
         {
             bool flag = false;
-            int rnd = Random.Range(0, Skill_Info.Instance.GetSkillMaxNum());
+            int rnd = Random.Range(0, Skill_Info.Instance.GetSkillMaxNum() + 1);
 
             for (int i = 0; i < set.Count; ++i)
                 if (set[i] == rnd)
@@ -39,13 +39,13 @@ public class SetSkill : MonoBehaviour
 
             bool flag2 = false;
             for(int i = 0; i < Skill_Info.Instance.allowSkill.Count; ++i)
-                if(Skill_Info.Instance.allowSkill[i] == j)
+                if(Skill_Info.Instance.allowSkill[i] == rnd)
                 {
                     flag2 = true;
                     break;
                 }
 
-            if(flag2)
+            if (flag2)
             {
                 set.Add(rnd);
                 Chocie[j].GetComponent<Image>().sprite = Skill_Info.Instance._iconSource[rnd];
@@ -53,6 +53,8 @@ public class SetSkill : MonoBehaviour
                 description[j].transform.GetChild(0).GetComponent<Text>().text = Skill_Info.Instance._description[rnd];
                 Chocie[j].GetComponent<GetSkill>().setID(rnd);
             }
+            else
+                --j;
         }
     }
 }

@@ -15,6 +15,7 @@ public class SkillSlotController : MonoBehaviour
     private bool SkillOn;
     Coroutine co = null;
     int level = 1;
+    public int GetID() { return _id; }
 
     void Start()
     {
@@ -35,6 +36,13 @@ public class SkillSlotController : MonoBehaviour
     {
         _levelIcon[level - 1].SetActive(true);
         ++level;
+    }
+
+    public void offAllLevelIcon()
+    {
+        for (int i = 0; i < _levelIcon.Count; ++i)
+            _levelIcon[i].SetActive(false);
+        level = 1;
     }
 
     public void StartCooldown()

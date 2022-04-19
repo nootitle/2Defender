@@ -16,6 +16,7 @@ public class Skill_Info : MonoBehaviour
     [SerializeField] public List<int> allowSkill = null;
     public List<int> _alreadyHave = null;
     public int IDCount = 0;
+    public int maxID = 0;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class Skill_Info : MonoBehaviour
                 this.transform.GetChild(i).GetComponent<SkillSlotController>().setID(i, _coolTime[i]);
         }
         IDCount = 2;
+        maxID = 6;
 
         for (int i = 0; i < 7; ++i)
             allowSkill.Add(i);
@@ -55,7 +57,7 @@ public class Skill_Info : MonoBehaviour
             {
                 if(_player.transform.GetComponent<Player>()._SkillLevelList[id] <= 3)
                 {
-                    _player.transform.GetComponent<Player>().setExtraDamage(id, 1);
+                    _player.transform.GetComponent<Player>().setSkillLevel(id, 1);
                     this.transform.GetChild(i).GetComponent<SkillSlotController>().setLevelIcon();
                 }
                 else
@@ -81,11 +83,31 @@ public class Skill_Info : MonoBehaviour
 
     public int GetSkillMaxNum()
     {
-        return allowSkill.Count;
+        return maxID;
     }
 
     public void AddNewSkillOnList(int id)
     {
+        for (int i = 0; i < allowSkill.Count; ++i)
+            if (allowSkill[i] == id)
+                return;
+
         allowSkill.Add(id);
+        if (id > maxID)
+            maxID = id;
+    }
+
+    public void ChangeSkill(int id, int idx)
+    {
+        _alreadyHave[idx] = id;
+
+        this.transform.GetChild(idx).GetComponent<Image>().sprite = _iconSource[id];
+        if (id >= _coolTime.Count)
+            this.transform.GetChild(idx).GetComponent<SkillSlotController>().setID(id);
+        else
+            this.transform.GetChild(idx).GetComponent<SkillSlotController>().setID(id, _coolTime[id]);
+
+        _player.transform.GetComponent<Player>().setSkillLevel(id, -1);
+        this.transform.GetChild(idx).GetComponent<SkillSlotController>().offAllLevelIcon();
     }
 }

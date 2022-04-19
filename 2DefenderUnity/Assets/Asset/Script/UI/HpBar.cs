@@ -7,9 +7,9 @@ public class HpBar : MonoBehaviour
 {
     [SerializeField] Slider _hpBar = null;
 
-    public void setHpBar(float damage)
+    public void setHpBar(float hp)
     {
-        _hpBar.value = damage;
+        _hpBar.value = hp;
     }
 
     public void setMaxHpBar(float value)

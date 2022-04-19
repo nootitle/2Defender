@@ -85,4 +85,41 @@ public class Enemy_Hit : MonoBehaviour
                 }
         }
     }
+
+    public void Stun(float duration)
+    {
+        switch (_type)
+        {
+            case 0:
+                {
+                    this.GetComponent<H_Melee>().CallStun(duration);
+                    break;
+                }
+            case 1:
+                {
+                    this.GetComponent<Skeleton_Melee>().CallStun(duration);
+                    break;
+                }
+            case 2:
+                {
+                    this.GetComponent<Skeleton_Melee>().CallStun(duration);
+                    break;
+                }
+            case 3:
+                {
+                    this.GetComponent<Slime>().CallStun(duration);
+                    break;
+                }
+            case 4:
+                {
+                    this.GetComponent<BOD>().CallStun(duration);
+                    break;
+                }
+            case 5:
+                {
+                    this.GetComponent<Archor>().CallStun(duration);
+                    break;
+                }
+        }
+    }
 }
