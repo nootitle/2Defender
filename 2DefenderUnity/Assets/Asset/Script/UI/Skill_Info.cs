@@ -14,6 +14,7 @@ public class Skill_Info : MonoBehaviour
     [SerializeField] GameObject _player = null;
     [SerializeField] GameObject _goldTextWindow = null;
     [SerializeField] public List<int> allowSkill = null;
+    [SerializeField] List<GameObject> _changeSkillWindowSlots = null;
     public List<int> _alreadyHave = null;
     public int IDCount = 0;
     public int maxID = 0;
@@ -30,6 +31,7 @@ public class Skill_Info : MonoBehaviour
         for(int i = 0; i < 2; ++i)
         {
             _alreadyHave.Add(i);
+            _changeSkillWindowSlots[i].GetComponent<Image>().sprite = _iconSource[i];
             this.transform.GetChild(i).GetComponent<Image>().sprite = _iconSource[i];
             if(i >= _coolTime.Count)
                 this.transform.GetChild(i).GetComponent<SkillSlotController>().setID(i);
@@ -59,6 +61,7 @@ public class Skill_Info : MonoBehaviour
                 {
                     _player.transform.GetComponent<Player>().setSkillLevel(id, 1);
                     this.transform.GetChild(i).GetComponent<SkillSlotController>().setLevelIcon();
+                    _changeSkillWindowSlots[i].GetComponent<ChangeSkillSlot>().setLevelIcon();
                 }
                 else
                 {
@@ -73,7 +76,9 @@ public class Skill_Info : MonoBehaviour
             }
 
         _alreadyHave.Add(id);
+        _changeSkillWindowSlots[IDCount].GetComponent<Image>().sprite = _iconSource[id];
         this.transform.GetChild(IDCount).GetComponent<Image>().sprite = _iconSource[id];
+
         if (id >= _coolTime.Count)
             this.transform.GetChild(IDCount).GetComponent<SkillSlotController>().setID(id);
         else
@@ -109,5 +114,8 @@ public class Skill_Info : MonoBehaviour
 
         _player.transform.GetComponent<Player>().setSkillLevel(id, -1);
         this.transform.GetChild(idx).GetComponent<SkillSlotController>().offAllLevelIcon();
+
+        _changeSkillWindowSlots[idx].GetComponent<Image>().sprite = _iconSource[idx];
+        _changeSkillWindowSlots[idx].GetComponent<ChangeSkillSlot>().offAllLevelIcon();
     }
 }

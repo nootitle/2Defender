@@ -63,6 +63,7 @@
     <Compile Include="Assets\Asset\Script\Player\LoadData.cs" />
     <Compile Include="Assets\Asset\Script\Player\SlotController.cs" />
     <Compile Include="Assets\Asset\Script\etc\MoveBackground.cs" />
+    <Compile Include="Assets\Asset\Script\UI\ChangeSkillSlot.cs" />
     <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\Lighting.cs" />
     <Compile Include="Assets\Asset\Map\UnderwaterFantasy\Scripts\Perspective2DSortMode.cs" />
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\rotation.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Assets\Asset\Script\Manager\EnemyManager.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Slime.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Skeleton_Melee_Anim.cs" />
+    <Compile Include="Assets\Free UI build package\Script\Slide.cs" />
     <Compile Include="Assets\Asset\Script\Player\billboard.cs" />
     <Compile Include="Assets\Asset\Script\Manager\SoundManager.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\BOD_Anim.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Assets\Asset\Script\Skill\hitfx\hitAndDestroy.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\ColorSwap\ColorSwap_Prototype.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Enemy_Hit.cs" />
+    <Compile Include="Assets\Free UI build package\Script\Togglescript.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\Dust_DestroyEvent.cs" />
     <Compile Include="Assets\Asset\Material\Effect\SelfDestruct.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Archor.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Assets\Asset\Script\Skill\Trap\BearTrap.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\PrototypeHeroAnimEvents.cs" />
     <Compile Include="Assets\Asset\Script\Manager\StageManager.cs" />
+    <Compile Include="Assets\Asset\Script\UI\IconDescription.cs" />
     <Compile Include="Assets\Asset\Script\UI\ButtonChange.cs" />
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\ReverseNormals.cs" />
     <Compile Include="Assets\Asset\Script\Manager\StorageManager.cs" />
@@ -101,6 +105,7 @@
     <Compile Include="Assets\Asset\Script\Enemy\H_Melee.cs" />
     <Compile Include="Assets\Asset\Script\UI\HpBar.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\TrackingBullet.cs" />
+    <Compile Include="Assets\Asset\Script\Manager\LoginManager.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\Sensor_Prototype.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Slime_Anim.cs" />
     <Compile Include="Assets\Asset\Script\UI\Joystick.cs" />
@@ -114,8 +119,9 @@
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_Explosion.cs" />
     <Compile Include="Assets\Asset\Script\Player\SkillInvenController.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\UI\IconDescription.cs" />
-    <Compile Include="Assets\Asset\Script\UI\ChangeSkillSlot.cs" />
+    <Compile Include="Assets\Asset\Script\Manager\LobbyManager.cs" />
+    <Compile Include="Assets\Resources\DataManager.cs" />
+    <Compile Include="Assets\Asset\Script\Manager\CSVReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />
@@ -126,6 +132,7 @@
     <None Include="Assets\Asset\Sound\ShootingSound\ReadMe.txt" />
     <None Include="Assets\Asset\Shader\Particle Ribbon by Moonflower Carnivore_Shaders\Particle Alpha Blend HDR.shader" />
     <None Include="Assets\Asset\Shader\NormalMappedSprite-Animated.shader" />
+    <None Include="Assets\Dark_Brown_GUI_kit\Dark_Brown_GUI_kit.txt" />
     <None Include="Assets\Asset\Sound\MentalDreamsAssets\SoldierSoundsPack\ReadMe!.txt" />
     <None Include="Assets\Asset\Map\Forest road BG\READ_ME_\READ_ME_.txt" />
     <None Include="Assets\Prototype Hero - Pixel Art\ColorSwap\Sprites-ColorSwap.shader" />
