@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class H_Melee : MonoBehaviour
 {
+    [SerializeField] GameObject _center = null;
     [SerializeField] float _maxHp = 100.0f;
     float _hp = 100.0f;
     [SerializeField] float _jumpPower = 5.0f;
@@ -16,6 +17,8 @@ public class H_Melee : MonoBehaviour
     [SerializeField] float _attackDelay = 2.0f;
     [SerializeField] float _attackDamage = 2.0f;
     [SerializeField] float _stun = 2.0f;
+    [SerializeField] AudioSource _hitSE = null;
+    [SerializeField] AudioSource _painSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -30,6 +33,8 @@ public class H_Melee : MonoBehaviour
 
     [SerializeField] GameObject _target = null;
     Player _player = null;
+
+    public GameObject GetCenter() { return _center; }
 
     void Start()
     {
@@ -51,14 +56,14 @@ public class H_Melee : MonoBehaviour
         if (_isStun) return;
         if (StageManager.Instance.pause) return;
 
-        if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
+        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
-            if (_target.transform.position.y > this.transform.position.y)
+            if (_target.transform.position.y > _center.transform.position.y)
                 stomping();
             else
                 Attack();
         }
-        else if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _chaseRange)
+        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
             chasing();
@@ -87,7 +92,7 @@ public class H_Melee : MonoBehaviour
 
     private void chasing()
     {
-        float dir = _target.transform.position.x - this.transform.position.x;
+        float dir = _target.transform.position.x - _center.transform.position.x;
         if (dir > 0)
             direction = 1;
         else
@@ -98,13 +103,13 @@ public class H_Melee : MonoBehaviour
 
     private void Patrol()
     {
-        if (this.transform.position.x < _originalPosition.x - _patrolRange)
+        if (_center.transform.position.x < _originalPosition.x - _patrolRange)
         {
             direction = 1;
             _pc.MoveAnim(_sprintTrigger, false, direction * _walkSpeed);
             Moving();
         }
-        else if (this.transform.position.x > _originalPosition.x + _patrolRange)
+        else if (_center.transform.position.x > _originalPosition.x + _patrolRange)
         {
             direction = -1;
             _pc.MoveAnim(_sprintTrigger, false, direction * _walkSpeed);
@@ -120,9 +125,6 @@ public class H_Melee : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         jumpCoolDown();
-
-        //if (collision.gameObject.tag.Contains("Enemy"))
-            //jump();
     }
 
     private void jump()
@@ -171,7 +173,7 @@ public class H_Melee : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
-            if (_target.transform.position.x - this.transform.position.x > 0)
+            if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
             else
                 _pc.setFlip(true);
@@ -187,7 +189,7 @@ public class H_Melee : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Stomp();
-            if (_target.transform.position.x - this.transform.position.x > 0)
+            if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
             else
                 _pc.setFlip(true);
@@ -200,8 +202,11 @@ public class H_Melee : MonoBehaviour
     {
         if (_isDie) return;
 
+        _hitSE.Play();
+        _painSE.Play();
         _pc.DamagedAnim();
         _hp -= value;
+
         if (_hp <= 0)
             Die();
         else

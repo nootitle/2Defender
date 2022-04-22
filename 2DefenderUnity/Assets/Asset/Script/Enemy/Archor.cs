@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Archor : MonoBehaviour
 {
+    [SerializeField] GameObject _center = null;
     [SerializeField] float _maxHp = 100.0f;
     float _hp = 100.0f;
     [SerializeField] float _jumpPower = 5.0f;
@@ -15,10 +16,13 @@ public class Archor : MonoBehaviour
     [SerializeField] float _attackDelay = 4.0f;
     [SerializeField] float _stun = 2.0f;
     [SerializeField] GameObject _arrow = null;
+    [SerializeField] AudioSource _hitSE = null;
+    [SerializeField] AudioSource _painSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isStun = false;
     bool _isDie = false;
+    bool _isAttacking = false;
     Coroutine _stunCo;
     Coroutine _extraHitCo;
 
@@ -28,6 +32,8 @@ public class Archor : MonoBehaviour
 
     [SerializeField] GameObject _target = null;
     Player _player = null;
+
+    public GameObject GetCenter() { return _center; }
 
     void Start()
     {
@@ -47,11 +53,12 @@ public class Archor : MonoBehaviour
 
         if (_isDie) return;
         if (_isStun) return;
+        if (_isAttacking) return;
         if (StageManager.Instance.pause) return;
 
-        if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
+        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             Attack();
-        else if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _chaseRange)
+        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
             chasing();
         else
             Patrol();
@@ -67,7 +74,7 @@ public class Archor : MonoBehaviour
 
     private void chasing()
     {
-        float dir = _target.transform.position.x - this.transform.position.x;
+        float dir = _target.transform.position.x - _center.transform.position.x;
         if (dir > 0)
             direction = 1;
         else
@@ -77,13 +84,13 @@ public class Archor : MonoBehaviour
 
     private void Patrol()
     {
-        if (this.transform.position.x < _originalPosition.x - _patrolRange)
+        if (_center.transform.position.x < _originalPosition.x - _patrolRange)
         {
             direction = 1;
             _pc.MoveAnim(false, direction * _walkSpeed);
             Moving();
         }
-        else if (this.transform.position.x > _originalPosition.x + _patrolRange)
+        else if (_center.transform.position.x > _originalPosition.x + _patrolRange)
         {
             direction = -1;
             _pc.MoveAnim(false, direction * _walkSpeed);
@@ -124,23 +131,46 @@ public class Archor : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
-            GameObject gm = Instantiate(_arrow);
-            gm.transform.position = this.transform.position + Vector3.up * 2.0f;
-            gm.GetComponent<Bullet_straight>().setDirection(_target.transform.position - gm.transform.position);
-            if (_target.transform.position.x - this.transform.position.x > 0)
+            _isAttacking = true;
+
+            if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
             else
                 _pc.setFlip(true);
-            _delayCount = 0.0f;
+
+            if (_extraHitCo != null) StopCoroutine(_extraHitCo);
+            _extraHitCo = StartCoroutine(ExtraHit());
         }
-        else
-            _pc.MoveAnim(false, 0);
+    }
+
+    IEnumerator ExtraHit()
+    {
+        yield return new WaitForSeconds(0.55f);
+
+        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_arrow);
+            gm.transform.position = _center.transform.position;
+            float temp = Mathf.Atan((_target.transform.position.y - _center.transform.position.y) /
+                (_target.transform.position.x - _center.transform.position.x)) * Mathf.Rad2Deg;
+            if (_target.transform.position.x - _center.transform.position.x > 0)
+                gm.transform.eulerAngles = new Vector3(0.0f, 0.0f, gm.transform.eulerAngles.z + temp + 180.0f);
+            else
+                gm.transform.eulerAngles = new Vector3(0.0f, 0.0f, gm.transform.eulerAngles.z + temp);
+            gm.GetComponent<Bullet_straight>().setDirection(_target.transform.position - gm.transform.position);
+        }
+        _pc.MoveAnim(true, 0);
+        _isAttacking = false;
+        _delayCount = 0.0f;
     }
 
     public void Damaged(float value)
     {
+        _hitSE.Play();
+        _painSE.Play();
         _pc.DamagedAnim();
         _hp -= value;
+
         if (_hp <= 0)
             Die();
         else

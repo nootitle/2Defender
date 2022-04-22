@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
@@ -34,7 +35,6 @@ public class StageManager : MonoBehaviour
             EnemyManager.Instance.setSpawnLevel(EnemyManager.Instance.getSpawnLevel() + 1);
             EnemyManager.Instance.setMaxEnemy(EnemyManager.Instance.getMaxEnemy() + 1);
             showRewardWindow();
-            killCount = 0;
         }
     }
 
@@ -53,5 +53,15 @@ public class StageManager : MonoBehaviour
             _rewardWindow.SetActive(false);
             pause = false;
         }
+    }
+
+    public void ReturnToMenu()
+    {
+        offRewardWindow();
+        StorageManager.Instance.updateGoldData();
+        if (DataStreamToStage.Instance != null)
+            DataStreamToStage.Instance.ReturnToMenu();
+        else
+            SceneManager.LoadScene(0);
     }
 }

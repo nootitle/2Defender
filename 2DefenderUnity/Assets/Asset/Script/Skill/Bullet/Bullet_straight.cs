@@ -11,6 +11,7 @@ public class Bullet_straight : MonoBehaviour
     [SerializeField] GameObject _hitEffect = null;
     [SerializeField] AudioSource _SE = null;
     [SerializeField] float _lifeTime = 5.0f;
+    [SerializeField] bool _manualRotate = false;
     float _extraDamage = 0.0f;
 
     void Start()
@@ -26,19 +27,25 @@ public class Bullet_straight : MonoBehaviour
         Moving();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject gm = collision.transform.gameObject;
-        if(_isAlies)
+        if (_isAlies)
         {
-            if(gm.tag.Contains("Enemy"))
+            if (gm.tag.Contains("Enemy"))
             {
                 gm.GetComponent<Enemy_Hit>().Hit(_attackPower + _extraDamage);
-                if(_hitEffect != null)
+                if (_hitEffect != null)
                 {
                     GameObject fx = Instantiate(_hitEffect);
                     fx.transform.position = this.transform.position;
-                }    
+                    Destroy(this.gameObject);
+                }       
+            }
+            else if (gm.layer == 11)
+            {
+                GameObject fx = Instantiate(_hitEffect);
+                fx.transform.position = this.transform.position;
                 Destroy(this.gameObject);
             }
         }
@@ -51,10 +58,17 @@ public class Bullet_straight : MonoBehaviour
                 {
                     GameObject fx = Instantiate(_hitEffect);
                     fx.transform.position = this.transform.position;
+                    Destroy(this.gameObject);
                 }
+            }
+            else if (gm.layer == 11)
+            {
+                GameObject fx = Instantiate(_hitEffect);
+                fx.transform.position = this.transform.position;
                 Destroy(this.gameObject);
             }
         }
+
     }
 
     public void setExtraDamage(int _level)
@@ -75,8 +89,9 @@ public class Bullet_straight : MonoBehaviour
     public void setDirection(Vector3 dir)
     {
         Direction = dir.normalized;
-        if (dir.x < 0)
-            this.transform.eulerAngles = this.transform.eulerAngles * -1;
+        
+        if (dir.x < 0 && !_manualRotate)
+            this.transform.eulerAngles = this.transform.eulerAngles * -1;  
     }
 
     public void setDirection(Vector3 dir, Vector3 angle)

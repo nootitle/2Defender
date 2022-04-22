@@ -12,7 +12,9 @@ public class LoginManager : MonoBehaviour
     [SerializeField] GameObject _LowLengthMessage = null;
     [SerializeField] GameObject _AlreadyMessage = null;
     [SerializeField] GameObject _incorrectMessage = null;
+    [SerializeField] GameObject _accountCreatedMessage = null;
     [SerializeField] GameObject _sucessMessage = null;
+    [SerializeField] GameObject _titleCanvas = null;
     [SerializeField] GameObject _loginCanvas = null;
     [SerializeField] GameObject _lobbyCanvas = null;
     [SerializeField] GameObject _lobbyManager = null;
@@ -21,6 +23,12 @@ public class LoginManager : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+
+        if (DataStreamToStage.Instance != null && DataStreamToStage.Instance.GetLogIn())
+        {
+            _titleCanvas.SetActive(false);
+            login();
+        }
     }
 
     public void createAccount()
@@ -43,15 +51,24 @@ public class LoginManager : MonoBehaviour
             _AlreadyMessage.SetActive(true);
             return;
         }
-        
+
+        allMessageOff();
+        _accountCreatedMessage.SetActive(true);
         PlayerPrefs.SetString(id, pass);
-        PlayerPrefs.SetString(id + "PlayerSetting", "100 50 0 0 0 ");
+        PlayerPrefs.SetString(id + "PlayerSetting", "100 50 0 0 0 0 ");
     }
 
     public void login()
     {
         string id = _id_field.text;
         string pass = _pass_field.text;
+
+        if(DataStreamToStage.Instance != null && DataStreamToStage.Instance.GetLogIn())
+        {
+            id = DataStreamToStage.Instance.getID();
+            pass = PlayerPrefs.GetString(id);
+            DataStreamToStage.Instance.logOut();
+        }
 
         if(!PlayerPrefs.HasKey(id))
         {
@@ -68,6 +85,7 @@ public class LoginManager : MonoBehaviour
             _loginCanvas.SetActive(false);
             _lobbyManager.GetComponent<LobbyManager>().setID(id);
             _lobbyManager.GetComponent<LobbyManager>().LobbyInit(id);
+            DataStreamToStage.Instance.setID(id);
         }
         else
         {
@@ -87,5 +105,12 @@ public class LoginManager : MonoBehaviour
         _AlreadyMessage.SetActive(false);
         _incorrectMessage.SetActive(false);
         _sucessMessage.SetActive(false);
+        _accountCreatedMessage.SetActive(false);
+    }
+
+    public void TitleToLogin()
+    {
+        _loginCanvas.SetActive(true);
+        _titleCanvas.SetActive(false);
     }
 }

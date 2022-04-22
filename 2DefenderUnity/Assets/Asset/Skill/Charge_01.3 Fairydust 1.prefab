@@ -4766,9 +4766,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a2b6f68f4ac84894694eff81d03b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 2
+  Normal_damage: 25
   _attackDelay: 1
-  _duration: 5
+  Normal_duration: 5
   _se: {fileID: 1733555932358178699}
   _fx: {fileID: 6192724089161036641, guid: da80c0619ebb8d94588a561cc2bb095b, type: 3}
 --- !u!114 &114535781194712048
@@ -4798,7 +4798,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8787a22db31fdb041b2ed1b4cb3617e4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0

@@ -46,6 +46,18 @@ public class Enemy_Hit : MonoBehaviour
                         this.GetComponent<Archor>().Damaged(value);
                     break;
                 }
+            case 6:
+                {
+                    if (!this.GetComponent<H_Melee2>().GetDead())
+                        this.GetComponent<H_Melee2>().Damaged(value);
+                    break;
+                }
+            case 7:
+                {
+                    if (!this.GetComponent<H_Knight>().GetDead())
+                        this.GetComponent<H_Knight>().Damaged(value);
+                    break;
+                }
         }
     }
 
@@ -81,6 +93,16 @@ public class Enemy_Hit : MonoBehaviour
             case 5:
                 {
                     this.GetComponent<Archor>().respawn();
+                    break;
+                }
+            case 6:
+                {
+                    this.GetComponent<H_Melee2>().respawn();
+                    break;
+                }
+            case 7:
+                {
+                    this.GetComponent<H_Knight>().respawn();
                     break;
                 }
         }
@@ -120,6 +142,56 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<Archor>().CallStun(duration);
                     break;
                 }
+            case 6:
+                {
+                    this.GetComponent<H_Melee2>().CallStun(duration);
+                    break;
+                }
+            case 7:
+                {
+                    this.GetComponent<H_Knight>().CallStun(duration);
+                    break;
+                }
         }
+    }
+
+    public GameObject GetCenter()
+    {
+        switch (_type)
+        {
+            case 0:
+                {
+                    return this.GetComponent<H_Melee>().GetCenter();
+                }
+            case 1:
+                {
+                    return this.GetComponent<Skeleton_Melee>().GetCenter();
+                }
+            case 2:
+                {
+                    return this.GetComponent<Skeleton_Melee>().GetCenter();
+                }
+            case 3:
+                {
+                    return this.GetComponent<Slime>().GetCenter();
+                }
+            case 4:
+                {
+                    return this.GetComponent<BOD>().GetCenter();
+                }
+            case 5:
+                {
+                    return this.GetComponent<Archor>().GetCenter();
+                }
+            case 6:
+                {
+                    return this.GetComponent<H_Melee2>().GetCenter();
+                }
+            case 7:
+                {
+                    return this.GetComponent<H_Knight>().GetCenter();
+                }
+        }
+        return null;
     }
 }

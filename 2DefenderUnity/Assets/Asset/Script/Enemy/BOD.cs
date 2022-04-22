@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BOD : MonoBehaviour
 {
+    [SerializeField] GameObject _center = null;
     [SerializeField] float _maxHp = 100.0f;
     float _hp = 100.0f;
     [SerializeField] float _jumpPower = 5.0f;
@@ -15,6 +16,8 @@ public class BOD : MonoBehaviour
     [SerializeField] float _attackDelay = 4.0f;
     [SerializeField] float _attackDamage = 2.0f;
     [SerializeField] float _stun = 2.0f;
+    [SerializeField] AudioSource _hitSE = null;
+    [SerializeField] AudioSource _painSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isStun = false;
@@ -32,6 +35,9 @@ public class BOD : MonoBehaviour
     [SerializeField] GameObject _castFxRight = null;
     [SerializeField] float _duration = 5.0f;
     Coroutine _castCo = null;
+    Coroutine _extraHitCo = null;
+
+    public GameObject GetCenter() { return _center; }
 
     void Start()
     {
@@ -53,7 +59,7 @@ public class BOD : MonoBehaviour
         if (_isStun) return;
         if (StageManager.Instance.pause) return;
 
-        if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _attackDistance)
+        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
             int rnd = Random.Range(0, 100);
             if (rnd < 25)
@@ -61,7 +67,7 @@ public class BOD : MonoBehaviour
             else
                 Attack();
         }
-        else if (_target != null && Vector2.Distance(_target.transform.position, this.transform.position) <= _chaseRange)
+        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
             chasing();
         else
             Patrol();
@@ -77,7 +83,7 @@ public class BOD : MonoBehaviour
 
     private void chasing()
     {
-        float dir = _target.transform.position.x - this.transform.position.x;
+        float dir = _target.transform.position.x - _center.transform.position.x;
         if (dir > 0)
             direction = 1;
         else
@@ -87,13 +93,13 @@ public class BOD : MonoBehaviour
 
     private void Patrol()
     {
-        if (this.transform.position.x < _originalPosition.x - _patrolRange)
+        if (_center.transform.position.x < _originalPosition.x - _patrolRange)
         {
             direction = 1;
             _pc.MoveAnim(false, direction * _walkSpeed);
             Moving();
         }
-        else if (this.transform.position.x > _originalPosition.x + _patrolRange)
+        else if (_center.transform.position.x > _originalPosition.x + _patrolRange)
         {
             direction = -1;
             _pc.MoveAnim(false, direction * _walkSpeed);
@@ -134,16 +140,29 @@ public class BOD : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
-            _player.Damaged(_attackDamage);
-            if (_target.transform.position.x - this.transform.position.x > 0)
+
+            if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(true);
             else
                 _pc.setFlip(false);
-            
+
+            if (_extraHitCo != null) StopCoroutine(_extraHitCo);
+            _extraHitCo = StartCoroutine(ExtraHit());
             _delayCount = 0.0f;
         }
         else
             _pc.MoveAnim(false, 0);
+    }
+
+    IEnumerator ExtraHit()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            _player.Damaged(_attackDamage);
+        }
+        _pc.MoveAnim(false, 0);
     }
 
     void casting()
@@ -151,7 +170,7 @@ public class BOD : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.casting();
-            if (_target.transform.position.x - this.transform.position.x > 0)
+            if (_target.transform.position.x - _center.transform.position.x > 0)
             {
                 _castFxRight.SetActive(true);
                 _pc.setFlip(true);
@@ -179,6 +198,8 @@ public class BOD : MonoBehaviour
 
     public void Damaged(float value)
     {
+        _hitSE.Play();
+        _painSE.Play();
         _pc.DamagedAnim();
         _hp -= value;
         if (_hp <= 0)

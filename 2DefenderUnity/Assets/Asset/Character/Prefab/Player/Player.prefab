@@ -2853,7 +2853,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d1a1b5697c47e1e45a3b93ec8047e01b, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2949,7 +2949,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 97c597387e0de7d469f84feeb907f33d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3045,7 +3045,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6566ab515f6a464418d1f17d691c4eeb, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3473,6 +3473,7 @@ MonoBehaviour:
   _se: {fileID: 4264040261710901964}
   _se_Melee: {fileID: 5597689907538483375}
   _se_damaged: {fileID: 8463974221003756989}
+  _swordFallSE: {fileID: 0}
   _hpBar: {fileID: 0}
   _skillSlot: {fileID: 0}
   _joyStick: {fileID: 0}
@@ -3483,7 +3484,7 @@ MonoBehaviour:
   _throwingStoneObject: {fileID: 0}
   _sharpShooterFx: {fileID: 0}
   _sharpShooterDuration: 5
-  _extraDamage_sharpShooter: 5
+  _magicExtraDamage_sharpShooter: 5
   _trap:
   - {fileID: 0}
   - {fileID: 0}
@@ -3493,8 +3494,13 @@ MonoBehaviour:
   _trackingBullets: []
   _trackingCastFx: {fileID: 124582, guid: 490bd81ecac396c4ea98caf994a16324, type: 3}
   _trackingAreaRadius: 5
-  _shiledFx: {fileID: 0}
+  _shieldBar: {fileID: 0}
+  _shieldFx: {fileID: 0}
+  _shieldSE: {fileID: 0}
   _shieldMax: 100
+  _durationSliding: 2
+  _slidingSE: {fileID: 0}
+  _gameOverCanvas: {fileID: 0}
 --- !u!50 &2160867914032271536
 Rigidbody2D:
   serializedVersion: 4

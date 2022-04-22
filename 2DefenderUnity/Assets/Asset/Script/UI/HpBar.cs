@@ -17,4 +17,10 @@ public class HpBar : MonoBehaviour
         this.transform.GetComponent<RectTransform>().sizeDelta += new Vector2(value, 0.0f);
         _hpBar.maxValue += value;
     }
+
+    public void MaxHpBarInit(float value)
+    {
+        this.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(value, this.transform.GetComponent<RectTransform>().sizeDelta.y);
+        _hpBar.maxValue = value;
+    }
 }

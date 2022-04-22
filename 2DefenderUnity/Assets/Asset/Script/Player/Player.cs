@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] public List<int> _SkillLevelList = null;
     Coroutine _stunCo = null;
     Coroutine _extraAttackCo = null;
-    float _extraDamage = 0.0f;
+    float _magicExtraDamage = 0.0f;
     public float _extraHeal = 0.0f;
     float _delayCount = 0.0f;
 
@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     [SerializeField] FootStepSE _se = null;
     [SerializeField] MeleeSE _se_Melee = null;
     [SerializeField] DamagedSE _se_damaged = null;
+    [SerializeField] AudioSource _swordFallSE = null;
 
     //UI
 
@@ -63,7 +64,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] GameObject _sharpShooterFx = null;
     [SerializeField] float _sharpShooterDuration = 5.0f;
-    [SerializeField] float _extraDamage_sharpShooter = 5.0f;
+    [SerializeField] float _magicExtraDamage_sharpShooter = 5.0f;
     Coroutine _sharpShooterCo = null;
 
     [SerializeField] List<GameObject> _trap = null;
@@ -82,6 +83,49 @@ public class Player : MonoBehaviour
     [SerializeField] AudioSource _slidingSE = null;
     Coroutine _slidingCo = null;
     bool _isSliding = false;
+    string currentID = "";
+
+    [SerializeField] GameObject _gameOverCanvas = null;
+
+    private void Awake()
+    {
+        List<string> statusList = new List<string>();
+
+        if (DataStreamToStage.Instance != null)
+        {
+            string id = DataStreamToStage.Instance.getID();
+
+            string stream = PlayerPrefs.GetString(id + "PlayerSetting");
+            currentID = id;
+
+            string temp = "";
+            for (int i = 0; i < stream.Length; ++i)
+            {
+                if (stream[i] == ' ')
+                {
+                    statusList.Add(temp);
+                    temp = "";
+                }
+                else
+                    temp += stream[i];
+            }
+
+            _maxHp = float.Parse(statusList[0]);
+            _hpBar.GetComponent<HpBar>().MaxHpBarInit(_maxHp);
+            _hpBar.GetComponent<HpBar>().setHpBar(_maxHp);
+            _attackDamage = float.Parse(statusList[1]);
+            _magicExtraDamage = float.Parse(statusList[2]);
+            _extraHeal = float.Parse(statusList[3]);
+            if (statusList[4] == "0")
+                _modeID = 0;
+            else if (statusList[4] == "1")
+            {
+                useSwordMode();
+            }
+            StorageManager.Instance.setGold(int.Parse(statusList[5]));
+        }
+       
+    }
 
     void Start()
     {
@@ -177,11 +221,13 @@ public class Player : MonoBehaviour
         }
 
         //스킬(키보드)
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             _skillSlot.transform.GetChild(2).GetComponent<SkillSlotController>().StartCooldown();
             fireBall();
         }
+        */
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
@@ -388,6 +434,17 @@ public class Player : MonoBehaviour
         _hpBar.GetComponent<HpBar>().setHpBar(0);
         _pc.DieAnim();
         _isDie = true;
+        _swordFallSE.Play();
+        updateUserData();
+        _gameOverCanvas.SetActive(true);
+    }
+
+    void updateUserData()
+    {
+        int gold = StorageManager.Instance.getGold();
+        PlayerPrefs.SetString(currentID + "PlayerSetting", _maxHp.ToString() + " " +
+            _attackDamage.ToString() + " " + _magicExtraDamage.ToString() + " " +
+            _extraHeal.ToString() + " " + _modeID.ToString() + " " + gold.ToString() + " ");
     }
 
     //스킬 작업중
@@ -408,8 +465,8 @@ public class Player : MonoBehaviour
             GameObject gm = Instantiate(_fireBall);
             gm.GetComponent<Bullet_straight>().setAlies(true);
             gm.GetComponent<Bullet_straight>().setExtraDamage(_SkillLevelList[2]);
-            if (_extraDamage > 0)
-                gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
+            if (_magicExtraDamage > 0)
+                gm.GetComponent<Bullet_straight>().addExtraDamage(_magicExtraDamage);
             if (_pc.flip)
             {
                 gm.GetComponent<Bullet_straight>().setDirection(Vector3.left);
@@ -469,8 +526,8 @@ public class Player : MonoBehaviour
             GameObject gm = Instantiate(_bulletsObject);
             gm.GetComponent<Bullet_straight>().setAlies(true);
             gm.GetComponent<Bullet_straight>().setExtraDamage(_SkillLevelList[4]);
-            if (_extraDamage > 0)
-                gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
+            if (_magicExtraDamage > 0)
+                gm.GetComponent<Bullet_straight>().addExtraDamage(_magicExtraDamage);
             if (_pc.flip)
             {
                 gm.GetComponent<Bullet_straight>().setDirection(-_dir, -_angle);
@@ -492,8 +549,8 @@ public class Player : MonoBehaviour
             GameObject gm = Instantiate(_throwingStoneObject);
             gm.GetComponent<Bullet_straight>().setAlies(true);
             gm.GetComponent<Bullet_straight>().setExtraDamage(_SkillLevelList[5]);
-            if (_extraDamage > 0)
-                gm.GetComponent<Bullet_straight>().addExtraDamage(_extraDamage);
+            if (_magicExtraDamage > 0)
+                gm.GetComponent<Bullet_straight>().addExtraDamage(_magicExtraDamage);
             if (_pc.flip)
             {
                 gm.GetComponent<Bullet_straight>().setDirection(Vector3.left, new Vector3(0.0f, 0.0f, -180.0f));
@@ -517,7 +574,7 @@ public class Player : MonoBehaviour
 
             _pc.Stomp();
             _sharpShooterFx.SetActive(true);
-            _extraDamage += _extraDamage_sharpShooter * _SkillLevelList[6];
+            _magicExtraDamage += _magicExtraDamage_sharpShooter * _SkillLevelList[6];
             _sharpShooterCo = StartCoroutine(sharpShooterCoolDown());
         }
     }
@@ -527,7 +584,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(_sharpShooterDuration);
 
         _sharpShooterFx.SetActive(false);
-        _extraDamage -= _extraDamage_sharpShooter * _SkillLevelList[6];
+        _magicExtraDamage -= _magicExtraDamage_sharpShooter * _SkillLevelList[6];
     }
 
     //이하 스킬은 추가 해금되는 스킬
@@ -601,6 +658,8 @@ public class Player : MonoBehaviour
 
     public void CallSkill(int id)
     {
+        if (_isDie) return;
+
         switch(id)
         {
             case 0: Attack(); break;
@@ -632,7 +691,7 @@ public class Player : MonoBehaviour
 
     public void UpgradeMagic(float value)
     {
-        _extraDamage += value;
+        _magicExtraDamage += value;
     }
 
     public void UpgradeHeal(float value)

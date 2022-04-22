@@ -43,6 +43,25 @@ public class Skill_Info : MonoBehaviour
 
         for (int i = 0; i < 7; ++i)
             allowSkill.Add(i);
+
+        if(DataStreamToStage.Instance != null)
+        {
+            string userID = DataStreamToStage.Instance.getID();
+            string stream = PlayerPrefs.GetString(userID + "PlayerAllowedSkills");
+            string temp = "";
+
+            for (int i = 0; i < stream.Length; ++i)
+            {
+                if (stream[i] == ' ')
+                {
+                    if (temp != "")
+                        AddNewSkillOnList(int.Parse(temp));
+                    temp = "";
+                }
+                else
+                    temp += stream[i];
+            }
+        }
     }
 
     public Player GetPlayer()

@@ -19437,7 +19437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 261f79bbe11f5d54c8092225b3bcaf34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _splashDamage: 20
+  _splashDamage: 75
   _radius: 10
   _explosionDelay: 2
   _hitFx: {fileID: 6192724089161036641, guid: da80c0619ebb8d94588a561cc2bb095b, type: 3}
@@ -19454,7 +19454,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f0bba60dd1813bd40af826dbaa99b983, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

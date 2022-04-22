@@ -5,6 +5,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] List<AudioSource> bgmList = null;
+    [SerializeField] AudioSource _clickSE = null;
     bool _isPlayBGM = true;
     [SerializeField] int BGM_ID = 0;
 
@@ -56,5 +57,10 @@ public class SoundManager : MonoBehaviour
                 ++i;
             }
         }
+    }
+
+    public void clickSE()
+    {
+        _clickSE.Play();
     }
 }

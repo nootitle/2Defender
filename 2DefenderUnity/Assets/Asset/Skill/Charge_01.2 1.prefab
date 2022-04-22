@@ -9610,6 +9610,7 @@ MonoBehaviour:
   _destroyTime: 3
   _SE: {fileID: 5031886865817290844}
   _isStickToPlayer: 1
+  _player: {fileID: 0}
 --- !u!82 &5031886865817290844
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9622,7 +9623,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5e1a9f876d3dafd47bc6b3dde25135fa, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
