@@ -13,6 +13,7 @@ public class StorageManager : MonoBehaviour
     [SerializeField] GameObject _LobbyManager = null;
     [SerializeField] List<int> _alreadyHave = null;
     [SerializeField] GameObject _purchaseMessage = null;
+    [SerializeField] GameObject _alreadyHaveMessage = null;
 
     [SerializeField] int _gold = 0;
 
@@ -158,7 +159,10 @@ public class StorageManager : MonoBehaviour
         {
             for (int i = 0; i < _alreadyHave.Count; ++i)
                 if (_alreadyHave[i] == id)
+                {
+                    _alreadyHaveMessage.SetActive(true);
                     return;
+                }
         }
 
         switch (id)

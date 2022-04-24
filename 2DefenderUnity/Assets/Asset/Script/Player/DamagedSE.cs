@@ -9,7 +9,7 @@ public class DamagedSE : MonoBehaviour
 
     public void PlayDamaged()
     {
-        if(_Damaged != null && !_Damaged[rnd].isPlaying)
+        if(_Damaged != null)
         {
             rnd = Random.Range(0, _Damaged.Count - 1);
             _Damaged[rnd].Play();

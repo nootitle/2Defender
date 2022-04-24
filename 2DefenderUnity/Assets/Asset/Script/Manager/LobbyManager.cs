@@ -8,6 +8,7 @@ public class LobbyManager : MonoBehaviour
 {
     [SerializeField] GameObject _loginCanvas = null;
     [SerializeField] GameObject _lobbyCanvas = null;
+    [SerializeField] GameObject _stageSelectCanvas = null;
     [SerializeField] GameObject _loadingCanvas = null;
     [SerializeField] GameObject _storageWindow = null;
     [SerializeField] Text _hpText = null;
@@ -104,11 +105,22 @@ public class LobbyManager : MonoBehaviour
             statusList[4] + " " + statusList[5] + " ");
     }
 
-    public void GoToStage()
+    public void GoToStageSelect()
     {
-        _loadingCanvas.SetActive(true);
         _lobbyCanvas.SetActive(false);
-        SceneManager.LoadScene(1);
+        _stageSelectCanvas.SetActive(true);
+    }
+
+    public void GoToStage(int id)
+    {
+        _stageSelectCanvas.SetActive(false);
+        _loadingCanvas.SetActive(true);
+        switch (id)
+        {
+            case 1: SceneManager.LoadScene(1); break;
+            case 2: SceneManager.LoadScene(2); break;
+            case 3: SceneManager.LoadScene(3); break;
+        }
     }
 
     public void showStatus()

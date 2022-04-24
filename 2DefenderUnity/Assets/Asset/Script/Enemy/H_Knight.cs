@@ -37,6 +37,12 @@ public class H_Knight : MonoBehaviour
     [SerializeField] GameObject _target = null;
     Player _player = null;
 
+    [SerializeField] GameObject _fireBall = null;
+    [SerializeField] AudioSource _fireBallSE = null;
+    [SerializeField] float _fireBallDistance = 7.0f;
+    [SerializeField] float _fireBallDelay = 2.0f;
+    float _fBDelay = 0.0f;
+
     public GameObject GetCenter() { return _center; }
 
     void Start()
@@ -46,6 +52,7 @@ public class H_Knight : MonoBehaviour
         _originalPosition = this.transform.position;
         direction = 1.0f;
         _delayCount = _attackDelay;
+        _fBDelay = _fireBallDelay;
         if (_target != null)
             _player = _target.GetComponent<Player>();
         jumpCoolDown();
@@ -62,25 +69,43 @@ public class H_Knight : MonoBehaviour
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
+            _pc.MoveAnim(false, true, 0.0f);
+
             int rnd = Random.Range(0, 100);
             if (rnd < 50)
                 Attack();
             else
                 stomping();
+                
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
-            chasing();
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998)
+                chasing();
+            else
+                jump();
+        }
+        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _fireBallDistance)
+        {
+            _pc.MoveAnim(false, true, 0.0f);
+            casting();
         }
         else
         {
             _sprintTrigger = false;
-            Patrol();
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998)
+                Patrol();
+            else
+                jump();
         }
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
+        if (_fBDelay < _fireBallDelay)
+            _fBDelay += Time.deltaTime;
     }
 
     private void Moving()
@@ -195,7 +220,7 @@ public class H_Knight : MonoBehaviour
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.5f);
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
@@ -229,6 +254,20 @@ public class H_Knight : MonoBehaviour
         _delayCount = 0.0f;
     }
 
+    void casting()
+    {
+        if (_fBDelay >= _fireBallDelay)
+        {
+            _pc.Cast();
+            _fireBallSE.Play();
+            GameObject gm = Instantiate(_fireBall);
+            gm.transform.position = _center.transform.position;
+            gm.GetComponent<Bullet_straight>().setDirection(_target.transform.position
+                - _center.transform.position);
+            _fBDelay = 0.0f;
+        }
+    }
+
     public void Damaged(float value)
     {
         if (_isDie) return;
@@ -252,6 +291,7 @@ public class H_Knight : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
 

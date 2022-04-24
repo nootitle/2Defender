@@ -264,21 +264,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93803b1f80228f844b4ea1acefcb87cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _center: {fileID: 0}
+  _center: {fileID: 6464150639876027854}
   _maxHp: 100
-  _jumpPower: 5
+  _jumpPower: 80
   _walkSpeed: 5
   _sprintSpeed: 10
   _patrolRange: 10
   _chaseRange: 4
-  _attackDistance: 2
-  _attackDelay: 2
+  _attackDistance: 3
+  _attackDelay: 0.5
   _attackDamage: 2
   _stun: 2
   _hitSE: {fileID: 8069693854353005100}
   _painSE: {fileID: 303370264038582203}
   _pc: {fileID: 3193481401259551307}
   _target: {fileID: 0}
+  _fireBall: {fileID: 0}
+  _fireBallSE: {fileID: 0}
+  _fireBallDistance: 7
+  _fireBallDelay: 2
 --- !u!114 &3668552796289543808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724581e240674fa49809eb61e07a7152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 7
 --- !u!82 &8069693854353005100
 AudioSource:
   m_ObjectHideFlags: 0
@@ -398,7 +402,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ecc517e7a0e396e42a4f3012969ff7d3, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c20a131ee400df544a6cafa00e56cca6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2
   m_Pitch: 1

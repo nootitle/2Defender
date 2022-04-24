@@ -177,6 +177,7 @@ public class Skeleton_Melee : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
 

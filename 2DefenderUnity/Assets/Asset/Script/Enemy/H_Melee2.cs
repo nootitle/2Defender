@@ -62,6 +62,8 @@ public class H_Melee2 : MonoBehaviour
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
+            _pc.MoveAnim(false, true, 0.0f);
+
             int rnd = Random.Range(0, 100);
             if (rnd < 50)
                 Attack();
@@ -71,12 +73,20 @@ public class H_Melee2 : MonoBehaviour
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
-            chasing();
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998)
+                chasing();
+            else
+                jump();
         }
         else
         {
             _sprintTrigger = false;
-            Patrol();
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998)
+                Patrol();
+            else
+                jump();
         }
 
         if (_delayCount < _attackDelay)
@@ -252,6 +262,7 @@ public class H_Melee2 : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
 

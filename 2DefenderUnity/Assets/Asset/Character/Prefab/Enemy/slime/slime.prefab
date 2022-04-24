@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _center: {fileID: 3106215286575775475}
   _maxHp: 50
-  _jumpPower: 5
+  _jumpPower: 80
   _walkSpeed: 5
   _patrolRange: 10
   _chaseRange: 10

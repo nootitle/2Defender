@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
     string currentID = "";
 
     [SerializeField] GameObject _gameOverCanvas = null;
+    [SerializeField] GameObject _escMenuCanvas = null;
 
     private void Awake()
     {
@@ -206,9 +207,6 @@ public class Player : MonoBehaviour
             transform.Translate(Hor * _sprintSpeed * Time.deltaTime, 0.0f, 0.0f);
         if (_joyStickMode) _pc.MoveForJoyStick(Hor);
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-            SkillListInvisible();
-
         if(_bgExtension)
         {
             if (transform.position.x > pointX - _mapInterval)
@@ -228,6 +226,9 @@ public class Player : MonoBehaviour
             fireBall();
         }
         */
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            CallEsc();
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
@@ -249,6 +250,14 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+
+    void CallEsc()
+    {
+        if (_escMenuCanvas.activeSelf)
+            _escMenuCanvas.SetActive(false);
+        else
+            _escMenuCanvas.SetActive(true);
     }
 
     public void SkillListInvisible()
@@ -439,7 +448,7 @@ public class Player : MonoBehaviour
         _gameOverCanvas.SetActive(true);
     }
 
-    void updateUserData()
+    public void updateUserData()
     {
         int gold = StorageManager.Instance.getGold();
         PlayerPrefs.SetString(currentID + "PlayerSetting", _maxHp.ToString() + " " +

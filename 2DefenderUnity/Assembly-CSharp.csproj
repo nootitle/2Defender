@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\randomParticleRotation.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\H_Melee2_Anim.cs" />
     <Compile Include="Assets\Resources\DataManager.cs" />
     <Compile Include="Assets\Asset\Script\UI\SetSkill.cs" />
     <Compile Include="Assets\Asset\Script\Player\Player.cs" />
@@ -78,6 +79,8 @@
     <Compile Include="Assets\Asset\Script\Player\billboard.cs" />
     <Compile Include="Assets\Asset\Script\Manager\SoundManager.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\BOD_Anim.cs" />
+    <Compile Include="Assets\Asset\Script\UI\EscMenu.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\H_Knight_Anim.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\BOD.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\PrototypeHero.cs" />
     <Compile Include="Assets\Asset\Script\UI\Skill_Info.cs" />
@@ -88,6 +91,8 @@
     <Compile Include="Assets\Asset\Script\UI\TextBlink.cs" />
     <Compile Include="Assets\Asset\UI\Free UI build package\Script\Togglescript.cs" />
     <Compile Include="Assets\Prototype Hero - Pixel Art\Demo\Dust_DestroyEvent.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\H_Melee2.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\H_Knight.cs" />
     <Compile Include="Assets\Asset\Material\Effect\SelfDestruct.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Archor.cs" />
     <Compile Include="Assets\Asset\Script\Player\CameraController.cs" />
@@ -125,10 +130,8 @@
     <Compile Include="Assets\Asset\Script\Player\SkillInvenController.cs" />
     <Compile Include="Assets\Asset\Script\Manager\CSVReader.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\H_Melee2.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\H_Melee2_Anim.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\H_Knight.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\H_Knight_Anim.cs" />
+    <Compile Include="Assets\Bandits - Pixel Art\Demo\Bandit.cs" />
+    <Compile Include="Assets\Bandits - Pixel Art\Demo\Sensor_Bandit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />
@@ -137,6 +140,7 @@
     <None Include="Assets\Asset\Effect\Particle Ribbon by Moonflower Carnivore\readme_Simple_Particle_Ribbon.txt" />
     <None Include="Assets\Asset\Animation\Warrior free set\License.txt" />
     <None Include="Assets\Asset\Sound\ShootingSound\ReadMe.txt" />
+    <None Include="Assets\Asset\Map\Cainos\Pixel Art Platformer - Village Props\Changelog.txt" />
     <None Include="Assets\Asset\Sound\FantomMusic\ReadMe.txt" />
     <None Include="Assets\Asset\Shader\Particle Ribbon by Moonflower Carnivore_Shaders\Particle Alpha Blend HDR.shader" />
     <None Include="Assets\Asset\Shader\NormalMappedSprite-Animated.shader" />

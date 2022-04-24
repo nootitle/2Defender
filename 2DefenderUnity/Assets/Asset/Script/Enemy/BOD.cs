@@ -68,9 +68,21 @@ public class BOD : MonoBehaviour
                 Attack();
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
-            chasing();
+        {
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998)
+                chasing();
+            else
+                jump();
+        }
         else
-            Patrol();
+        {
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998)
+                Patrol();
+            else
+                jump();
+        }
 
         if (_delayCount < _attackDelay)
             _delayCount += Time.deltaTime;
@@ -122,6 +134,7 @@ public class BOD : MonoBehaviour
         if (!_jumpTrigger)
         {
             _jumpTrigger = true;
+            _pc.jumpAnim();
             _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
@@ -216,6 +229,7 @@ public class BOD : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
 

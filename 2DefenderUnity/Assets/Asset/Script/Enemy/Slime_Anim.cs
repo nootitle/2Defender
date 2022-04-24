@@ -40,7 +40,7 @@ public class Slime_Anim : MonoBehaviour
         _animator.SetFloat("Speed", speed);
     }
 
-    private void jumpAnim()
+    public void jumpAnim()
     {
         if (!_isjumping)
         {
