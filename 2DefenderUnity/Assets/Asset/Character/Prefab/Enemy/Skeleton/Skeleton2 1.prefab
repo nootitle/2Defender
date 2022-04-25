@@ -294,14 +294,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _center: {fileID: 2829590135425757167}
-  _maxHp: 250
+  _maxHp: 500
   _jumpPower: 5
   _walkSpeed: 5
-  _patrolRange: 10
-  _chaseRange: 6
+  _patrolRange: 50
+  _chaseRange: 49
   _attackDistance: 4
   _attackDelay: 4
-  _attackDamage: 4
+  _attackDamage: 8
   _stun: 2
   _hitSE: {fileID: 8920160558343157816}
   _pc: {fileID: 6105033993448679558}

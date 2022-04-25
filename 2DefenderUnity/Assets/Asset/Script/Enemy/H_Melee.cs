@@ -19,6 +19,7 @@ public class H_Melee : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] bool _reverseFlip = false;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -26,6 +27,7 @@ public class H_Melee : MonoBehaviour
     bool _isDie = false;
     Coroutine _sprintCo;
     Coroutine _stunCo;
+    Coroutine _jumpCo;
 
     private Rigidbody2D _rb = null;
     [SerializeField] H_Melee_Anim _pc = null;
@@ -54,6 +56,11 @@ public class H_Melee : MonoBehaviour
         //sprint();
         if (_isDie) return;
         if (_isStun) return;
+        if (_jumpTrigger)
+        {
+            transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+            return;
+        }
         if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
@@ -66,7 +73,11 @@ public class H_Melee : MonoBehaviour
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
-            chasing();
+            int rnd = Random.Range(0, 1000);
+            if (!_jumpTrigger && rnd < 5)
+                jump();
+            else
+                chasing();
         }
         else
         {
@@ -93,11 +104,17 @@ public class H_Melee : MonoBehaviour
     private void chasing()
     {
         float dir = _target.transform.position.x - _center.transform.position.x;
-        if (dir > 0)
-            direction = 1;
-        else
-            direction = -1;
         _pc.MoveAnim(_sprintTrigger, false, direction * _sprintSpeed);
+        if (dir > 0)
+        {
+            if (_reverseFlip) _pc.setFlip(true);
+            direction = 1;
+        }
+        else
+        {
+            if (_reverseFlip) _pc.setFlip(false);
+            direction = -1;
+        }
         transform.Translate(direction * _sprintSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -107,12 +124,14 @@ public class H_Melee : MonoBehaviour
         {
             direction = 1;
             _pc.MoveAnim(_sprintTrigger, false, direction * _walkSpeed);
+            if (_reverseFlip) _pc.setFlip(true);
             Moving();
         }
         else if (_center.transform.position.x > _originalPosition.x + _patrolRange)
         {
             direction = -1;
             _pc.MoveAnim(_sprintTrigger, false, direction * _walkSpeed);
+            if (_reverseFlip) _pc.setFlip(false);
             Moving();
         }
         else
@@ -131,9 +150,16 @@ public class H_Melee : MonoBehaviour
     {
         if (!_jumpTrigger)
         {
+            if (_jumpCo != null) StopCoroutine(_jumpCo);
+            _jumpCo = StartCoroutine(jumpCoolDownIE());
             _jumpTrigger = true;
             _pc.jumpAnim();
-            _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            if(direction == 1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+            else if(direction == -1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+            else
+                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
 
@@ -161,6 +187,13 @@ public class H_Melee : MonoBehaviour
         }
     }
 
+    IEnumerator jumpCoolDownIE()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        jumpCoolDown();
+    }
+
     IEnumerator sprintTerm()
     {
         yield return new WaitForSeconds(0.5f);
@@ -174,9 +207,15 @@ public class H_Melee : MonoBehaviour
         {
             _pc.Attack();
             if (_target.transform.position.x - _center.transform.position.x > 0)
-                _pc.setFlip(false);
+            {
+                if(_reverseFlip) _pc.setFlip(true);
+                else _pc.setFlip(false);
+            }
             else
-                _pc.setFlip(true);
+            {
+                if (_reverseFlip) _pc.setFlip(false);
+                else _pc.setFlip(true);
+            }
             _player.Damaged(_attackDamage);
             _delayCount = 0.0f;
         }
@@ -190,9 +229,15 @@ public class H_Melee : MonoBehaviour
         {
             _pc.Stomp();
             if (_target.transform.position.x - _center.transform.position.x > 0)
-                _pc.setFlip(false);
+            {
+                if (_reverseFlip) _pc.setFlip(true);
+                else _pc.setFlip(false);
+            }
             else
-                _pc.setFlip(true);
+            {
+                if (_reverseFlip) _pc.setFlip(false);
+                else _pc.setFlip(true);
+            }
             _player.Damaged(_attackDamage);
             _delayCount = 0.0f;
         }
@@ -221,6 +266,7 @@ public class H_Melee : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        _jumpTrigger = false;
         StartCoroutine(SelfDestroy());
     }
 
@@ -236,6 +282,7 @@ public class H_Melee : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _jumpTrigger = false;
         _hp = _maxHp;
     }
 

@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    public static SoundManager Instance = null;
+
     [SerializeField] List<AudioSource> bgmList = null;
     [SerializeField] AudioSource _clickSE = null;
     bool _isPlayBGM = true;
     [SerializeField] int BGM_ID = 0;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+    }
 
     void Start()
     {

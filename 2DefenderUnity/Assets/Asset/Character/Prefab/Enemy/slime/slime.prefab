@@ -153,8 +153,8 @@ MonoBehaviour:
   _jumpPower: 80
   _walkSpeed: 5
   _patrolRange: 10
-  _chaseRange: 10
-  _attackDistance: 4
+  _chaseRange: 50
+  _attackDistance: 49
   _attackDelay: 6
   _attackDamage: 2
   _stun: 2

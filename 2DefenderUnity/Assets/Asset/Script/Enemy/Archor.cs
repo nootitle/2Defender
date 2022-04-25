@@ -18,6 +18,7 @@ public class Archor : MonoBehaviour
     [SerializeField] GameObject _arrow = null;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] bool _reverseFlip = false;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isStun = false;
@@ -25,6 +26,7 @@ public class Archor : MonoBehaviour
     bool _isAttacking = false;
     Coroutine _stunCo;
     Coroutine _extraHitCo;
+    Coroutine _jumpCo;
 
     private Rigidbody2D _rb = null;
     [SerializeField] Archor_Anim _pc = null;
@@ -54,22 +56,23 @@ public class Archor : MonoBehaviour
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
+        if (_jumpTrigger)
+        {
+            transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+            return;
+        }
         if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             Attack();
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
-            int rnd = Random.Range(0, 1000);
-            if (rnd < 998)
-                chasing();
-            else
-                jump();
+             chasing();
         }
         else
         {
             int rnd = Random.Range(0, 1000);
-            if (rnd < 998)
+            if (rnd < 998 || _jumpTrigger)
                 Patrol();
             else
                 jump();
@@ -88,9 +91,15 @@ public class Archor : MonoBehaviour
     {
         float dir = _target.transform.position.x - _center.transform.position.x;
         if (dir > 0)
+        {
             direction = 1;
+            if (_reverseFlip) _pc.setFlip(false);
+        }
         else
+        {
             direction = -1;
+            if (_reverseFlip) _pc.setFlip(true);
+        }
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -100,12 +109,14 @@ public class Archor : MonoBehaviour
         {
             direction = 1;
             _pc.MoveAnim(false, direction * _walkSpeed);
+            if (_reverseFlip) _pc.setFlip(false);
             Moving();
         }
         else if (_center.transform.position.x > _originalPosition.x + _patrolRange)
         {
             direction = -1;
             _pc.MoveAnim(false, direction * _walkSpeed);
+            if (_reverseFlip) _pc.setFlip(true);
             Moving();
         }
         else
@@ -124,9 +135,16 @@ public class Archor : MonoBehaviour
     {
         if (!_jumpTrigger)
         {
+            if (_jumpCo != null) StopCoroutine(_jumpCo);
+            _jumpCo = StartCoroutine(jumpCoolDownIE());
             _jumpTrigger = true;
             _pc.jumpAnim();
-            _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            if (direction == 1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+            else if (direction == -1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+            else
+                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
 
@@ -139,6 +157,13 @@ public class Archor : MonoBehaviour
         }
     }
 
+    IEnumerator jumpCoolDownIE()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        jumpCoolDown();
+    }
+
     void Attack()
     {
         if (_delayCount >= _attackDelay)
@@ -147,9 +172,15 @@ public class Archor : MonoBehaviour
             _isAttacking = true;
 
             if (_target.transform.position.x - _center.transform.position.x > 0)
-                _pc.setFlip(false);
+            {
+                if(_reverseFlip) _pc.setFlip(false);
+                else _pc.setFlip(true);
+            }                  
             else
-                _pc.setFlip(true);
+            {
+                if (_reverseFlip) _pc.setFlip(true);
+                else _pc.setFlip(false);
+            }
 
             if (_extraHitCo != null) StopCoroutine(_extraHitCo);
             _extraHitCo = StartCoroutine(ExtraHit());
@@ -198,6 +229,9 @@ public class Archor : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        _isStun = false;
+        _isAttacking = false;
+        _jumpTrigger = false;
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -214,6 +248,8 @@ public class Archor : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _isAttacking = false;
+        _jumpTrigger = false;
         _hp = _maxHp;
     }
 

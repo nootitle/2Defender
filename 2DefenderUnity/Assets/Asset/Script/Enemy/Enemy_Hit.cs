@@ -58,6 +58,18 @@ public class Enemy_Hit : MonoBehaviour
                         this.GetComponent<H_Knight>().Damaged(value);
                     break;
                 }
+            case 8:
+                {
+                    if (!this.GetComponent<Charger>().GetDead())
+                        this.GetComponent<Charger>().Damaged(value);
+                    break;
+                }
+            case 9:
+                {
+                    if (!this.GetComponent<Fighter>().GetDead())
+                        this.GetComponent<Fighter>().Damaged(value);
+                    break;
+                }
         }
     }
 
@@ -103,6 +115,21 @@ public class Enemy_Hit : MonoBehaviour
             case 7:
                 {
                     this.GetComponent<H_Knight>().respawn();
+                    break;
+                }
+            case 8:
+                {
+                    this.GetComponent<Charger>().respawn();
+                    break;
+                }
+            case 9:
+                {
+                    this.GetComponent<Fighter>().respawn();
+                    break;
+                }
+            case 10:
+                {
+                    this.GetComponent<Boss1>().respawn();
                     break;
                 }
         }
@@ -152,6 +179,21 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<H_Knight>().CallStun(duration);
                     break;
                 }
+            case 8:
+                {
+                    this.GetComponent<Charger>().CallStun(duration);
+                    break;
+                }
+            case 9:
+                {
+                    this.GetComponent<Fighter>().CallStun(duration);
+                    break;
+                }
+            case 10:
+                {
+                    this.GetComponent<Boss1>().CallStun(duration);
+                    break;
+                }
         }
     }
 
@@ -190,6 +232,18 @@ public class Enemy_Hit : MonoBehaviour
             case 7:
                 {
                     return this.GetComponent<H_Knight>().GetCenter();
+                }
+            case 8:
+                {
+                    return this.GetComponent<Charger>().GetCenter();
+                }
+            case 9:
+                {
+                    return this.GetComponent<Fighter>().GetCenter();
+                }
+            case 10:
+                {
+                    return this.GetComponent<Boss1>().GetCenter();
                 }
         }
         return null;

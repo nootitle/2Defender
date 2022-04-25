@@ -24,6 +24,7 @@ public class Skeleton_Melee : MonoBehaviour
     bool _isDie = false;
     Coroutine _stunCo;
     Coroutine _extraHitCo;
+    Coroutine _jumpCo;
 
     private Rigidbody2D _rb = null;
     [SerializeField] Skeleton_Melee_Anim _pc = null;
@@ -53,6 +54,11 @@ public class Skeleton_Melee : MonoBehaviour
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
+        if (_jumpTrigger)
+        {
+            transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+            return;
+        }
         if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
@@ -69,15 +75,26 @@ public class Skeleton_Melee : MonoBehaviour
     private void Moving()
     {
          transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+        if (direction == 1)
+            _pc.setFlip(false);
+        else if(direction == -1)
+            _pc.setFlip(true);
     }
 
     private void chasing()
     {
         float dir = _target.transform.position.x - _center.transform.position.x;
         if (dir > 0)
+        {
             direction = 1;
+            _pc.setFlip(false);
+        }
         else
+        {
             direction = -1;
+            _pc.setFlip(true);
+        }
+
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -111,8 +128,15 @@ public class Skeleton_Melee : MonoBehaviour
     {
         if (!_jumpTrigger)
         {
+            if (_jumpCo != null) StopCoroutine(_jumpCo);
+            _jumpCo = StartCoroutine(jumpCoolDownIE());
             _jumpTrigger = true;
-            _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            if (direction == 1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+            else if (direction == -1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+            else
+                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
 
@@ -123,6 +147,13 @@ public class Skeleton_Melee : MonoBehaviour
             _jumpTrigger = false;
             _pc.jumpCoolDown();
         }
+    }
+
+    IEnumerator jumpCoolDownIE()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        jumpCoolDown();
     }
 
     void Attack()
@@ -177,6 +208,9 @@ public class Skeleton_Melee : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        _isStun = false;
+        _isAttacking = false;
+        _jumpTrigger = false;
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -193,6 +227,8 @@ public class Skeleton_Melee : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _isAttacking = false;
+        _jumpTrigger = false;
         _hp = _maxHp;
     }
 

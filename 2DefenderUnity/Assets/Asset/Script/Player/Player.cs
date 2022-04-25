@@ -254,6 +254,7 @@ public class Player : MonoBehaviour
 
     void CallEsc()
     {
+        SoundManager.Instance.clickSE();
         if (_escMenuCanvas.activeSelf)
             _escMenuCanvas.SetActive(false);
         else
@@ -440,6 +441,7 @@ public class Player : MonoBehaviour
 
     void Die()
     {
+        StageManager.Instance.offRewardWindow();
         _hpBar.GetComponent<HpBar>().setHpBar(0);
         _pc.DieAnim();
         _isDie = true;

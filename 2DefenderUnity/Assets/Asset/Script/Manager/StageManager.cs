@@ -30,7 +30,7 @@ public class StageManager : MonoBehaviour
 
     void stage1()
     {
-        if (killCount != 0 && killCount % 5 == 0)
+        if (killCount != 0 && killCount % 20 == 0)
         {
             EnemyManager.Instance.setSpawnLevel(EnemyManager.Instance.getSpawnLevel() + 1);
             EnemyManager.Instance.setMaxEnemy(EnemyManager.Instance.getMaxEnemy() + 1);

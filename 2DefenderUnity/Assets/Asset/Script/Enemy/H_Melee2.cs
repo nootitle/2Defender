@@ -29,6 +29,7 @@ public class H_Melee2 : MonoBehaviour
     Coroutine _stunCo;
     Coroutine _extraHitCo;
     Coroutine _extraHitCo2;
+    Coroutine _jumpCo;
 
     private Rigidbody2D _rb = null;
     [SerializeField] H_Melee2_Anim _pc = null;
@@ -55,9 +56,15 @@ public class H_Melee2 : MonoBehaviour
     {
         //jump();
         //sprint();
+
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
+        if (_jumpTrigger)
+        {
+            transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+            return;
+        }
         if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
@@ -73,17 +80,13 @@ public class H_Melee2 : MonoBehaviour
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
-            int rnd = Random.Range(0, 1000);
-            if (rnd < 998)
-                chasing();
-            else
-                jump();
+             chasing();
         }
         else
         {
             _sprintTrigger = false;
             int rnd = Random.Range(0, 1000);
-            if (rnd < 998)
+            if (rnd < 998 || _jumpTrigger)
                 Patrol();
             else
                 jump();
@@ -146,9 +149,16 @@ public class H_Melee2 : MonoBehaviour
     {
         if (!_jumpTrigger)
         {
+            if (_jumpCo != null) StopCoroutine(_jumpCo);
+            _jumpCo = StartCoroutine(jumpCoolDownIE());
             _jumpTrigger = true;
             _pc.jumpAnim();
-            _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            if (direction == 1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+            else if (direction == -1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+            else
+                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
 
@@ -174,6 +184,13 @@ public class H_Melee2 : MonoBehaviour
             _jumpTrigger = false;
             _pc.jumpCoolDown();
         }
+    }
+
+    IEnumerator jumpCoolDownIE()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        jumpCoolDown();
     }
 
     IEnumerator sprintTerm()
@@ -262,6 +279,9 @@ public class H_Melee2 : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        _isStun = false;
+        _isAttacking = false;
+        _jumpTrigger = false;
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -278,6 +298,8 @@ public class H_Melee2 : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _isAttacking = false;
+        _jumpTrigger = false;
         _hp = _maxHp;
     }
 

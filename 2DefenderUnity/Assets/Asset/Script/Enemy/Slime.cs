@@ -23,6 +23,7 @@ public class Slime : MonoBehaviour
     bool _isDie = false;
     Coroutine _stunCo;
     Coroutine _extraHitCo;
+    Coroutine _jumpCo;
 
     private Rigidbody2D _rb = null;
     [SerializeField] Slime_Anim _pc = null;
@@ -51,6 +52,11 @@ public class Slime : MonoBehaviour
 
         if (_isDie) return;
         if (_isStun) return;
+        if (_jumpTrigger)
+        {
+            transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
+            return;
+        }
         if (StageManager.Instance.pause) return;
 
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
@@ -63,16 +69,12 @@ public class Slime : MonoBehaviour
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
-            int rnd = Random.Range(0, 1000);
-            if (rnd < 998)
-                chasing();
-            else
-                jump();
+             chasing();
         }
         else
         {
             int rnd = Random.Range(0, 1000);
-            if (rnd < 998)
+            if (rnd < 998 || _jumpTrigger)
                 Patrol();
             else
                 jump();
@@ -127,9 +129,16 @@ public class Slime : MonoBehaviour
     {
         if (!_jumpTrigger)
         {
+            if (_jumpCo != null) StopCoroutine(_jumpCo);
+            _jumpCo = StartCoroutine(jumpCoolDownIE());
             _jumpTrigger = true;
             _pc.jumpAnim();
-            _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            if (direction == 1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+            else if (direction == -1)
+                _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+            else
+                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
     }
 
@@ -140,6 +149,13 @@ public class Slime : MonoBehaviour
             _jumpTrigger = false;
             _pc.jumpCoolDown();
         }
+    }
+
+    IEnumerator jumpCoolDownIE()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        jumpCoolDown();
     }
 
     void Attack()
@@ -207,6 +223,8 @@ public class Slime : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
+        _isStun = false;
+        _jumpTrigger = false;
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -223,6 +241,7 @@ public class Slime : MonoBehaviour
     {
         _isDie = false;
         _isStun = false;
+        _jumpTrigger = false;
         _hp = _maxHp;
     }
 
