@@ -84,15 +84,19 @@ public class H_Knight : MonoBehaviour
                 stomping();
                 
         }
-        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
-        {
-            _sprintTrigger = true;
-            chasing();
-        }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _fireBallDistance)
         {
             _pc.MoveAnim(false, true, 0.0f);
             casting();
+        }
+        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
+        {
+            _sprintTrigger = true;
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998 || _jumpTrigger)
+                chasing();
+            else
+                jump();
         }
         else
         {

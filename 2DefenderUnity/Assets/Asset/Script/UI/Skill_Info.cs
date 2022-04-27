@@ -85,6 +85,7 @@ public class Skill_Info : MonoBehaviour
                 else
                 {
                     StorageManager.Instance.setGold(100);
+                    StorageManager.Instance.addGoldDelta(100);
                     if(!_goldTextWindow.activeSelf)
                     {
                         _goldTextWindow.SetActive(true);

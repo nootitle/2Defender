@@ -76,7 +76,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject _shieldBar = null;
     [SerializeField] GameObject _shieldFx = null;
     [SerializeField] AudioSource _shieldSE = null;
-    [SerializeField] float _shieldMax = 100.0f;
+    [SerializeField] float _shieldMax = 500.0f;
     float _shield = 0.0f;
 
     [SerializeField] float _durationSliding = 2.0f;
@@ -377,6 +377,7 @@ public class Player : MonoBehaviour
     {
         if (_isDie) return;
         if (_isSliding) return;
+        if (StageManager.Instance.pause) return;
 
         float temp = value;
         if(_shield > 0)
@@ -448,6 +449,7 @@ public class Player : MonoBehaviour
         _swordFallSE.Play();
         updateUserData();
         _gameOverCanvas.SetActive(true);
+        SoundManager.Instance.defeatBGM();
     }
 
     public void updateUserData()

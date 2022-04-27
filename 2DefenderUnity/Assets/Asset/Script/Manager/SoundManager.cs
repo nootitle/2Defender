@@ -8,6 +8,9 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] List<AudioSource> bgmList = null;
     [SerializeField] AudioSource _clickSE = null;
+    [SerializeField] AudioSource _bossBgm = null;
+    [SerializeField] AudioSource _clearBgm = null;
+    [SerializeField] AudioSource _defeatBgm = null;
     bool _isPlayBGM = true;
     [SerializeField] int BGM_ID = 0;
 
@@ -65,6 +68,25 @@ public class SoundManager : MonoBehaviour
                 ++i;
             }
         }
+    }
+
+    public void playBossBGM()
+    {
+        _bossBgm.Play();
+        switchBGM(false);
+    }
+
+    public void clearBGM()
+    {
+        _bossBgm.Stop();
+        _clearBgm.Play();
+    }
+
+    public void defeatBGM()
+    {
+        if (_bossBgm.isPlaying) _bossBgm.Stop();
+        switchBGM(false);
+        _defeatBgm.Play();
     }
 
     public void clickSE()

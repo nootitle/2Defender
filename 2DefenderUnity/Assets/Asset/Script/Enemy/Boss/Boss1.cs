@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss1 : MonoBehaviour
 {
@@ -14,17 +15,21 @@ public class Boss1 : MonoBehaviour
     [SerializeField] float _patrolRange = 10.0f;
     [SerializeField] float _chaseRange = 4.0f;
     [SerializeField] float _attackDistance = 2.0f;
+    [SerializeField] float _lungeDistance = 6.0f;
     [SerializeField] float _attackDelay = 2.0f;
     [SerializeField] float _attackDamage = 2.0f;
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] AudioSource _slashSE1 = null;
+    [SerializeField] AudioSource _slashSE2 = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
     bool _isStun = false;
     bool _isDie = false;
     bool _isAttacking = false;
+    bool _islunging = false;
     Coroutine _sprintCo;
     Coroutine _stunCo;
     Coroutine _extraHitCo;
@@ -40,15 +45,37 @@ public class Boss1 : MonoBehaviour
 
     [SerializeField] GameObject _fireBall = null;
     [SerializeField] AudioSource _fireBallSE = null;
-    [SerializeField] float _fireBallDistance = 7.0f;
     [SerializeField] float _fireBallDelay = 2.0f;
     float _fBDelay = 0.0f;
 
     public GameObject GetCenter() { return _center; }
 
+    [SerializeField] float _MaxSuperArmor = 100.0f;
+    float _superArmor = 100.0f;
+
+    [SerializeField] GameObject _bossCanvas = null;
+    [SerializeField] GameObject _hpSlider = null;
+    [SerializeField] GameObject _superArmorSlider = null;
+    Slider hpSlider = null;
+    Slider superArmorSlider = null;
+    [SerializeField] GameObject _superArmorFx = null;
+    public float _superArmorMaden = 0.0f;
+    Coroutine _superArmorCo = null;
+    bool _superArmorBroken = false;
+    [SerializeField] AudioSource _superArmorSE = null;
+
+    [SerializeField] GameObject _clearCanvas = null;
+
+    [SerializeField] Camera _camera = null;
+    Coroutine _cutSceneCo = null;
+
+    [SerializeField] int _bossID = 1;
+    [SerializeField] GameObject _banner = null;
+
     void Start()
     {
         _hp = _maxHp;
+        _superArmor = _MaxSuperArmor;
         _rb = this.GetComponent<Rigidbody2D>();
         _originalPosition = this.transform.position;
         direction = 1.0f;
@@ -56,7 +83,19 @@ public class Boss1 : MonoBehaviour
         _fBDelay = _fireBallDelay;
         if (_target != null)
             _player = _target.GetComponent<Player>();
+
+        hpSlider = _hpSlider.GetComponent<Slider>();
+        superArmorSlider = _superArmorSlider.GetComponent<Slider>();
         jumpCoolDown();
+    }
+
+    private void OnEnable()
+    {
+        _bossCanvas.SetActive(true);
+        SoundManager.Instance.playBossBGM();
+
+        if (_cutSceneCo != null) StopCoroutine(_cutSceneCo);
+        _cutSceneCo = StartCoroutine(CutScene());
     }
 
     void Update()
@@ -74,25 +113,27 @@ public class Boss1 : MonoBehaviour
         }
         if (StageManager.Instance.pause) return;
 
-        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        if(_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
-            _pc.MoveAnim(false, true, 0.0f);
+            stomping();
+        }
+        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _lungeDistance)
+        {
+            _pc.Slide();
             int rnd = Random.Range(0, 100);
             if (rnd < 50)
                 Attack();
             else
-                stomping();
-
+                casting();
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
-            chasing();
-        }
-        else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _fireBallDistance)
-        {
-            _pc.MoveAnim(false, true, 0.0f);
-            casting();
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998 || _jumpTrigger)
+                chasing();
+            else
+                jump();
         }
         else
         {
@@ -156,6 +197,11 @@ public class Boss1 : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if(_islunging && collision.gameObject.tag.Contains("Player"))
+        {
+            collision.gameObject.transform.GetComponent<Player>().Damaged(_attackDamage);
+            _islunging = false;
+        }
         jumpCoolDown();
     }
 
@@ -218,7 +264,6 @@ public class Boss1 : MonoBehaviour
     {
         if (_delayCount >= _attackDelay)
         {
-            _pc.Attack();
             _isAttacking = true;
             if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
@@ -228,19 +273,26 @@ public class Boss1 : MonoBehaviour
             if (_extraHitCo != null) StopCoroutine(_extraHitCo);
             _extraHitCo = StartCoroutine(ExtraHit());
         }
+        else
+            _pc.Slide();
     }
 
     IEnumerator ExtraHit()
     {
-        yield return new WaitForSeconds(0.4f);
-        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
-            _player.Damaged(_attackDamage);
-
+        _pc.Slide();
+        _slashSE1.Play();
         yield return new WaitForSeconds(0.5f);
-        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
-            _player.Damaged(_attackDamage);
 
+        _islunging = true;
+        _pc.Attack();
+        if (direction == 1)
+            _rb.AddForce(Vector3.right * _walkSpeed * 30.0f, ForceMode2D.Impulse);
+        else if (direction == -1)
+            _rb.AddForce(Vector3.left * _walkSpeed * 30.0f, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(1.5f);
         _isAttacking = false;
+        _islunging = false;
         _delayCount = 0.0f;
     }
 
@@ -250,6 +302,7 @@ public class Boss1 : MonoBehaviour
         {
             _isAttacking = true;
             _pc.Stomp();
+            _slashSE2.Play();
             if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
             else
@@ -290,17 +343,70 @@ public class Boss1 : MonoBehaviour
 
         _hitSE.Play();
         _painSE.Play();
-        _pc.DamagedAnim();
-        _hp -= value;
+        if(value < _superArmor)
+        {
+            _superArmor -= value;
+            superArmorSlider.value = _superArmor;
+        }
+        else
+        {
+            if(_superArmor > 0)
+            {
+                value -= _superArmor;
+                if (!_superArmorBroken)
+                {
+                    _superArmorCo = StartCoroutine(_retreatSuperArmor());
+                    _superArmorBroken = true;
+                }             
+            }
+
+            _superArmor = 0.0f;
+            _hp -= value;
+            superArmorSlider.value = _superArmor;
+            hpSlider.value = _hp;
+        }
 
         if (_hp <= 0)
             Die();
         else
         {
-            _isStun = true;
-            if (_stunCo != null) StopCoroutine(_stunCo);
-            _stunCo = StartCoroutine("Stun");
+            if(_superArmor <= 0)
+            {
+                _isStun = true;
+                _pc.DamagedAnim();
+                if (_stunCo != null) StopCoroutine(_stunCo);
+                _stunCo = StartCoroutine("Stun");
+            }
         }
+    }
+
+    IEnumerator _retreatSuperArmor()
+    {
+        yield return new WaitForSeconds(2.0f);
+
+        _superArmorFx.SetActive(true);
+        _superArmorSE.Play();
+        Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _attackDistance);
+        for(int i = 0; i < co.Length; ++i)
+        {
+            if(co[i].gameObject.tag.Contains("Player"))
+            {
+                co[i].gameObject.GetComponent<Player>().Damaged(_attackDamage);
+                break;
+            }
+        }
+        _superArmorMaden = _MaxSuperArmor;
+
+        while (_superArmorMaden >= 0)
+        {
+            if (_isDie) break;
+            yield return new WaitForSeconds(0.1f);
+            _superArmorMaden -= 10;
+            _superArmor += 10;
+            superArmorSlider.value = _superArmor;
+        }
+        _superArmorBroken = false;
+        _superArmorFx.SetActive(false);
     }
 
     void Die()
@@ -310,6 +416,22 @@ public class Boss1 : MonoBehaviour
         _isStun = false;
         _isAttacking = false;
         _jumpTrigger = false;
+        StopAllCoroutines();
+
+        StageManager.Instance.pause = true;
+        StartCoroutine(DieProcess());
+    }
+    
+    IEnumerator DieProcess()
+    {
+        Time.timeScale = 0.2f;
+
+        yield return new WaitForSeconds(1.0f);
+
+        Time.timeScale = 1.0f;
+        SoundManager.Instance.clearBGM();
+        DataStreamToStage.Instance.SetClearData(_bossID);
+        _clearCanvas.SetActive(true);
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -329,6 +451,7 @@ public class Boss1 : MonoBehaviour
         _isAttacking = false;
         _jumpTrigger = false;
         _hp = _maxHp;
+        _superArmor = _MaxSuperArmor;
     }
 
     public bool GetDead()
@@ -349,6 +472,7 @@ public class Boss1 : MonoBehaviour
 
     public void CallStun(float duration)
     {
+        if (_superArmor > 0) return;
         _isStun = true;
         if (_stunCo != null) StopCoroutine(_stunCo);
         _stunCo = StartCoroutine(exitCallStunFunction(duration));
@@ -363,5 +487,17 @@ public class Boss1 : MonoBehaviour
             _isStun = false;
             _pc.MoveAnim(_sprintTrigger, false, _rb.velocity.x);
         }
+    }
+
+    IEnumerator CutScene()
+    {
+        StageManager.Instance.pause = true;
+        if (_camera == null) _camera = Camera.main;
+        _camera.GetComponent<billboard>().changeTarget(this.gameObject);
+
+        yield return new WaitForSeconds(2.0f);
+
+        _camera.GetComponent<billboard>().changeTarget(_target);
+        _banner.SetActive(true);
     }
 }

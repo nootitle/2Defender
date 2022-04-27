@@ -173,13 +173,13 @@ public class Archor : MonoBehaviour
 
             if (_target.transform.position.x - _center.transform.position.x > 0)
             {
-                if(_reverseFlip) _pc.setFlip(false);
-                else _pc.setFlip(true);
+                if(_reverseFlip) _pc.setFlip(true);
+                else _pc.setFlip(false);
             }                  
             else
             {
-                if (_reverseFlip) _pc.setFlip(true);
-                else _pc.setFlip(false);
+                if (_reverseFlip) _pc.setFlip(false);
+                else _pc.setFlip(true);
             }
 
             if (_extraHitCo != null) StopCoroutine(_extraHitCo);

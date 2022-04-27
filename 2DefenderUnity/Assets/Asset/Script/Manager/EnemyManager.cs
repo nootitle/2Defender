@@ -11,6 +11,10 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] int maxEnemy = 5;
     int EnemyNum;
     int spawnLevel;
+    bool _respawnStop = false;
+    public bool getRespawnStop() { return _respawnStop; }
+    public void setRespawnStop(bool value) { _respawnStop = value; }
+
     public int getSpawnLevel() { return spawnLevel; }
     public void setSpawnLevel(int level)
     {
@@ -41,7 +45,8 @@ public class EnemyManager : MonoBehaviour
 
     void Update()
     {
-        spawn();
+        if(!_respawnStop)
+            spawn();
     }
 
     public void spawn()

@@ -7,10 +7,16 @@ public class StageManager : MonoBehaviour
 {
     public static StageManager Instance = null;
     [SerializeField] GameObject _rewardWindow = null;
+    [SerializeField] GameObject _boss = null;
 
     int killCount;
     public bool pause = false;
-    public void setKillCount(int value) { killCount += value; }
+    public void setKillCount(int value) 
+    { 
+        killCount += value;
+        StorageManager.Instance.setGold(value * 10);
+        StorageManager.Instance.addGoldDelta(value * 10);
+    }
 
     private void Awake()
     {
@@ -30,12 +36,18 @@ public class StageManager : MonoBehaviour
 
     void stage1()
     {
-        if (killCount != 0 && killCount % 20 == 0)
+        if (killCount != 0 && killCount % 20 == 0 && killCount <= 100)
         {
             EnemyManager.Instance.setSpawnLevel(EnemyManager.Instance.getSpawnLevel() + 1);
             EnemyManager.Instance.setMaxEnemy(EnemyManager.Instance.getMaxEnemy() + 1);
             showRewardWindow();
         }
+        if (killCount >= 110 && !EnemyManager.Instance.getRespawnStop())
+        {
+            _boss.SetActive(true);
+            EnemyManager.Instance.setRespawnStop(true);
+        }
+
     }
 
     public void showRewardWindow()

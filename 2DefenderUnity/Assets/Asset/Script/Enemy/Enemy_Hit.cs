@@ -70,6 +70,30 @@ public class Enemy_Hit : MonoBehaviour
                         this.GetComponent<Fighter>().Damaged(value);
                     break;
                 }
+            case 10:
+                {
+                    if (!this.GetComponent<Boss1>().GetDead())
+                        this.GetComponent<Boss1>().Damaged(value);
+                    break;
+                }
+            case 11:
+                {
+                    if (!this.GetComponent<Boss2>().GetDead())
+                        this.GetComponent<Boss2>().Damaged(value);
+                    break;
+                }
+            case 12:
+                {
+                    if (!this.GetComponent<Boss3>().GetDead())
+                        this.GetComponent<Boss3>().Damaged(value);
+                    break;
+                }
+            case 13:
+                {
+                    if (!this.GetComponent<Plunder>().GetDead())
+                        this.GetComponent<Plunder>().Damaged(value);
+                    break;
+                }
         }
     }
 
@@ -130,6 +154,21 @@ public class Enemy_Hit : MonoBehaviour
             case 10:
                 {
                     this.GetComponent<Boss1>().respawn();
+                    break;
+                }
+            case 11:
+                {
+                    this.GetComponent<Boss2>().respawn();
+                    break;
+                }
+            case 12:
+                {
+                    this.GetComponent<Boss3>().respawn();
+                    break;
+                }
+            case 13:
+                {
+                    this.GetComponent<Plunder>().respawn();
                     break;
                 }
         }
@@ -194,6 +233,21 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<Boss1>().CallStun(duration);
                     break;
                 }
+            case 11:
+                {
+                    this.GetComponent<Boss2>().CallStun(duration);
+                    break;
+                }
+            case 12:
+                {
+                    this.GetComponent<Boss3>().CallStun(duration);
+                    break;
+                }
+            case 13:
+                {
+                    this.GetComponent<Plunder>().CallStun(duration);
+                    break;
+                }
         }
     }
 
@@ -244,6 +298,18 @@ public class Enemy_Hit : MonoBehaviour
             case 10:
                 {
                     return this.GetComponent<Boss1>().GetCenter();
+                }
+            case 11:
+                {
+                    return this.GetComponent<Boss2>().GetCenter();
+                }
+            case 12:
+                {
+                    return this.GetComponent<Boss3>().GetCenter();
+                }
+            case 13:
+                {
+                    return this.GetComponent<Plunder>().GetCenter();
                 }
         }
         return null;

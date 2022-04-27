@@ -43,4 +43,17 @@ public class DataStreamToStage : MonoBehaviour
     {
         return _login;
     }
+
+    public void SetClearData(int mapID)
+    {
+        int currentMapID = PlayerPrefs.GetInt(currentID + "PlayerSetting_Level");
+        if (currentMapID >= mapID) return;
+
+        switch(mapID)
+        {
+            case 1: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 1); break;
+            case 2: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 2); break;
+            case 3: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 3); break;
+        }
+    }
 }

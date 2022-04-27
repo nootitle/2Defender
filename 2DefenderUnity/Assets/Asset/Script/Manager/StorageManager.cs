@@ -16,6 +16,9 @@ public class StorageManager : MonoBehaviour
     [SerializeField] GameObject _alreadyHaveMessage = null;
 
     [SerializeField] int _gold = 0;
+    int goldDelta = 0;
+    public int getGoldDelta() { return goldDelta; }
+    public void addGoldDelta(int value) { goldDelta += value; }
 
     private void Awake()
     {

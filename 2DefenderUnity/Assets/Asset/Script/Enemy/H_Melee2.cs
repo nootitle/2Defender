@@ -80,7 +80,11 @@ public class H_Melee2 : MonoBehaviour
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
             _sprintTrigger = true;
-             chasing();
+            int rnd = Random.Range(0, 1000);
+            if (rnd < 998 || _jumpTrigger)
+                chasing();
+            else
+                jump();
         }
         else
         {

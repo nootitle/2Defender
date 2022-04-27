@@ -27,15 +27,17 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {       
+        /*
         CameraObject.CalculateFrustumCorners(
             new Rect(X, Y, W, H),
             CameraObject.farClipPlane,
             Camera.MonoOrStereoscopicEye.Mono,
             FrustumLine);
-        
+        */
+        /*
         for (int i = 0; i < 4; ++i)
             Debug.DrawLine(transform.position, FrustumLine[i], Color.red);
-
+        */
         /*
         if(Input.GetMouseButton(0))
         {
