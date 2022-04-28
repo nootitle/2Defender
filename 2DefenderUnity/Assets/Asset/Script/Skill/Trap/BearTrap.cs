@@ -13,10 +13,12 @@ public class BearTrap : MonoBehaviour
     bool _capture = false;
     Coroutine _co = null;
     [SerializeField] Animator _ani = null;
+    Rigidbody2D _rb = null;
 
     private void OnEnable()
     {
         _capture = false;
+        _rb = this.GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -39,7 +41,9 @@ public class BearTrap : MonoBehaviour
                     EH.Hit(_damage);
                     EH.Stun(_duration);
                     GameObject gm = Instantiate(_hitFx);
-                    gm.transform.position = c.transform.position;
+                    gm.transform.position = c.GetComponent<Enemy_Hit>().GetCenter().transform.position;
+                    _rb.simulated = false;
+                    this.transform.position = c.GetComponent<Enemy_Hit>().GetCenter().transform.position + Vector3.down;
                     _capture = true;
 
                     if (_co != null) StopCoroutine(_co);
@@ -59,6 +63,7 @@ public class BearTrap : MonoBehaviour
     {
         yield return new WaitForSeconds(_duration);
 
+        _rb.simulated = true;
         _capture = false;
         _ani.SetTrigger("Disable");
         this.gameObject.SetActive(false);

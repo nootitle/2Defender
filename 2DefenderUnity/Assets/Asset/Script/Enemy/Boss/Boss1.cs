@@ -34,6 +34,7 @@ public class Boss1 : MonoBehaviour
     Coroutine _stunCo;
     Coroutine _extraHitCo;
     Coroutine _extraHitCo2;
+    Coroutine _castOverCo;
     Coroutine _jumpCo;
 
     private Rigidbody2D _rb = null;
@@ -100,9 +101,6 @@ public class Boss1 : MonoBehaviour
 
     void Update()
     {
-        //jump();
-        //sprint();
-
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
@@ -119,7 +117,6 @@ public class Boss1 : MonoBehaviour
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _lungeDistance)
         {
-            _pc.Slide();
             int rnd = Random.Range(0, 100);
             if (rnd < 50)
                 Attack();
@@ -273,8 +270,6 @@ public class Boss1 : MonoBehaviour
             if (_extraHitCo != null) StopCoroutine(_extraHitCo);
             _extraHitCo = StartCoroutine(ExtraHit());
         }
-        else
-            _pc.Slide();
     }
 
     IEnumerator ExtraHit()
@@ -285,10 +280,16 @@ public class Boss1 : MonoBehaviour
 
         _islunging = true;
         _pc.Attack();
-        if (direction == 1)
+        if (_target.transform.position.x - _center.transform.position.x > 0)
+        {
+            _pc.setFlip(false);
             _rb.AddForce(Vector3.right * _walkSpeed * 30.0f, ForceMode2D.Impulse);
-        else if (direction == -1)
+        }
+        else
+        {
+            _pc.setFlip(true);
             _rb.AddForce(Vector3.left * _walkSpeed * 30.0f, ForceMode2D.Impulse);
+        }
 
         yield return new WaitForSeconds(1.5f);
         _isAttacking = false;
@@ -327,14 +328,27 @@ public class Boss1 : MonoBehaviour
     {
         if (_fBDelay >= _fireBallDelay)
         {
+            _isAttacking = true;
             _pc.Cast();
-            _fireBallSE.Play();
-            GameObject gm = Instantiate(_fireBall);
-            gm.transform.position = _center.transform.position;
-            gm.GetComponent<Bullet_straight>().setDirection(_target.transform.position
-                - _center.transform.position);
-            _fBDelay = 0.0f;
+            
+            if (_castOverCo != null) StopCoroutine(_castOverCo);
+            _castOverCo = StartCoroutine(castOver());
         }
+    }
+
+    IEnumerator castOver()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        _fireBallSE.Play();
+        GameObject gm = Instantiate(_fireBall);
+        gm.transform.position = _center.transform.position;
+        gm.GetComponent<Bullet_straight>().setDirection(_target.transform.position
+            - _center.transform.position);
+
+        yield return new WaitForSeconds(0.5f);
+        _fBDelay = 0.0f;
+        _isAttacking = false;
     }
 
     public void Damaged(float value)

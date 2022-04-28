@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (StageManager.Instance.pause) return;
+
         if(!_joyStickMode)
         {
             float x = Input.GetAxis("Horizontal");

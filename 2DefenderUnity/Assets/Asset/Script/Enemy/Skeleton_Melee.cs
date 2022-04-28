@@ -17,6 +17,7 @@ public class Skeleton_Melee : MonoBehaviour
     [SerializeField] float _attackDamage = 2.0f;
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
+    [SerializeField] AudioSource _attackSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isAttacking = false;
@@ -49,8 +50,6 @@ public class Skeleton_Melee : MonoBehaviour
 
     void Update()
     {
-        //jump();
-
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
@@ -79,6 +78,7 @@ public class Skeleton_Melee : MonoBehaviour
             _pc.setFlip(false);
         else if(direction == -1)
             _pc.setFlip(true);
+        _pc.MoveAnim(false, _walkSpeed * direction);
     }
 
     private void chasing()
@@ -94,7 +94,7 @@ public class Skeleton_Melee : MonoBehaviour
             direction = -1;
             _pc.setFlip(true);
         }
-
+        _pc.MoveAnim(false, _walkSpeed * direction);
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -161,30 +161,39 @@ public class Skeleton_Melee : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
+            _isAttacking = true;
 
             if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
             else
                 _pc.setFlip(true);
-            _isAttacking = true; 
+
             _delayCount = 0.0f;
             if (_extraHitCo != null) StopCoroutine(_extraHitCo);
             _extraHitCo = StartCoroutine(ExtraHit());
         }
         else
-            _pc.MoveAnim(false, 0);
+            _pc.MoveAnim(true, 0);
     }
 
     IEnumerator ExtraHit()
     {
         yield return new WaitForSeconds(0.2f);
-        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
-            _player.Damaged(_attackDamage);
+        if (!_isStun)
+        {
+            _attackSE.Play();
+            if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+                _player.Damaged(_attackDamage);
+        }
 
         yield return new WaitForSeconds(0.5f);
+        if (!_isStun)
+        {
+            _attackSE.Play();
+            if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+                _player.Damaged(_attackDamage);
+        }
 
-        if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
-            _player.Damaged(_attackDamage);
         _isAttacking = false;
         _pc.MoveAnim(false, 0);
     }

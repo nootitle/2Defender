@@ -43,7 +43,7 @@ public class LobbyManager : MonoBehaviour
         _hpText.text = "최대체력 : " + statusList[0];
         _meleeText.text = "근접공격력 : " + statusList[1];
         _magicText.text = "공격마법숙련도 : " + statusList[2];
-        _healText.text = "회복마법숙력도 : " + statusList[3];
+        _healText.text = "회복마법숙련도 : " + statusList[3];
         if (statusList[4] == "0")
             _weaponText.text = "특수장비 : 없음";
         else if (statusList[4] == "1")
@@ -65,7 +65,7 @@ public class LobbyManager : MonoBehaviour
         _hpText.text = "최대체력 : " + statusList[0];
         _meleeText.text = "근접공격력 : " + statusList[1];
         _magicText.text = "공격마법숙련도 : " + statusList[2];
-        _healText.text = "회복마법숙력도 : " + statusList[3];
+        _healText.text = "회복마법숙련도 : " + statusList[3];
     }
 
     public void updateStatus(float hp, float melee, float magic, float heal, int weapon)
@@ -78,7 +78,7 @@ public class LobbyManager : MonoBehaviour
         _hpText.text = "최대체력 : " + statusList[0];
         _meleeText.text = "근접공격력 : " + statusList[1];
         _magicText.text = "공격마법숙련도 : " + statusList[2];
-        _healText.text = "회복마법숙력도 : " + statusList[3];
+        _healText.text = "회복마법숙련도 : " + statusList[3];
 
         if (weapon == 0)
         {

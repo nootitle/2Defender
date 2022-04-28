@@ -56,6 +56,7 @@
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\randomParticleRotation.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\H_Melee2_Anim.cs" />
     <Compile Include="Assets\Resources\DataManager.cs" />
+    <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss3.cs" />
     <Compile Include="Assets\Asset\Script\UI\SetSkill.cs" />
     <Compile Include="Assets\Asset\Script\Player\Player.cs" />
     <Compile Include="Assets\Asset\Script\UI\WindowDisappear.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\Lighting.cs" />
     <Compile Include="Assets\Asset\Map\UnderwaterFantasy\Scripts\Perspective2DSortMode.cs" />
     <Compile Include="Assets\Asset\Script\etc\Particle Ribbon by Moonflower Carnivore_Scripts\rotation.cs" />
+    <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss1.cs" />
     <Compile Include="Assets\Asset\Script\Manager\LobbyManager.cs" />
     <Compile Include="Assets\Asset\Script\etc\Sensor_HeroKnight.cs" />
     <Compile Include="Assets\Asset\Script\Manager\EnemyManager.cs" />
@@ -93,10 +95,12 @@
     <Compile Include="Assets\Asset\Script\UI\Skill_Info.cs" />
     <Compile Include="Assets\Asset\Script\Player\DragController.cs" />
     <Compile Include="Assets\Asset\Script\Skill\hitfx\hitAndDestroy.cs" />
+    <Compile Include="Assets\Asset\Script\UI\ReadyTextEffect.cs" />
     <Compile Include="Assets\Asset\Character\Prototype Hero - Pixel Art\ColorSwap\ColorSwap_Prototype.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Enemy_Hit.cs" />
     <Compile Include="Assets\Asset\Script\Manager\StageSelectManager.cs" />
     <Compile Include="Assets\Asset\Script\UI\TextBlink.cs" />
+    <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss2.cs" />
     <Compile Include="Assets\Asset\UI\Free UI build package\Script\Togglescript.cs" />
     <Compile Include="Assets\Asset\Character\Prototype Hero - Pixel Art\Demo\Dust_DestroyEvent.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\H_Melee2.cs" />
@@ -147,9 +151,6 @@
     <Compile Include="Assets\Asset\Script\Player\SkillInvenController.cs" />
     <Compile Include="Assets\Asset\Script\Manager\CSVReader.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss1.cs" />
-    <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss2.cs" />
-    <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />
@@ -158,6 +159,7 @@
     <None Include="Assets\Asset\Effect\Particle Ribbon by Moonflower Carnivore\readme_Simple_Particle_Ribbon.txt" />
     <None Include="Assets\Asset\Sprite\Gothicvania Cemetery Artwork\about.txt" />
     <None Include="Assets\Asset\Animation\Warrior free set\License.txt" />
+    <None Include="Assets\Pixel2DCastleTileset\about.txt" />
     <None Include="Assets\Asset\Sound\ShootingSound\ReadMe.txt" />
     <None Include="Assets\Asset\Map\Cainos\Pixel Art Platformer - Village Props\Changelog.txt" />
     <None Include="Assets\Asset\Sound\FantomMusic\ReadMe.txt" />
@@ -175,6 +177,7 @@
     <None Include="Assets\Asset\Character\Fox\Readme.txt" />
     <None Include="Assets\Asset\Shader\NormalMappedTileAnimated.shader" />
     <None Include="Assets\Asset\Animation\Warrior free set\Contact.txt" />
+    <None Include="Assets\Custom Character_Vol3\Read Me(En,Jp).txt" />
     <None Include="Assets\Asset\Map\Nature_pixel_art_assets\pixel_snapping_README.txt" />
     <None Include="Assets\Asset\Shader\ColorSwap\Sprites-ColorSwap.shader" />
   </ItemGroup>
@@ -781,6 +784,9 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

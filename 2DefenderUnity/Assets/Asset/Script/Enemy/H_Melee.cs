@@ -19,6 +19,7 @@ public class H_Melee : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] AudioSource _meleeSE = null;
     [SerializeField] bool _reverseFlip = false;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
@@ -52,8 +53,6 @@ public class H_Melee : MonoBehaviour
 
     void Update()
     {
-        //jump();
-        //sprint();
         if (_isDie) return;
         if (_isStun) return;
         if (_jumpTrigger)
@@ -206,6 +205,7 @@ public class H_Melee : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
+            _meleeSE.Play();
             if (_target.transform.position.x - _center.transform.position.x > 0)
             {
                 if(_reverseFlip) _pc.setFlip(true);
@@ -228,6 +228,7 @@ public class H_Melee : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Stomp();
+            _meleeSE.Play();
             if (_target.transform.position.x - _center.transform.position.x > 0)
             {
                 if (_reverseFlip) _pc.setFlip(true);

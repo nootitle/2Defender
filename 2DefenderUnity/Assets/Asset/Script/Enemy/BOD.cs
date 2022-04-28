@@ -18,6 +18,8 @@ public class BOD : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] AudioSource _meleeSE = null;
+    [SerializeField] AudioSource _castSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isStun = false;
@@ -92,6 +94,7 @@ public class BOD : MonoBehaviour
 
     private void Moving()
     {
+        _pc.MoveAnim(false, _walkSpeed * direction);
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -99,9 +102,16 @@ public class BOD : MonoBehaviour
     {
         float dir = _target.transform.position.x - _center.transform.position.x;
         if (dir > 0)
+        {
+            _pc.setFlip(true);
             direction = 1;
+        }
         else
+        {
             direction = -1;
+            _pc.setFlip(false);
+        }
+        _pc.MoveAnim(false, _walkSpeed * direction);
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -180,18 +190,17 @@ public class BOD : MonoBehaviour
             _delayCount = 0.0f;
         }
         else
-            _pc.MoveAnim(false, 0);
+            _pc.MoveAnim(true, 0);
     }
 
     IEnumerator ExtraHit()
     {
         yield return new WaitForSeconds(0.5f);
-
+        _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
             _player.Damaged(_attackDamage);
         }
-        _pc.MoveAnim(false, 0);
     }
 
     void casting()
@@ -199,6 +208,7 @@ public class BOD : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.casting();
+            _castSE.Play();
             if (_target.transform.position.x - _center.transform.position.x > 0)
             {
                 _castFxRight.SetActive(true);
@@ -214,7 +224,7 @@ public class BOD : MonoBehaviour
             _castCo = StartCoroutine(castOff());
         }
         else
-            _pc.MoveAnim(false, 0);
+            _pc.MoveAnim(true, 0);
     }
 
     IEnumerator castOff()

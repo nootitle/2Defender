@@ -119,7 +119,6 @@ public class Boss2 : MonoBehaviour
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _farAttackDistance)
         {
-            _pc.Slide();
             int rnd = Random.Range(0, 100);
             if (rnd < 50)
                 Attack();
@@ -277,8 +276,8 @@ public class Boss2 : MonoBehaviour
         for(int i = 0; i < 10; ++i)
         {
             if (_isStun) break;
+            if (_isDie) break;
 
-            yield return new WaitForSeconds(0.5f);
             if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(false);
             else
@@ -291,9 +290,10 @@ public class Boss2 : MonoBehaviour
             gm.transform.position = _center.transform.position;
             gm.GetComponent<Bullet_straight>().setDirection(_target.transform.position
                 - _center.transform.position);
+
+            yield return new WaitForSeconds(0.5f);
         }
 
-        yield return new WaitForSeconds(0.5f);
         _isAttacking = false;
         _delayCount = 0.0f;
     }
@@ -313,6 +313,8 @@ public class Boss2 : MonoBehaviour
             if (_extraHitCo2 != null) StopCoroutine(_extraHitCo2);
             _extraHitCo2 = StartCoroutine(ExtraHit2());
         }
+        else
+            _pc.Slide();
     }
 
     IEnumerator ExtraHit2()
@@ -331,8 +333,10 @@ public class Boss2 : MonoBehaviour
         {
             _isAttacking = true;
             if (_extraCastCo != null) StopCoroutine(_extraCastCo);
-            _extraCastCo = StartCoroutine(castProcess());            
+            _extraCastCo = StartCoroutine(castProcess());
         }
+        else
+            _pc.Slide();
     }
 
     IEnumerator castProcess()
@@ -340,10 +344,11 @@ public class Boss2 : MonoBehaviour
         for(int i = 0; i < 5; ++i)
         {
             if (_isStun) break;
+            if (_isDie) break;
 
-            yield return new WaitForSeconds(1.0f);
             _pc.Cast();
             MakeSpreadBullets();
+            yield return new WaitForSeconds(1.0f);
         }
         _isAttacking = false;
         _delayCount = 0.0f;

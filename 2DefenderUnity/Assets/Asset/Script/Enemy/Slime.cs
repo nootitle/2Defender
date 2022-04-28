@@ -17,6 +17,7 @@ public class Slime : MonoBehaviour
     [SerializeField] float _attackDamage = 2.0f;
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
+    [SerializeField] AudioSource _meleeSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isStun = false;
@@ -48,8 +49,6 @@ public class Slime : MonoBehaviour
 
     void Update()
     {
-        //jump();
-
         if (_isDie) return;
         if (_isStun) return;
         if (_jumpTrigger)
@@ -86,16 +85,24 @@ public class Slime : MonoBehaviour
 
     private void Moving()
     {
+        _pc.MoveAnim(false, _walkSpeed * direction);
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
     private void chasing()
     {
         float dir = _target.transform.position.x - _center.transform.position.x;
+        _pc.MoveAnim(false, _walkSpeed * direction);
         if (dir > 0)
+        {
             direction = 1;
+            _pc.setFlip(true);
+        }
         else
+        {
             direction = -1;
+            _pc.setFlip(false);
+        }
         transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
     }
 
@@ -134,9 +141,15 @@ public class Slime : MonoBehaviour
             _jumpTrigger = true;
             _pc.jumpAnim();
             if (direction == 1)
+            {
                 _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+                _pc.setFlip(true);
+            }
             else if (direction == -1)
+            {
                 _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+                _pc.setFlip(false);
+            }
             else
                 _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
         }
@@ -163,7 +176,7 @@ public class Slime : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
-
+            _meleeSE.Play();
             if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(true);
             else
@@ -181,6 +194,7 @@ public class Slime : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Stomp();
+            _meleeSE.Play();
             _player.Damaged(_attackDamage * 1.5f);
             if (_target.transform.position.x - _center.transform.position.x > 0)
                 _pc.setFlip(true);

@@ -19,6 +19,9 @@ public class Charger : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] AudioSource _preSE = null;
+    [SerializeField] AudioSource _chargeSE = null;
+    [SerializeField] AudioSource _normalAttackSE = null;
     [SerializeField] bool _reverseFlip = false;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
@@ -58,6 +61,7 @@ public class Charger : MonoBehaviour
         //sprint();
         if (_isDie) return;
         if (_isStun) return;
+        if (_isAttacking) return;
         if (_jumpTrigger)
         {
             transform.Translate(direction * _walkSpeed * Time.deltaTime, 0.0f, 0.0f);
@@ -224,6 +228,7 @@ public class Charger : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _pc.Attack();
+            _normalAttackSE.Play();
             if (_target.transform.position.x - _center.transform.position.x > 0)
             {
                 if (_reverseFlip) _pc.setFlip(true);
@@ -238,7 +243,7 @@ public class Charger : MonoBehaviour
             _delayCount = 0.0f;
         }
         else
-            _pc.MoveAnim(false, false, 0);
+            _pc.MoveAnim(false, true, 0);
     }
 
     void stomping()
@@ -246,17 +251,9 @@ public class Charger : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _isAttacking = true;
-            _pc.Stomp();
-            if (_target.transform.position.x - _center.transform.position.x > 0)
-            {
-                if (_reverseFlip) _pc.setFlip(true);
-                else _pc.setFlip(false);
-            }
-            else
-            {
-                if (_reverseFlip) _pc.setFlip(false);
-                else _pc.setFlip(true);
-            }
+            _preSE.Play();
+            _pc.setReady();
+            
             if (_chargerCo != null) StopCoroutine(_chargerCo);
             _chargerCo = StartCoroutine(charge());
         }
@@ -267,7 +264,22 @@ public class Charger : MonoBehaviour
     IEnumerator charge()
     {
         yield return new WaitForSeconds(2.0f);
+        _chargeSE.Play();
+        _pc.Stomp();
+        if (_target.transform.position.x - _center.transform.position.x > 0)
+        {
+            if (_reverseFlip) _pc.setFlip(true);
+            else _pc.setFlip(false);
+            _rb.AddForce(Vector2.right * _sprintSpeed * 20.0f, ForceMode2D.Impulse);
+        }
+        else
+        {
+            if (_reverseFlip) _pc.setFlip(false);
+            else _pc.setFlip(true);
+            _rb.AddForce(Vector2.left * _sprintSpeed * 20.0f, ForceMode2D.Impulse);
+        }
 
+        yield return new WaitForSeconds(1.0f);
         _isAttacking = false;
         _delayCount = 0.0f;
     }

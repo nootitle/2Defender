@@ -8,6 +8,7 @@ public class StageManager : MonoBehaviour
     public static StageManager Instance = null;
     [SerializeField] GameObject _rewardWindow = null;
     [SerializeField] GameObject _boss = null;
+    [SerializeField] GameObject _readySign = null;
 
     int killCount;
     public bool pause = false;
@@ -27,6 +28,7 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         killCount = 0;
+        _readySign.SetActive(true);
     }
 
     void Update()

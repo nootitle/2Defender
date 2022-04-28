@@ -19,6 +19,7 @@ public class Fighter : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] AudioSource _meleeSE = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -61,9 +62,6 @@ public class Fighter : MonoBehaviour
 
     void Update()
     {
-        //jump();
-        //sprint();
-
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
@@ -233,10 +231,12 @@ public class Fighter : MonoBehaviour
     IEnumerator ExtraHit()
     {
         yield return new WaitForSeconds(0.4f);
+        _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
         yield return new WaitForSeconds(0.5f);
+        _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
@@ -263,6 +263,7 @@ public class Fighter : MonoBehaviour
     IEnumerator ExtraHit2()
     {
         yield return new WaitForSeconds(0.2f);
+        _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 

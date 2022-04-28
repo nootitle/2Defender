@@ -77,6 +77,12 @@ public class Charger_Anim : MonoBehaviour
         _animator.SetTrigger("Attack_Normal");
     }
 
+    public void setReady()
+    {
+        resetMoveTrigger();
+        _animator.SetTrigger("ready");
+    }
+
     public void Stomp()
     {
         resetMoveTrigger();

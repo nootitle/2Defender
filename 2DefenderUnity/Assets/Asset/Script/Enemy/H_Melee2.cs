@@ -19,6 +19,8 @@ public class H_Melee2 : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
+    [SerializeField] AudioSource _slashSE1 = null;
+    [SerializeField] AudioSource _slashSE2 = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -223,10 +225,12 @@ public class H_Melee2 : MonoBehaviour
     IEnumerator ExtraHit()
     {
         yield return new WaitForSeconds(0.4f);
+        _slashSE1.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.4f);
+        _slashSE2.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
@@ -252,7 +256,8 @@ public class H_Melee2 : MonoBehaviour
 
     IEnumerator ExtraHit2()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
+        _slashSE1.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
             _player.Damaged(_attackDamage);
 
