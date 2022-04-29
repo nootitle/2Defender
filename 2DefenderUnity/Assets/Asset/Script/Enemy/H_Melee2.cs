@@ -42,6 +42,9 @@ public class H_Melee2 : MonoBehaviour
 
     public GameObject GetCenter() { return _center; }
 
+    [SerializeField] GameObject _dropItem1 = null;
+    [SerializeField] GameObject _dropItem2 = null;
+
     void Start()
     {
         _hp = _maxHp;
@@ -56,9 +59,6 @@ public class H_Melee2 : MonoBehaviour
 
     void Update()
     {
-        //jump();
-        //sprint();
-
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
@@ -291,6 +291,13 @@ public class H_Melee2 : MonoBehaviour
         _isStun = false;
         _isAttacking = false;
         _jumpTrigger = false;
+
+        int rnd = Random.Range(0, 100);
+        if (rnd < 5)
+            dropItem(1);
+        else if (rnd >= 5 && rnd < 10)
+            dropItem(2);
+
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -343,6 +350,26 @@ public class H_Melee2 : MonoBehaviour
         {
             _isStun = false;
             _pc.MoveAnim(_sprintTrigger, false, _rb.velocity.x);
+        }
+    }
+
+    void dropItem(int id)
+    {
+        if(id == 1)
+        {
+            if (_dropItem1 != null)
+            {
+                GameObject gm = Instantiate(_dropItem1);
+                gm.transform.position = _center.transform.position;
+            }
+        }
+        else if(id == 2)
+        {
+            if (_dropItem2 != null)
+            {
+                GameObject gm = Instantiate(_dropItem2);
+                gm.transform.position = _center.transform.position;
+            }
         }
     }
 }

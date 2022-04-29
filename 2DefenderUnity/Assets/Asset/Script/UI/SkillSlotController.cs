@@ -35,6 +35,7 @@ public class SkillSlotController : MonoBehaviour
 
     public void setLevelIcon()
     {
+        if (level > 3) return;
         _levelIcon[level - 1].SetActive(true);
         ++level;
     }

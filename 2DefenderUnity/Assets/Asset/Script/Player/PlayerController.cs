@@ -163,4 +163,24 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetTrigger("Sliding");
     }
+
+    public void CounterReadyAnim()
+    {
+        resetMoveTrigger();
+        _animator.ResetTrigger("CancelCounter");
+        _animator.SetTrigger("CounterReady");
+    }
+
+    public void CacnelCounterAnim()
+    {
+        _animator.ResetTrigger("CounterReady");
+        _animator.ResetTrigger("Counter");
+        _animator.SetTrigger("CancelCounter");
+    }
+
+    public void CounterAnim()
+    {
+        _animator.ResetTrigger("CounterReady");
+        _animator.SetTrigger("Counter");
+    }
 }

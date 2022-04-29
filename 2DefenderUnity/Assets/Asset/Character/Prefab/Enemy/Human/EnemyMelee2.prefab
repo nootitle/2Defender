@@ -283,6 +283,8 @@ MonoBehaviour:
   _slashSE2: {fileID: 1105346802466305169}
   _pc: {fileID: 9169129437565489543}
   _target: {fileID: 0}
+  _dropItem1: {fileID: 5585088898529328088, guid: 243026a13256c414786b0a27fb4c0af5, type: 3}
+  _dropItem2: {fileID: 2672069665957632977, guid: 546cf2f008771fc40b7193466eb343d5, type: 3}
 --- !u!114 &3668552796289543808
 MonoBehaviour:
   m_ObjectHideFlags: 0

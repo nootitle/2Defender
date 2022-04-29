@@ -282,6 +282,7 @@ MonoBehaviour:
   _reverseFlip: 0
   _pc: {fileID: 3668552796115643126}
   _target: {fileID: 0}
+  _dropItem: {fileID: 5585088898529328088, guid: 243026a13256c414786b0a27fb4c0af5, type: 3}
 --- !u!114 &3668552796289543808
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -308,6 +308,7 @@ MonoBehaviour:
   _attackSE: {fileID: 1968054297732696377}
   _pc: {fileID: 6105033993448679558}
   _target: {fileID: 0}
+  _dropItem: {fileID: 535355386893205106, guid: 6ec6eb2ba610da848b5fc36cac2db405, type: 3}
 --- !u!114 &5142183543492435874
 MonoBehaviour:
   m_ObjectHideFlags: 0

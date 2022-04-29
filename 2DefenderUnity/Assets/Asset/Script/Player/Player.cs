@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     [SerializeField] public List<int> _SkillLevelList = null;
     Coroutine _stunCo = null;
     Coroutine _extraAttackCo = null;
+    Coroutine _extraMeleeAttackCo = null;
+    float _meleeExtraDamage = 0.0f;
     float _magicExtraDamage = 0.0f;
     public float _extraHeal = 0.0f;
     float _delayCount = 0.0f;
@@ -83,6 +85,14 @@ public class Player : MonoBehaviour
     [SerializeField] AudioSource _slidingSE = null;
     Coroutine _slidingCo = null;
     bool _isSliding = false;
+
+    bool _isReadyToCounter = false;
+
+    [SerializeField] GameObject _steamPackFx = null;
+
+    [SerializeField] List<GameObject> _airforceBombs = null;
+    Coroutine _airforceCo = null;
+
     string currentID = "";
 
     [SerializeField] GameObject _gameOverCanvas = null;
@@ -163,7 +173,7 @@ public class Player : MonoBehaviour
             else if (Joy > 0)
                 Hor = 0.8f;
             else
-                Hor = 0.0f;
+                Hor = 0.0f;         
         }
         else
         {
@@ -174,11 +184,13 @@ public class Player : MonoBehaviour
         //기본공격(키보드) 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            cancelCounter();
             _skillSlot.transform.GetChild(0).GetComponent<SkillSlotController>().StartCooldown();
             Attack();
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
+            cancelCounter();
             _skillSlot.transform.GetChild(1).GetComponent<SkillSlotController>().StartCooldown();
             stomping();
         }
@@ -186,11 +198,19 @@ public class Player : MonoBehaviour
         if (!_joyStickMode)
         {
             if (Input.GetKeyDown(KeyCode.Space))
+            {
+                cancelCounter();
                 jump();
+            }
             if (Input.GetKey(KeyCode.LeftShift))
+            {
+                cancelCounter();
                 sprint();
+            }
             else
+            {
                 sprintStop();
+            }
         }
 
         if (Hor >= 0.2f || Hor <= -0.2f)
@@ -226,6 +246,9 @@ public class Player : MonoBehaviour
             fireBall();
         }
         */
+
+        if (Input.GetKeyDown(KeyCode.L))
+            Airforce();
 
         if (Input.GetKeyDown(KeyCode.Escape))
             CallEsc();
@@ -321,7 +344,7 @@ public class Player : MonoBehaviour
             {
                 Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
                 if (EH != null)
-                    EH.Hit(_attackDamage * _SkillLevelList[0]);
+                    EH.Hit(_attackDamage * _SkillLevelList[0] + _meleeExtraDamage);
             }
 
             if (_modeID == 1)
@@ -364,9 +387,9 @@ public class Player : MonoBehaviour
                 if (EH != null)
                 {
                     if (_modeID == 0)
-                        EH.Hit(_attackDamage * 1.5f * _SkillLevelList[1]);
+                        EH.Hit(_attackDamage * 1.5f * _SkillLevelList[1] + _meleeExtraDamage);
                     else if(_modeID == 1)
-                        EH.Hit(_attackDamage * 2.0f * _SkillLevelList[1]);
+                        EH.Hit(_attackDamage * 2.0f * _SkillLevelList[1] + _meleeExtraDamage);
                 }
 
             }
@@ -378,6 +401,23 @@ public class Player : MonoBehaviour
         if (_isDie) return;
         if (_isSliding) return;
         if (StageManager.Instance.pause) return;
+
+        if (_isReadyToCounter)
+        {
+            Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _attackDistance);
+            for(int i = 0; i < co.Length; ++i)
+            {
+                Enemy_Hit EH = co[i].gameObject.GetComponent<Enemy_Hit>();
+                if(EH != null)
+                {
+                    EH.Hit(_attackDamage * _SkillLevelList[11] * 2.0f + _meleeExtraDamage);
+                }
+            }
+            _isReadyToCounter = false;
+            _pc.CounterAnim();
+            _se_Melee.bladeSE();
+            return;
+        }
 
         float temp = value;
         if(_shield > 0)
@@ -422,6 +462,7 @@ public class Player : MonoBehaviour
     {
         if (_isDie) return;
 
+        GameObject gm = Instantiate(_healFx);
         float temp = Mathf.Min(_hp + value, _maxHp);
         _hp = temp;
         if (_hpBar != null)
@@ -498,7 +539,6 @@ public class Player : MonoBehaviour
         if (_healFx != null)
         {
             healed(5.0f * _SkillLevelList[3] + _extraHeal);
-            GameObject gm = Instantiate(_healFx);
         }
     }
 
@@ -662,9 +702,62 @@ public class Player : MonoBehaviour
 
     IEnumerator ExitSliding()
     {
-        yield return new WaitForSeconds(_durationSliding);
+        yield return new WaitForSeconds(_durationSliding * _SkillLevelList[10]);
 
         _isSliding = false;
+    }
+
+    public void Counter()
+    {
+        if(!_isReadyToCounter)
+        {
+            _isReadyToCounter = true;
+            _pc.CounterReadyAnim();
+        }
+    }
+
+    void cancelCounter()
+    {
+        if(_isReadyToCounter)
+        {
+            _isReadyToCounter = false;
+            _pc.CacnelCounterAnim();
+        }
+    }
+
+    public void SteamPack()
+    {
+        _attackDelay /= 2.0f;
+        _steamPackFx.SetActive(true);
+        Invoke("endSteamPack", 15.0f * _SkillLevelList[12]);
+    }
+
+    void endSteamPack()
+    {
+        _steamPackFx.SetActive(false);
+        _attackDelay *= 2.0f;
+    }
+
+    public void Airforce()
+    {
+        if (_airforceCo != null) StopCoroutine(_airforceCo);
+        _airforceCo = StartCoroutine(extraAirforce());
+    }
+
+    IEnumerator extraAirforce()
+    {
+        for(int j = 0; j < _SkillLevelList[13]; ++j)
+        {
+            Debug.Log(_SkillLevelList[13]);
+            for (int i = 0; i < _airforceBombs.Count; ++i)
+            {
+                _airforceBombs[i].transform.position = this.transform.position +
+                    Vector3.left * 20.0f + Vector3.right * (i % 5) * 5.0f + Vector3.up * 20.0f;
+                _airforceBombs[i].SetActive(true);
+            }
+
+            yield return new WaitForSeconds(4.0f);
+        }
     }
 
     //기본공격, 스킬 통합 호출 함수
@@ -673,7 +766,9 @@ public class Player : MonoBehaviour
     {
         if (_isDie) return;
 
-        switch(id)
+        cancelCounter();
+
+        switch (id)
         {
             case 0: Attack(); break;
             case 1: stomping(); break;
@@ -686,6 +781,9 @@ public class Player : MonoBehaviour
             case 8: trackingBullet(); break;
             case 9: MakeShield(); break;
             case 10: Sliding(); break;
+            case 11: Counter(); break;
+            case 12: SteamPack(); break;
+            case 13: Airforce(); break;
         }
     }
 
@@ -735,5 +833,28 @@ public class Player : MonoBehaviour
     public void AddNewSkillOnList(int id)
     {
         Skill_Info.Instance.AddNewSkillOnList(id);
+    }
+
+    //기타 스킬(아이템 획득 시 발동 스킬 등)
+
+    public void riseExtraAttack(float value, float duration)
+    {
+        _meleeExtraDamage += value;
+        if (_extraMeleeAttackCo != null) StopCoroutine(_extraMeleeAttackCo);
+        _extraMeleeAttackCo = StartCoroutine(offriseExtraAttack(value, duration));
+    }
+
+    IEnumerator offriseExtraAttack(float value, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _meleeExtraDamage -= value;
+    }
+
+    public void MakeShieldByItem(float value)
+    {
+        _shieldSE.Play();
+        _shieldFx.SetActive(true);
+        _shield = Mathf.Max(_shieldMax, _shield + value);
+        _shieldBar.GetComponent<HpBar>().setHpBar(_shield);
     }
 }

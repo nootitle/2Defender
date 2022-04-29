@@ -220,7 +220,26 @@ public class StorageManager : MonoBehaviour
                     }
                     break;
                 }
-
+            case 12:
+                {
+                    if (_gold >= 50)
+                    {
+                        setGold(-50);
+                        _alreadyHave.Add(id);
+                        _purchaseMessage.SetActive(true);
+                    }
+                    break;
+                }
+            case 13:
+                {
+                    if (_gold >= 50)
+                    {
+                        setGold(-50);
+                        _alreadyHave.Add(id);
+                        _purchaseMessage.SetActive(true);
+                    }
+                    break;
+                }
         }
 
         string str = "";
