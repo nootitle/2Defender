@@ -56,6 +56,18 @@ public class SplashArea : MonoBehaviour
                         gm.transform.position = c.transform.position;
                     }
                 }
+
+                Alies AH = c.gameObject.GetComponent<Alies>();
+                if(AH != null)
+                {
+                    AH.Hit(_splashDamage);
+                    if (_hitFxExist)
+                    {
+                        GameObject gm = Instantiate(_hitFx);
+                        gm.transform.position = c.transform.position;
+                    }
+                }
+
                 _delayCount = 0.0f;
             }
         }

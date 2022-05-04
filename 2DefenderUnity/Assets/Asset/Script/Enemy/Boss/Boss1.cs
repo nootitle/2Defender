@@ -23,6 +23,7 @@ public class Boss1 : MonoBehaviour
     [SerializeField] AudioSource _painSE = null;
     [SerializeField] AudioSource _slashSE1 = null;
     [SerializeField] AudioSource _slashSE2 = null;
+    [SerializeField] GameObject _meleeFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -198,6 +199,15 @@ public class Boss1 : MonoBehaviour
         {
             collision.gameObject.transform.GetComponent<Player>().Damaged(_attackDamage);
             _islunging = false;
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
+        }
+        else if (collision.gameObject.layer == 13)
+        {
+            collision.gameObject.GetComponent<Alies>().Hit(_attackDamage * 2.0f);
+            _islunging = false;
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
         }
         jumpCoolDown();
     }

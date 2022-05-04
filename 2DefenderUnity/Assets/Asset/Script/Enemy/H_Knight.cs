@@ -20,6 +20,7 @@ public class H_Knight : MonoBehaviour
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
     [SerializeField] AudioSource _meleeSE = null;
+    [SerializeField] GameObject _meleeFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -237,12 +238,20 @@ public class H_Knight : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
             _player.Damaged(_attackDamage);
+        }
 
         yield return new WaitForSeconds(0.3f);
         _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
             _player.Damaged(_attackDamage);
+        }
 
         _isAttacking = false;
         _delayCount = 0.0f;
@@ -269,7 +278,11 @@ public class H_Knight : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         _meleeSE.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
             _player.Damaged(_attackDamage);
+        }
 
         _isAttacking = false;
         _delayCount = 0.0f;

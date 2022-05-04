@@ -17,8 +17,10 @@ public class Item : MonoBehaviour
     [SerializeField] GameObject _fx = null;
 
     /*
-     * 1 : 포션
-     * 2 : 
+     * 1 : HP 회복
+     * 2 : 근접공격력 일시적 증가
+     * 3 : 보호막 생성
+     * 4 : 궁극기 게이지 증가
      */
 
     void Start()
@@ -61,6 +63,7 @@ public class Item : MonoBehaviour
                 case 1: item_type1(); break;
                 case 2: item_type2(); break;
                 case 3: item_type3(); break;
+                case 4: item_type4(); break;
             }
         }
     }
@@ -96,6 +99,18 @@ public class Item : MonoBehaviour
         {
             GameObject gm = Instantiate(_fx);
             gm.transform.position = _center.transform.position;
+        }
+
+        Destroy(this.gameObject);
+    }
+
+    void item_type4()
+    {
+        _player.GetComponent<Player>().UltGaugeUp(_value);
+        if (_fx != null)
+        {
+            GameObject gm = Instantiate(_fx);
+            gm.transform.position = _center.transform.position + Vector3.down;
         }
 
         Destroy(this.gameObject);

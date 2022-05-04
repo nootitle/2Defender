@@ -24,6 +24,7 @@ public class StorageManager : MonoBehaviour
     {
         if(Instance == null)
             Instance = this;
+        goldDelta = 0;
     }
 
     public void setGold(int gold)
@@ -32,6 +33,8 @@ public class StorageManager : MonoBehaviour
         _goldText.text = _gold.ToString();
         if(_LobbyManager != null)
             _LobbyManager.GetComponent<LobbyManager>().updateGold(_gold);
+        if(EscMenu.Instance != null)
+            EscMenu.Instance.UpdateGold(goldDelta);
     }
 
     public void setGoldDirectly(int gold)
@@ -231,6 +234,16 @@ public class StorageManager : MonoBehaviour
                     break;
                 }
             case 13:
+                {
+                    if (_gold >= 50)
+                    {
+                        setGold(-50);
+                        _alreadyHave.Add(id);
+                        _purchaseMessage.SetActive(true);
+                    }
+                    break;
+                }
+            case 14:
                 {
                     if (_gold >= 50)
                     {

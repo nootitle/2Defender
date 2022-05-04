@@ -128,7 +128,7 @@ MonoBehaviour:
   _speed: 15
   _attackPower: 10
   _isAlies: 0
-  _hitEffect: {fileID: 3509318686028251528, guid: 2499c841e135c404cbd64c2c8a85b74b, type: 3}
+  _hitEffect: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
   _SE: {fileID: 1599785259576994908}
   _lifeTime: 5
   _manualRotate: 1
@@ -141,7 +141,7 @@ AudioSource:
   m_GameObject: {fileID: 6480584309753354010}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: 24252664d1f41c140864d611ea092c18, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2

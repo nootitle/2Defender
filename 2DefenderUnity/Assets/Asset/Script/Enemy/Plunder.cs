@@ -20,6 +20,7 @@ public class Plunder : MonoBehaviour
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _painSE = null;
     [SerializeField] AudioSource _meleeSE = null;
+    [SerializeField] GameObject _meleeFx = null;
     [SerializeField] bool _reverseFlip = false;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
@@ -233,6 +234,9 @@ public class Plunder : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
 
+        GameObject gm = Instantiate(_meleeFx);
+        gm.transform.position = _target.transform.position;
+
         _player.Damaged(_attackDamage);
         _delayCount = 0.0f;
         _isAttacking = false;
@@ -264,6 +268,9 @@ public class Plunder : MonoBehaviour
     IEnumerator extraHit2()
     {
         yield return new WaitForSeconds(0.2f);
+
+        GameObject gm = Instantiate(_meleeFx);
+        gm.transform.position = _target.transform.position;
 
         _player.Damaged(_attackDamage);
         _delayCount = 0.0f;

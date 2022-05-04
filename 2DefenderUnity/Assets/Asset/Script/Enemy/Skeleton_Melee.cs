@@ -18,6 +18,7 @@ public class Skeleton_Melee : MonoBehaviour
     [SerializeField] float _stun = 2.0f;
     [SerializeField] AudioSource _hitSE = null;
     [SerializeField] AudioSource _attackSE = null;
+    [SerializeField] GameObject _meleeFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isAttacking = false;
@@ -185,7 +186,11 @@ public class Skeleton_Melee : MonoBehaviour
         {
             _attackSE.Play();
             if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+            {
+                GameObject gm = Instantiate(_meleeFx);
+                gm.transform.position = _target.transform.position;
                 _player.Damaged(_attackDamage);
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
@@ -193,7 +198,11 @@ public class Skeleton_Melee : MonoBehaviour
         {
             _attackSE.Play();
             if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+            {
+                GameObject gm = Instantiate(_meleeFx);
+                gm.transform.position = _target.transform.position;
                 _player.Damaged(_attackDamage);
+            }
         }
 
         _isAttacking = false;

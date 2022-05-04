@@ -13,85 +13,141 @@ public class Enemy_Hit : MonoBehaviour
             case 0:
                 {
                     if(!this.GetComponent<H_Melee>().GetDead())
+                    {
                         this.GetComponent<H_Melee>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 1:
                 {
                     if(!this.GetComponent<Skeleton_Melee>().GetDead())
+                    {
                         this.GetComponent<Skeleton_Melee>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 2:
                 {
                     if (!this.GetComponent<Skeleton_Melee>().GetDead())
+                    {
                         this.GetComponent<Skeleton_Melee>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 3:
                 {
                     if (!this.GetComponent<Slime>().GetDead())
+                    {
                         this.GetComponent<Slime>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 4:
                 {
                     if (!this.GetComponent<BOD>().GetDead())
+                    {
                         this.GetComponent<BOD>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(2.0f);
+                    }
                     break;
                 }
             case 5:
                 {
                     if (!this.GetComponent<Archor>().GetDead())
+                    {
                         this.GetComponent<Archor>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 6:
                 {
                     if (!this.GetComponent<H_Melee2>().GetDead())
+                    {
                         this.GetComponent<H_Melee2>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 7:
                 {
                     if (!this.GetComponent<H_Knight>().GetDead())
+                    {
                         this.GetComponent<H_Knight>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 8:
                 {
                     if (!this.GetComponent<Charger>().GetDead())
+                    {
                         this.GetComponent<Charger>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 9:
                 {
                     if (!this.GetComponent<Fighter>().GetDead())
+                    {
                         this.GetComponent<Fighter>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(1.0f);
+                    }
                     break;
                 }
             case 10:
                 {
                     if (!this.GetComponent<Boss1>().GetDead())
+                    {
                         this.GetComponent<Boss1>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
                     break;
                 }
             case 11:
                 {
                     if (!this.GetComponent<Boss2>().GetDead())
+                    {
                         this.GetComponent<Boss2>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
                     break;
                 }
             case 12:
                 {
                     if (!this.GetComponent<Boss3>().GetDead())
+                    {
                         this.GetComponent<Boss3>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
                     break;
                 }
             case 13:
                 {
                     if (!this.GetComponent<Plunder>().GetDead())
+                    {
                         this.GetComponent<Plunder>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
                     break;
                 }
         }

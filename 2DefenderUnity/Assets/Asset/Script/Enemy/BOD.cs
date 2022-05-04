@@ -20,6 +20,7 @@ public class BOD : MonoBehaviour
     [SerializeField] AudioSource _painSE = null;
     [SerializeField] AudioSource _meleeSE = null;
     [SerializeField] AudioSource _castSE = null;
+    [SerializeField] GameObject _meleeFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _isStun = false;
@@ -41,6 +42,8 @@ public class BOD : MonoBehaviour
     Coroutine _extraHitCo = null;
 
     public GameObject GetCenter() { return _center; }
+
+    [SerializeField] GameObject _dropItem = null;
 
     void Start()
     {
@@ -200,6 +203,8 @@ public class BOD : MonoBehaviour
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
         {
             _player.Damaged(_attackDamage);
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
         }
     }
 
@@ -257,6 +262,11 @@ public class BOD : MonoBehaviour
         _isDie = true;
         _isStun = false;
         _jumpTrigger = false;
+
+        int rnd = Random.Range(0, 100);
+        if (rnd < 5)
+            dropItem();
+
         StopAllCoroutines();
         StartCoroutine(SelfDestroy());
     }
@@ -308,6 +318,15 @@ public class BOD : MonoBehaviour
         {
             _isStun = false;
             _pc.MoveAnim(false, _rb.velocity.x);
+        }
+    }
+
+    void dropItem()
+    {
+        if (_dropItem != null)
+        {
+            GameObject gm = Instantiate(_dropItem);
+            gm.transform.position = _center.transform.position;
         }
     }
 }

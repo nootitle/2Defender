@@ -161,6 +161,7 @@ MonoBehaviour:
   _stun: 2
   _hitSE: {fileID: 6574000805687517598}
   _attackSE: {fileID: 3828945113160000125}
+  _meleeFx: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
   _pc: {fileID: 2326186912969793711}
   _target: {fileID: 0}
   _dropItem: {fileID: 535355386893205106, guid: 6ec6eb2ba610da848b5fc36cac2db405, type: 3}
@@ -186,7 +187,7 @@ AudioSource:
   m_GameObject: {fileID: 99279683611351949}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3af8a9d07bc438e458fa25f5e334a22b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
@@ -282,7 +283,7 @@ AudioSource:
   m_GameObject: {fileID: 99279683611351949}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: f9cfc0e6ef7909a4fa3f8663ac5f3034, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2

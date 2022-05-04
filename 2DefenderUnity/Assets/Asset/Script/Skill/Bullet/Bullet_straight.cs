@@ -67,6 +67,13 @@ public class Bullet_straight : MonoBehaviour
                 fx.transform.position = this.transform.position;
                 Destroy(this.gameObject);
             }
+            else if (gm.layer == 13)
+            {
+                gm.GetComponent<Alies>().Hit(_attackPower + _extraDamage);
+                GameObject fx = Instantiate(_hitEffect);
+                fx.transform.position = this.transform.position;
+                Destroy(this.gameObject);
+            }
         }
 
     }

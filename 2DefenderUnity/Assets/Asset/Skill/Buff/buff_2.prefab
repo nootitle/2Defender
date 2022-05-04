@@ -9346,7 +9346,7 @@ GameObject:
   - component: {fileID: 4530964436243426}
   - component: {fileID: 198832113064215590}
   - component: {fileID: 114324931711431486}
-  - component: {fileID: 4847400921238641418}
+  - component: {fileID: 5739583691267616318}
   - component: {fileID: 8304007940891523915}
   m_Layer: 0
   m_Name: buff_2
@@ -14103,7 +14103,7 @@ MonoBehaviour:
   x: 0
   y: 1
   z: 0
---- !u!114 &4847400921238641418
+--- !u!114 &5739583691267616318
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14112,7 +14112,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1774791834312446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73913561b039ba54899204e45a613f84, type: 3}
+  m_Script: {fileID: 11500000, guid: 668b9796b11928c438a5a5657cd100db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _destroyTime: 15
@@ -14128,7 +14128,7 @@ AudioSource:
   m_GameObject: {fileID: 1774791834312446}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: f4504136726ad314ea47de102a8627bc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5

@@ -183,4 +183,46 @@ public class PlayerController : MonoBehaviour
         _animator.ResetTrigger("CounterReady");
         _animator.SetTrigger("Counter");
     }
+
+    public void UltAnim_Ready()
+    {
+        resetMoveTrigger();
+        _animator.ResetTrigger("CancelCounter");
+        _animator.ResetTrigger("CounterReady");
+        _animator.ResetTrigger("Counter");
+        _animator.SetTrigger("Ult_Ready");
+    }
+
+    public void UltAnim()
+    {
+        _animator.ResetTrigger("Ult_Ready");
+        _animator.SetTrigger("Ult");
+    }
+
+    public void UltAnim_Over()
+    {
+        _animator.ResetTrigger("Ult");
+        _animator.SetTrigger("Ult_Over");
+    }
+
+    public void UltAnim2_Ready()
+    {
+        resetMoveTrigger();
+        _animator.ResetTrigger("CancelCounter");
+        _animator.ResetTrigger("CounterReady");
+        _animator.ResetTrigger("Counter");
+        _animator.SetTrigger("Ult2_Ready");
+    }
+
+    public void UltAnim2()
+    {
+        _animator.ResetTrigger("Ult2_Ready");
+        _animator.SetTrigger("Ult2");
+    }
+
+    public void UltAnim2_Over()
+    {
+        _animator.ResetTrigger("Ult2");
+        _animator.SetTrigger("Ult2_Over");
+    }
 }

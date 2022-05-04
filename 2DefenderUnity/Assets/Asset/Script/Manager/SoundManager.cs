@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -11,6 +13,10 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioSource _bossBgm = null;
     [SerializeField] AudioSource _clearBgm = null;
     [SerializeField] AudioSource _defeatBgm = null;
+
+    [SerializeField] AudioMixer _mixer = null;
+    [SerializeField] Slider _slider = null;
+
     bool _isPlayBGM = true;
     [SerializeField] int BGM_ID = 0;
 
@@ -24,6 +30,9 @@ public class SoundManager : MonoBehaviour
     {
         if (bgmList.Count != 0 && BGM_ID < bgmList.Count && !bgmList[BGM_ID].isPlaying)
             bgmList[BGM_ID].Play();
+
+        float volume = PlayerPrefs.GetFloat("MasterVolumeOption", 0.75f);
+        _mixer.SetFloat("Master", Mathf.Log10(volume) * 20);
     }
 
     void Update()
@@ -79,6 +88,7 @@ public class SoundManager : MonoBehaviour
     public void clearBGM()
     {
         _bossBgm.Stop();
+        switchBGM(false);
         _clearBgm.Play();
     }
 
@@ -92,5 +102,16 @@ public class SoundManager : MonoBehaviour
     public void clickSE()
     {
         _clickSE.Play();
+    }
+
+    public void initMasterVolumeSlider()
+    {
+        _slider.value = PlayerPrefs.GetFloat("MasterVolumeOption", 0.75f);
+    }
+
+    public void setMasterVolume()
+    {
+        _mixer.SetFloat("Master", Mathf.Log10(_slider.value) * 20);
+        PlayerPrefs.SetFloat("MasterVolumeOption", _slider.value);
     }
 }

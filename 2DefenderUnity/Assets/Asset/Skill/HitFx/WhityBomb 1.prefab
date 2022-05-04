@@ -19440,7 +19440,7 @@ MonoBehaviour:
   _splashDamage: 75
   _radius: 10
   _explosionDelay: 2
-  _hitFx: {fileID: 6192724089161036641, guid: da80c0619ebb8d94588a561cc2bb095b, type: 3}
+  _hitFx: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
   _hitFxExist: 1
 --- !u!82 &-3502421359825767861
 AudioSource:
@@ -19451,7 +19451,7 @@ AudioSource:
   m_GameObject: {fileID: 100010}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: f0bba60dd1813bd40af826dbaa99b983, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5

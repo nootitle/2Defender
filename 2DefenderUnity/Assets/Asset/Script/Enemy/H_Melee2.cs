@@ -21,6 +21,7 @@ public class H_Melee2 : MonoBehaviour
     [SerializeField] AudioSource _painSE = null;
     [SerializeField] AudioSource _slashSE1 = null;
     [SerializeField] AudioSource _slashSE2 = null;
+    [SerializeField] GameObject _meleeFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -227,12 +228,20 @@ public class H_Melee2 : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         _slashSE1.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
             _player.Damaged(_attackDamage);
+        }
 
         yield return new WaitForSeconds(0.4f);
         _slashSE2.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
             _player.Damaged(_attackDamage);
+        }
 
         _isAttacking = false;
         _delayCount = 0.0f;
@@ -256,10 +265,14 @@ public class H_Melee2 : MonoBehaviour
 
     IEnumerator ExtraHit2()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.4f);
         _slashSE1.Play();
         if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+        {
+            GameObject gm = Instantiate(_meleeFx);
+            gm.transform.position = _target.transform.position;
             _player.Damaged(_attackDamage);
+        }
 
         _isAttacking = false;
         _delayCount = 0.0f;

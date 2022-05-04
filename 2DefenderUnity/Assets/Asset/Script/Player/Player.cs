@@ -47,6 +47,8 @@ public class Player : MonoBehaviour
     [SerializeField] DamagedSE _se_damaged = null;
     [SerializeField] AudioSource _swordFallSE = null;
 
+    [SerializeField] GameObject _hitFx = null;
+
     //UI
 
     [SerializeField] GameObject _hpBar = null;
@@ -86,6 +88,8 @@ public class Player : MonoBehaviour
     Coroutine _slidingCo = null;
     bool _isSliding = false;
 
+    [SerializeField] AudioSource _counterReadySE = null;
+    [SerializeField] GameObject _counterFx = null;
     bool _isReadyToCounter = false;
 
     [SerializeField] GameObject _steamPackFx = null;
@@ -97,6 +101,13 @@ public class Player : MonoBehaviour
 
     [SerializeField] GameObject _gameOverCanvas = null;
     [SerializeField] GameObject _escMenuCanvas = null;
+
+    [SerializeField] List<GameObject> _alies1 = null;
+    [SerializeField] List<GameObject> _alies2 = null;
+
+    Coroutine _ultGaugeUpCo = null;
+    Coroutine _ultCo = null;
+    Coroutine _ult2Co = null;
 
     private void Awake()
     {
@@ -248,7 +259,13 @@ public class Player : MonoBehaviour
         */
 
         if (Input.GetKeyDown(KeyCode.L))
-            Airforce();
+            Ult();
+
+        if (Input.GetKeyDown(KeyCode.P))
+            Ult2();
+
+        if (Input.GetKeyDown(KeyCode.M))
+            UltBarManager.Instance.updateSlider(100.0f);
 
         if (Input.GetKeyDown(KeyCode.Escape))
             CallEsc();
@@ -282,6 +299,7 @@ public class Player : MonoBehaviour
             _escMenuCanvas.SetActive(false);
         else
             _escMenuCanvas.SetActive(true);
+        SoundManager.Instance.initMasterVolumeSlider();
     }
 
     public void SkillListInvisible()
@@ -344,7 +362,16 @@ public class Player : MonoBehaviour
             {
                 Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
                 if (EH != null)
-                    EH.Hit(_attackDamage * _SkillLevelList[0] + _meleeExtraDamage);
+                {
+                    float dis_y = Mathf.Abs(EH.GetCenter().transform.position.y - this.transform.position.y);
+                    if (dis_y < 2.5f)
+                    {
+                        EH.Hit(_attackDamage * _SkillLevelList[0] + _meleeExtraDamage);
+                        GameObject gm = Instantiate(_hitFx);
+                        gm.transform.position = EH.GetCenter().transform.position;
+                    }
+                }
+                    
             }
 
             if (_modeID == 1)
@@ -367,7 +394,15 @@ public class Player : MonoBehaviour
         {
             Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
             if (EH != null)
-                EH.Hit(_attackDamage * _SkillLevelList[0]);
+            {
+                float dis_y = Mathf.Abs(EH.GetCenter().transform.position.y - this.transform.position.y);
+                if (dis_y < 2.5f)
+                {
+                    EH.Hit(_attackDamage * _SkillLevelList[0]);
+                    GameObject gm = Instantiate(_hitFx);
+                    gm.transform.position = EH.GetCenter().transform.position;
+                }
+            }
         }
     }
 
@@ -379,19 +414,30 @@ public class Player : MonoBehaviour
             _se_Melee.bladeSE();
             _delayCount = 0.0f;
 
-            Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x - 1.0f, transform.position.y + 2.0f), _attackDistance);
+            Collider2D[] co = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y + 2.0f), _attackDistance);
 
             foreach (Collider2D c in co)
             {
                 Enemy_Hit EH = c.gameObject.GetComponent<Enemy_Hit>();
                 if (EH != null)
                 {
-                    if (_modeID == 0)
-                        EH.Hit(_attackDamage * 1.5f * _SkillLevelList[1] + _meleeExtraDamage);
-                    else if(_modeID == 1)
-                        EH.Hit(_attackDamage * 2.0f * _SkillLevelList[1] + _meleeExtraDamage);
+                    float dis_y = (EH.GetCenter().transform.position.y - this.transform.position.y);
+                    if(dis_y < 4.0f && dis_y > 0.0f)
+                    {
+                        if (_modeID == 0)
+                        {
+                            EH.Hit(_attackDamage * 1.5f * _SkillLevelList[1] + _meleeExtraDamage);
+                            GameObject gm = Instantiate(_hitFx);
+                            gm.transform.position = EH.GetCenter().transform.position;
+                        }
+                        else if (_modeID == 1)
+                        {
+                            EH.Hit(_attackDamage * 2.0f * _SkillLevelList[1] + _meleeExtraDamage);
+                            GameObject gm = Instantiate(_hitFx);
+                            gm.transform.position = EH.GetCenter().transform.position;
+                        }
+                    }
                 }
-
             }
         }
     }
@@ -404,6 +450,7 @@ public class Player : MonoBehaviour
 
         if (_isReadyToCounter)
         {
+            _counterFx.SetActive(true);
             Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _attackDistance);
             for(int i = 0; i < co.Length; ++i)
             {
@@ -688,7 +735,7 @@ public class Player : MonoBehaviour
     {
         _shieldSE.Play();
         _shieldFx.SetActive(true);
-        _shield = _shieldMax * _SkillLevelList[9];
+        _shield = Mathf.Min(_shield + _shieldMax * _SkillLevelList[9], 100.0f);
         _shieldBar.GetComponent<HpBar>().setHpBar(_shield);
     }
 
@@ -713,6 +760,7 @@ public class Player : MonoBehaviour
         {
             _isReadyToCounter = true;
             _pc.CounterReadyAnim();
+            _counterReadySE.Play();
         }
     }
 
@@ -734,6 +782,7 @@ public class Player : MonoBehaviour
 
     void endSteamPack()
     {
+
         _steamPackFx.SetActive(false);
         _attackDelay *= 2.0f;
     }
@@ -748,15 +797,34 @@ public class Player : MonoBehaviour
     {
         for(int j = 0; j < _SkillLevelList[13]; ++j)
         {
-            Debug.Log(_SkillLevelList[13]);
             for (int i = 0; i < _airforceBombs.Count; ++i)
             {
+                yield return new WaitForSeconds(0.2f);
                 _airforceBombs[i].transform.position = this.transform.position +
-                    Vector3.left * 20.0f + Vector3.right * (i % 5) * 5.0f + Vector3.up * 20.0f;
+                    Vector3.right * (i % 5) * 0.5f + Vector3.up * 15.0f;
                 _airforceBombs[i].SetActive(true);
             }
 
-            yield return new WaitForSeconds(4.0f);
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
+
+    public void MakeAlies()
+    {
+        for(int i = 0; i < _SkillLevelList[14]; ++i)
+        {
+            if(_SkillLevelList[14] < 3)
+            {
+                _alies1[i].SetActive(true);
+                _alies1[i].GetComponent<Alies>().respawn();
+                _alies1[i].transform.position = this.transform.position + Vector3.right * 2.0f;
+            }
+            else
+            {
+                _alies2[i].SetActive(true);
+                _alies2[i].GetComponent<Alies>().respawn();
+                _alies2[i].transform.position = this.transform.position + Vector3.right * 2.0f;
+            }
         }
     }
 
@@ -784,6 +852,7 @@ public class Player : MonoBehaviour
             case 11: Counter(); break;
             case 12: SteamPack(); break;
             case 13: Airforce(); break;
+            case 14: MakeAlies(); break;
         }
     }
 
@@ -856,5 +925,67 @@ public class Player : MonoBehaviour
         _shieldFx.SetActive(true);
         _shield = Mathf.Max(_shieldMax, _shield + value);
         _shieldBar.GetComponent<HpBar>().setHpBar(_shield);
+    }
+
+    public void UltGaugeUp(float value)
+    {
+        if (_ultGaugeUpCo != null) StopCoroutine(_ultGaugeUpCo);
+        _ultGaugeUpCo = StartCoroutine(UltGaugeUpSlowly(value));
+    }
+
+    IEnumerator UltGaugeUpSlowly(float value)
+    {
+        float _value = value;
+
+        while(_value > 0)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            _value -= 1.0f;
+            UltBarManager.Instance.updateSlider(1.0f);
+        }
+    }
+
+    //±Ã±Ø±â
+
+    public void Ult()
+    {
+        if(UltBarManager.Instance.GetUltGauge() >= 100.0f)
+        {
+            _pc.UltAnim_Ready();
+            if (_ultCo != null) StopCoroutine(_ultCo);
+            _ultCo = StartCoroutine(Ult_AnimProcess());
+            CutInManager.Instance.Activate();
+            UltBarManager.Instance.initSlider();
+        }
+    }
+
+    IEnumerator Ult_AnimProcess()
+    {
+        yield return new WaitForSeconds(1.0f);
+        _pc.UltAnim();
+        yield return new WaitForSeconds(1.0f);
+        _pc.UltAnim_Over();
+    }
+
+    public void Ult2()
+    {
+        if (UltBarManager.Instance.GetUltGauge() >= 100.0f)
+        {
+            if (_ult2Co != null) StopCoroutine(_ult2Co);
+            _ult2Co = StartCoroutine(Ult2_AnimProcess());
+            CutInManager.Instance.Activate2();
+            UltBarManager.Instance.initSlider();
+        }
+    }
+
+    IEnumerator Ult2_AnimProcess()
+    {
+        yield return new WaitForSeconds(1.1f);
+        _pc.UltAnim2_Ready();
+        yield return new WaitForSeconds(0.9f);
+        _pc.UltAnim2();
+        yield return new WaitForSeconds(2.0f);
+        _pc.UltAnim2_Over();
     }
 }

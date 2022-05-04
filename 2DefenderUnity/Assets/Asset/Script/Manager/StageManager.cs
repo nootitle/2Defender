@@ -78,4 +78,11 @@ public class StageManager : MonoBehaviour
         else
             SceneManager.LoadScene(0);
     }
+
+    public void GoToEndingScene()
+    {
+        offRewardWindow();
+        StorageManager.Instance.updateGoldData();
+        SceneManager.LoadScene(4);
+    }
 }

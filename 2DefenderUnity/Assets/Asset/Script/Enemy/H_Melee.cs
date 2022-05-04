@@ -21,6 +21,7 @@ public class H_Melee : MonoBehaviour
     [SerializeField] AudioSource _painSE = null;
     [SerializeField] AudioSource _meleeSE = null;
     [SerializeField] bool _reverseFlip = false;
+    [SerializeField] GameObject _hitFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -212,11 +213,17 @@ public class H_Melee : MonoBehaviour
             {
                 if(_reverseFlip) _pc.setFlip(true);
                 else _pc.setFlip(false);
+
+                GameObject gm = Instantiate(_hitFx);
+                gm.transform.position = _target.transform.position;
             }
             else
             {
                 if (_reverseFlip) _pc.setFlip(false);
                 else _pc.setFlip(true);
+
+                GameObject gm = Instantiate(_hitFx);
+                gm.transform.position = _target.transform.position;
             }
             _player.Damaged(_attackDamage);
             _delayCount = 0.0f;
@@ -235,11 +242,17 @@ public class H_Melee : MonoBehaviour
             {
                 if (_reverseFlip) _pc.setFlip(true);
                 else _pc.setFlip(false);
+
+                GameObject gm = Instantiate(_hitFx);
+                gm.transform.position = _target.transform.position;
             }
             else
             {
                 if (_reverseFlip) _pc.setFlip(false);
                 else _pc.setFlip(true);
+
+                GameObject gm = Instantiate(_hitFx);
+                gm.transform.position = _target.transform.position;
             }
             _player.Damaged(_attackDamage);
             _delayCount = 0.0f;

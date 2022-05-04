@@ -14,10 +14,6 @@ public class H_Melee_Anim : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
     }
 
-    void Update()
-    { 
-    }
-
     public void MoveAnim(bool isRunning, bool isStop, float speed)
     {
         if (_isjumping) return;        

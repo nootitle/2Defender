@@ -166,11 +166,13 @@ MonoBehaviour:
   _painSE: {fileID: 7689505190698381029}
   _meleeSE: {fileID: 190113591617345743}
   _castSE: {fileID: 6423425001549027587}
+  _meleeFx: {fileID: 8443315704496310910, guid: 6ef35fa36e3a65043b2d800600204bdd, type: 3}
   _pc: {fileID: 8049156543444012811}
   _target: {fileID: 0}
   _castFxLeft: {fileID: 1278840925534239532}
   _castFxRight: {fileID: 7356799919127344378}
   _duration: 5
+  _dropItem: {fileID: 66017646962753900, guid: 41b99f7cc15d7e24bad8cc0f5a5769a8, type: 3}
 --- !u!114 &4317064280078062504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,7 +195,7 @@ AudioSource:
   m_GameObject: {fileID: 658791365332131758}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: 22eab4df0bfb76b439118c30d20e43b9, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
@@ -289,7 +291,7 @@ AudioSource:
   m_GameObject: {fileID: 658791365332131758}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: 44f2bfb3cae026e48a0609f0c35c45da, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
@@ -385,7 +387,7 @@ AudioSource:
   m_GameObject: {fileID: 658791365332131758}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: 22eab4df0bfb76b439118c30d20e43b9, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
@@ -481,7 +483,7 @@ AudioSource:
   m_GameObject: {fileID: 658791365332131758}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 7e6b48e88e020ec4e83bb6445f7366ff, type: 2}
   m_audioClip: {fileID: 8300000, guid: 8f14c9f162be18344b908f4a8d56bc93, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5

@@ -22,6 +22,7 @@ public class Charger : MonoBehaviour
     [SerializeField] AudioSource _preSE = null;
     [SerializeField] AudioSource _chargeSE = null;
     [SerializeField] AudioSource _normalAttackSE = null;
+    [SerializeField] GameObject _chargeFx = null;
     [SerializeField] bool _reverseFlip = false;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
@@ -43,6 +44,8 @@ public class Charger : MonoBehaviour
 
     public GameObject GetCenter() { return _center; }
 
+    [SerializeField] GameObject _dropItem = null;
+
     void Start()
     {
         _hp = _maxHp;
@@ -57,8 +60,6 @@ public class Charger : MonoBehaviour
 
     void Update()
     {
-        //jump();
-        //sprint();
         if (_isDie) return;
         if (_isStun) return;
         if (_isAttacking) return;
@@ -161,8 +162,16 @@ public class Charger : MonoBehaviour
             {
                 collision.gameObject.GetComponent<Player>().Damaged(_attackDamage * 2.0f);
                 _isAttacking = false;
+                _chargeFx.SetActive(false);
                 if (_chargerCo != null) StopCoroutine(_chargerCo);
             }
+            else if(collision.gameObject.layer == 13)
+            {
+                collision.gameObject.GetComponent<Alies>().Hit(_attackDamage * 2.0f);
+                _isAttacking = false;
+                _chargeFx.SetActive(false);
+                if (_chargerCo != null) StopCoroutine(_chargerCo);
+            }    
         }
         else
             jumpCoolDown();
@@ -253,7 +262,8 @@ public class Charger : MonoBehaviour
             _isAttacking = true;
             _preSE.Play();
             _pc.setReady();
-            
+            _chargeFx.SetActive(true);
+
             if (_chargerCo != null) StopCoroutine(_chargerCo);
             _chargerCo = StartCoroutine(charge());
         }
@@ -281,6 +291,7 @@ public class Charger : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
         _isAttacking = false;
+        _chargeFx.SetActive(false);
         _delayCount = 0.0f;
     }
 
@@ -305,10 +316,16 @@ public class Charger : MonoBehaviour
 
     void Die()
     {
+        _chargeFx.SetActive(false);
         _pc.DieAnim();
         _isDie = true;
         _jumpTrigger = false;
         _isAttacking = false;
+
+        int rnd = Random.Range(0, 100);
+        if (rnd < 5)
+            dropItem();
+
         StartCoroutine(SelfDestroy());
     }
 
@@ -360,6 +377,15 @@ public class Charger : MonoBehaviour
         {
             _isStun = false;
             _pc.MoveAnim(_sprintTrigger, false, _rb.velocity.x);
+        }
+    }
+
+    void dropItem()
+    {
+        if (_dropItem != null)
+        {
+            GameObject gm = Instantiate(_dropItem);
+            gm.transform.position = _center.transform.position;
         }
     }
 }

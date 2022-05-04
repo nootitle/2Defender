@@ -24,6 +24,7 @@ public class Boss3 : MonoBehaviour
     [SerializeField] AudioSource _slashSE1 = null;
     [SerializeField] AudioSource _slashSE2 = null;
     [SerializeField] AudioSource _slashSE3 = null;
+    [SerializeField] GameObject _meleeFx = null;
     float _delayCount = 0.0f;
     bool _jumpTrigger = false;
     bool _sprintTrigger = false;
@@ -282,7 +283,12 @@ public class Boss3 : MonoBehaviour
             else if (j == 1) _slashSE2.Play();
             else _slashSE3.Play();
             if (Vector2.Distance(_target.transform.position, _center.transform.position) <= _attackDistance)
+            {
                 _player.Damaged(_attackDamage);
+                GameObject gm = Instantiate(_meleeFx);
+                gm.transform.position = _target.transform.position;
+            }
+
         }
 
 

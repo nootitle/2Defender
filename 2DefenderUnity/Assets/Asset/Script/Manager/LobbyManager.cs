@@ -53,6 +53,8 @@ public class LobbyManager : MonoBehaviour
         weaponList = new List<int>();
         if (statusList[4] == "1")
             weaponList.Add(1);
+
+        SoundManager.Instance.initMasterVolumeSlider();
     }
 
     public void updateStatus(float hp, float melee, float magic, float heal)
