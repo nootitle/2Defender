@@ -30,7 +30,6 @@ public class Alies_H2 : MonoBehaviour
     Coroutine _sprintCo;
     Coroutine _stunCo;
     Coroutine _jumpCo;
-    Coroutine _attackCo = null;
 
     private Rigidbody2D _rb = null;
     [SerializeField] Alies_H2_Anim _pc = null;

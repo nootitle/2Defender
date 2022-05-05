@@ -150,6 +150,16 @@ public class Enemy_Hit : MonoBehaviour
                     }
                     break;
                 }
+            case 14:
+                {
+                    if (!this.GetComponent<Boss4>().GetDead())
+                    {
+                        this.GetComponent<Boss4>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
+                    break;
+                }
         }
     }
 
@@ -225,6 +235,11 @@ public class Enemy_Hit : MonoBehaviour
             case 13:
                 {
                     this.GetComponent<Plunder>().respawn();
+                    break;
+                }
+            case 14:
+                {
+                    this.GetComponent<Boss4>().respawn();
                     break;
                 }
         }
@@ -304,6 +319,11 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<Plunder>().CallStun(duration);
                     break;
                 }
+            case 14:
+                {
+                    this.GetComponent<Boss4>().CallStun(duration);
+                    break;
+                }
         }
     }
 
@@ -366,6 +386,10 @@ public class Enemy_Hit : MonoBehaviour
             case 13:
                 {
                     return this.GetComponent<Plunder>().GetCenter();
+                }
+            case 14:
+                {
+                    return this.GetComponent<Boss4>().GetCenter();
                 }
         }
         return null;
