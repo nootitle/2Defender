@@ -46,7 +46,8 @@ public class StageManager : MonoBehaviour
         }
         if (killCount >= 110 && !EnemyManager.Instance.getRespawnStop())
         {
-            _boss.SetActive(true);
+            if(_boss != null)
+                _boss.SetActive(true);
             EnemyManager.Instance.setRespawnStop(true);
         }
 

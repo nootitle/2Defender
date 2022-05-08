@@ -46,7 +46,6 @@ public class Boss4_Anim : MonoBehaviour
 
     public void Appear()
     {
-        resetMoveTrigger();
         _animator.SetTrigger("Appear");
     }
 

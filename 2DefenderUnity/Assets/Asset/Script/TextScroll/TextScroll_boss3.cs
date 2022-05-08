@@ -69,7 +69,7 @@ public class TextScroll_boss3 : MonoBehaviour
                 }
             case 3:
                 {
-                    _text.text = "주인공 : 그래, 빨리와라. 그리고 그대~로 죽어서 나의 돈이 되도록 해.";
+                    _text.text = "주인공 : 그래, 빨리와라. 그래야 나도 편하지.";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;

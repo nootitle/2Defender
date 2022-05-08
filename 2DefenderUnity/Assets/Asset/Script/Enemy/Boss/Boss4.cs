@@ -66,7 +66,7 @@ public class Boss4 : MonoBehaviour
     [SerializeField] Camera _camera = null;
     Coroutine _cutSceneCo = null;
 
-    [SerializeField] int _bossID = 3;
+    [SerializeField] int _bossID = 4;
     [SerializeField] GameObject _banner = null;
 
     bool _isAppear = false;
@@ -93,11 +93,13 @@ public class Boss4 : MonoBehaviour
         _isAppear = true;
         _bossCanvas.SetActive(true);
         _pc.Appear();
+        _shieldObject.color = new Color(_shieldObject.color.r,
+            _shieldObject.color.g, _shieldObject.color.b, 0.0f);
         SoundManager.Instance.playBossBGM();
         Invoke("appearEnd", 4.0f);
 
-        //if (_cutSceneCo != null) StopCoroutine(_cutSceneCo);
-        //_cutSceneCo = StartCoroutine(CutScene());
+        if (_cutSceneCo != null) StopCoroutine(_cutSceneCo);
+        _cutSceneCo = StartCoroutine(CutScene());
     }
 
     void Update()
@@ -115,10 +117,21 @@ public class Boss4 : MonoBehaviour
                 BeamAttack();
             else
                 LightningAttack();
+            
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _lungeDistance)
         {
-            GrenadeAttack();
+            float height = _target.transform.position.y - _head.transform.position.y;
+            if (height > -1.0f && height < 1.0f)
+                BeamAttack();
+            else
+            {
+                int rnd = Random.Range(0, 100);
+                if(rnd < 50)
+                    GrenadeAttack();
+                else
+                    LightningAttack();
+            }
         }
         else if (_target != null && Vector2.Distance(_target.transform.position, _center.transform.position) <= _chaseRange)
         {
@@ -136,6 +149,8 @@ public class Boss4 : MonoBehaviour
     void appearEnd()
     {
         _isAppear = false;
+        _shieldObject.color = new Color(_shieldObject.color.r,
+            _shieldObject.color.g, _shieldObject.color.b, 1.0f);
     }
 
     private void Moving()
@@ -249,18 +264,22 @@ public class Boss4 : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
 
         _fireSE2.Play();
-        GameObject gm = Instantiate(_grenade);
-        gm.transform.position = _throwPosition.transform.position;
-        Rigidbody2D _gmRb = gm.GetComponent<Rigidbody2D>();
+        for(int i = 0; i < 3; ++i)
+        {
+            GameObject gm = Instantiate(_grenade);
+            gm.transform.position = _throwPosition.transform.position;
+            Rigidbody2D _gmRb = gm.GetComponent<Rigidbody2D>();
 
-        if (_target.transform.position.x - _center.transform.position.x > 0)
-        {
-            _gmRb.AddForce(Vector3.up * _walkSpeed + Vector3.right * 30.0f, ForceMode2D.Impulse);
+            if (_target.transform.position.x - _center.transform.position.x > 0)
+            {
+                _gmRb.AddForce(Vector3.up * (2.0f * i) + Vector3.right * 30.0f, ForceMode2D.Impulse);
+            }
+            else
+            {
+                _gmRb.AddForce(Vector3.up * (2.0f * i) + Vector3.left * 30.0f, ForceMode2D.Impulse);
+            }
         }
-        else
-        {
-            _gmRb.AddForce(Vector3.up * _walkSpeed + Vector3.left * 30.0f, ForceMode2D.Impulse);
-        }
+
 
         _isAttacking = false;
         _delayCount = 0.0f;
@@ -459,7 +478,7 @@ public class Boss4 : MonoBehaviour
         if (_camera == null) _camera = Camera.main;
         _camera.GetComponent<billboard>().changeTarget(this.gameObject);
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(4.0f);
 
         _camera.GetComponent<billboard>().changeTarget(_target);
         _banner.SetActive(true);

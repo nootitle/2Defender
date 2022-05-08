@@ -49,7 +49,7 @@ public class TextScroll_boss1 : MonoBehaviour
                 }
             case 1:
                 {
-                    _text.text = "주인공 : 곧 죽을 놈이 내가 누군질 알아서 뭐하게.";
+                    _text.text = "주인공 : 네 보스가 어디있는지 알려주면 비켜주지.";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;
@@ -69,7 +69,7 @@ public class TextScroll_boss1 : MonoBehaviour
                 }
             case 3:
                 {
-                    _text.text = "주인공 : 진정해. 난 네 엄지손가락이 하나 필요할 뿐이야. 의뢰를 받았거든.";
+                    _text.text = "주인공 : 아무래도 말로는 안될 것 같군.";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;

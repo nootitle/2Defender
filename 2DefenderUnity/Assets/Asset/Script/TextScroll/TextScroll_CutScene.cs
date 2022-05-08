@@ -71,7 +71,7 @@ public class TextScroll_CutScene : MonoBehaviour
                 }
             case 3:
                 {
-                    _text.text = "주인공 : 넌 아직도 내가 누군지 모르겠나.";
+                    _text.text = "주인공 : 넌 아직도 눈치를 못 챘나.";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;
@@ -91,7 +91,7 @@ public class TextScroll_CutScene : MonoBehaviour
                 }
             case 5:
                 {
-                    _text.text = "주인공 : 10년 전, 네가 털었던 라켄이라는 마을을 기억하나.";
+                    _text.text = "주인공 : 10년 전, 너랑 네 보스가 내 아버지를 죽이고, 어머니를 강탈해간 것 말야.";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;
@@ -101,7 +101,7 @@ public class TextScroll_CutScene : MonoBehaviour
                 }
             case 6:
                 {
-                    _text.text = "약탈자 지휘관 : 라켄.. 아니 잠깐 내가 미안..";
+                    _text.text = "약탈자 지휘관 : 그럼 너는.. 아니 잠깐 내가 미안..";
                     _text.color = Color.red;
                     _bossCG.transform.position += Vector3.up * 30.0f;
                     _playerCG.transform.position -= Vector3.up * 30.0f;
@@ -125,7 +125,7 @@ public class TextScroll_CutScene : MonoBehaviour
                 }
             case 8:
                 {
-                    _text.text = "주인공 : 한 놈도 남김없이 죽일거야. 한 놈도 남김없이...";
+                    _text.text = "주인공 : 이 날을 위해 8년을 기다렸지. 8년을...";
                     break;
                 }
             case 9:

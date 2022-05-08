@@ -122,6 +122,7 @@ public class LobbyManager : MonoBehaviour
             case 1: SceneManager.LoadScene(1); break;
             case 2: SceneManager.LoadScene(2); break;
             case 3: SceneManager.LoadScene(3); break;
+            case 4: SceneManager.LoadScene(5); break;
         }
     }
 

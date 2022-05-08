@@ -11,7 +11,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] int maxEnemy = 5;
     int EnemyNum;
     int spawnLevel;
-    bool _respawnStop = false;
+    [SerializeField] bool _respawnStop = false;
     public bool getRespawnStop() { return _respawnStop; }
     public void setRespawnStop(bool value) { _respawnStop = value; }
 

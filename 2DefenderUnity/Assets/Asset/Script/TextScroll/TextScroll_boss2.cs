@@ -49,7 +49,7 @@ public class TextScroll_boss2 : MonoBehaviour
                 }
             case 1:
                 {
-                    _text.text = "주인공 : 글쎄, 그보다 수인 현상금도 손가락이랑 교환하면 되는지, 혹시 아냐?";
+                    _text.text = "주인공 : 글쎄, 그보다 '네로'라는 녀석을 알고 있지?";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;
@@ -59,7 +59,7 @@ public class TextScroll_boss2 : MonoBehaviour
                 }
             case 2:
                 {
-                    _text.text = "도굴단 대장 : 겁만 없는 게 아니라, 돈에 눈이 멀었구만.";
+                    _text.text = "도굴단 대장 : 몰라. 네 친구를 왜 여기서 찾냐.";
                     _text.color = Color.red;
                     _bossCG.transform.position += Vector3.up * 30.0f;
                     _playerCG.transform.position -= Vector3.up * 30.0f;
@@ -69,7 +69,7 @@ public class TextScroll_boss2 : MonoBehaviour
                 }
             case 3:
                 {
-                    _text.text = "주인공 : 도굴꾼 주제에 왜 혓바닥이 이리 길어?";
+                    _text.text = "주인공 : 그야 네가 그 놈의 의뢰를 받고, 내 아버지에게 누명을 씌웠었으니까.";
                     _text.color = Color.white;
                     _bossCG.transform.position -= Vector3.up * 30.0f;
                     _playerCG.transform.position += Vector3.up * 30.0f;
