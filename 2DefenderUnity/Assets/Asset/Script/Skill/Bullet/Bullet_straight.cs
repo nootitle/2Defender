@@ -48,6 +48,12 @@ public class Bullet_straight : MonoBehaviour
                 fx.transform.position = this.transform.position;
                 Destroy(this.gameObject);
             }
+            else if (gm.layer == 0 || gm.layer == 14)
+            {
+                GameObject fx = Instantiate(_hitEffect);
+                fx.transform.position = this.transform.position;
+                Destroy(this.gameObject);
+            }
         }
         else
         {
@@ -74,8 +80,13 @@ public class Bullet_straight : MonoBehaviour
                 fx.transform.position = this.transform.position;
                 Destroy(this.gameObject);
             }
+            else if (gm.layer == 0 || gm.layer == 14)
+            {
+                GameObject fx = Instantiate(_hitEffect);
+                fx.transform.position = this.transform.position;
+                Destroy(this.gameObject);
+            }
         }
-
     }
 
     public void setExtraDamage(int _level)

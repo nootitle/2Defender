@@ -534,6 +534,7 @@ public class Player : MonoBehaviour
         _hpBar.GetComponent<HpBar>().setHpBar(0);
         _pc.DieAnim();
         _isDie = true;
+        _rb.constraints = RigidbodyConstraints2D.FreezePositionX;
         _swordFallSE.Play();
         updateUserData();
         _gameOverCanvas.SetActive(true);

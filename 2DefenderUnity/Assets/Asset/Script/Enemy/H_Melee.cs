@@ -41,6 +41,8 @@ public class H_Melee : MonoBehaviour
     public GameObject GetCenter() { return _center; }
 
     [SerializeField] GameObject _dropItem = null;
+    [SerializeField] bool _hasJumpPoints = false;
+    Coroutine _jumpWithPointsCo = null;
 
     void Start()
     {
@@ -152,16 +154,48 @@ public class H_Melee : MonoBehaviour
     {
         if (!_jumpTrigger)
         {
-            if (_jumpCo != null) StopCoroutine(_jumpCo);
-            _jumpCo = StartCoroutine(jumpCoolDownIE());
-            _jumpTrigger = true;
-            _pc.jumpAnim();
-            if(direction == 1)
-                _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
-            else if(direction == -1)
-                _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+            bool flag = true;
+            GameObject next = null;
+            if (_hasJumpPoints)
+            {
+                Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, 2.0f);
+                for (int i = 0; i < co.Length; ++i)
+                {
+                    JumpPoint Jp = co[i].gameObject.GetComponent<JumpPoint>();
+                    if (Jp != null)
+                    {
+                        next = Jp.nextPos();
+                        flag = false;
+                        Debug.Log("포인트 발견");
+                        break;
+                    }
+                }
+            }
+
+            if(flag)
+            {
+                if (_jumpCo != null) StopCoroutine(_jumpCo);
+                _jumpCo = StartCoroutine(jumpCoolDownIE());
+                _jumpTrigger = true;
+                _pc.jumpAnim();
+                if (direction == 1)
+                    _rb.AddForce(Vector3.up * _jumpPower + Vector3.right * 5.0f, ForceMode2D.Impulse);
+                else if (direction == -1)
+                    _rb.AddForce(Vector3.up * _jumpPower + Vector3.left * 5.0f, ForceMode2D.Impulse);
+                else
+                    _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            }
             else
-                _rb.AddForce(Vector3.up * _jumpPower, ForceMode2D.Impulse);
+            {
+                /*
+                if (_jumpCo != null) StopCoroutine(_jumpCo);
+                _jumpCo = StartCoroutine(jumpCoolDownIE());
+                _jumpTrigger = true;
+                _pc.jumpAnim();
+                if (_jumpWithPointsCo != null) StopCoroutine(_jumpWithPointsCo);
+                _jumpWithPointsCo = StartCoroutine(jumpWithPoints(next));
+                */
+            }
         }
     }
 
@@ -195,6 +229,18 @@ public class H_Melee : MonoBehaviour
 
         jumpCoolDown();
     }
+
+    /*IEnumerator jumpWithPoints(GameObject _next)
+    {
+        Debug.Log("특수점프 루틴");
+        while (Vector3.Distance(this.transform.position, _next.transform.position) > 0.2f)
+        {
+            Debug.Log("특수점프 루틴2");
+            yield return new WaitForSeconds(0.1f);
+            this.transform.position = Vector3.Lerp(this.transform.position, _next.transform.position, 2.0f * Time.deltaTime);
+        }
+    }
+    */
 
     IEnumerator sprintTerm()
     {

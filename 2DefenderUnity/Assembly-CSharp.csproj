@@ -65,6 +65,7 @@
     <Compile Include="Assets\Asset\Script\Player\FootStepSE.cs" />
     <Compile Include="Assets\Asset\Script\Alies\Alies_H_Anim.cs" />
     <Compile Include="Assets\Asset\Sprite\Bandits - Pixel Art\Demo\Bandit.cs" />
+    <Compile Include="Assets\Asset\Script\Environment\DeadZone.cs" />
     <Compile Include="Assets\Asset\Script\Manager\DataStreamToStage.cs" />
     <Compile Include="Assets\Asset\Script\Skill\GetSkill.cs" />
     <Compile Include="Assets\Asset\Script\UI\SkillSlotController.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Assets\Asset\Script\Skill\Spawner\DoorSpawner.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_AirBomb.cs" />
     <Compile Include="Assets\Asset\Script\etc\HeroKnight.cs" />
+    <Compile Include="Assets\Asset\Script\Environment\PlatformMove.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Laser.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_straight.cs" />
     <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\ConGUI.cs" />
@@ -173,8 +175,10 @@
     <Compile Include="Assets\Asset\Script\Alies\Alies_H.cs" />
     <Compile Include="Assets\Asset\Script\Manager\CSVReader.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\Environment\PlatformMove.cs" />
-    <Compile Include="Assets\Asset\Script\Environment\DeadZone.cs" />
+    <Compile Include="Assets\Asset\Script\Environment\JumpPoint.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Bat.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Bat_Anim.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Spiral.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />

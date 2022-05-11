@@ -160,6 +160,26 @@ public class Enemy_Hit : MonoBehaviour
                     }
                     break;
                 }
+            case 15:
+                {
+                    if (!this.GetComponent<Bat>().GetDead())
+                    {
+                        this.GetComponent<Bat>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
+                    break;
+                }
+            case 16:
+                {
+                    if (!this.GetComponent<Spiral>().GetDead())
+                    {
+                        this.GetComponent<Spiral>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
+                    break;
+                }
         }
     }
 
@@ -240,6 +260,16 @@ public class Enemy_Hit : MonoBehaviour
             case 14:
                 {
                     this.GetComponent<Boss4>().respawn();
+                    break;
+                }
+            case 15:
+                {
+                    this.GetComponent<Bat>().respawn();
+                    break;
+                }
+            case 16:
+                {
+                    this.GetComponent<Spiral>().respawn();
                     break;
                 }
         }
@@ -324,6 +354,16 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<Boss4>().CallStun(duration);
                     break;
                 }
+            case 15:
+                {
+                    this.GetComponent<Bat>().CallStun(duration);
+                    break;
+                }
+            case 16:
+                {
+                    this.GetComponent<Spiral>().CallStun(duration);
+                    break;
+                }
         }
     }
 
@@ -390,6 +430,14 @@ public class Enemy_Hit : MonoBehaviour
             case 14:
                 {
                     return this.GetComponent<Boss4>().GetCenter();
+                }
+            case 15:
+                {
+                    return this.GetComponent<Bat>().GetCenter();
+                }
+            case 16:
+                {
+                    return this.GetComponent<Spiral>().GetCenter();
                 }
         }
         return null;

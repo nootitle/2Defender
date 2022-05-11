@@ -59,9 +59,10 @@ public class EnemyManager : MonoBehaviour
                 {
                     ++EnemyNum;
                     EnemyList[i].SetActive(true);
-                    EnemyList[i].GetComponent<Enemy_Hit>().respawn();
                     int rnd = Random.Range(0, SpawnPoints.Count - 1);
                     EnemyList[i].transform.position = SpawnPoints[rnd].transform.position;
+                    EnemyList[i].GetComponent<Enemy_Hit>().respawn();
+
                     if (EnemyNum >= maxEnemy)
                         break;
                 }
