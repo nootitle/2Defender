@@ -58,6 +58,7 @@
     <Compile Include="Assets\Resources\DataManager.cs" />
     <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss3.cs" />
     <Compile Include="Assets\Asset\Script\UI\SetSkill.cs" />
+    <Compile Include="Assets\Asset\Script\Environment\JumpPoint.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Lightning.cs" />
     <Compile Include="Assets\Asset\Script\TextScroll\TextScroll_boss4.cs" />
     <Compile Include="Assets\Asset\Script\Player\Player.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Assets\Asset\Script\Enemy\Boss\Boss3.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Plunder.cs" />
     <Compile Include="Assets\Asset\Script\Manager\SoundManager.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Bat.cs" />
     <Compile Include="Assets\Asset\Script\UI\CutInManager.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\BOD_Anim.cs" />
     <Compile Include="Assets\Asset\Script\Manager\ComboManager.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Assets\Asset\Script\Environment\PlatformMove.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Laser.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_straight.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Bat_Anim.cs" />
     <Compile Include="Assets\Asset\Script\etc\KY_effects_Script\ConGUI.cs" />
     <Compile Include="Assets\Asset\Material\Effect\AnimationHelper.cs" />
     <Compile Include="Assets\Asset\Script\Manager\CutSceneManager.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="Assets\Asset\Script\UI\HpBar.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Plunder_Anim.cs" />
     <Compile Include="Assets\Asset\Script\Skill\Bullet\TrackingBullet.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Spiral.cs" />
     <Compile Include="Assets\Asset\Script\Manager\LoginManager.cs" />
     <Compile Include="Assets\Asset\Character\Prototype Hero - Pixel Art\Demo\Sensor_Prototype.cs" />
     <Compile Include="Assets\Asset\Script\Enemy\Slime_Anim.cs" />
@@ -175,19 +179,20 @@
     <Compile Include="Assets\Asset\Script\Alies\Alies_H.cs" />
     <Compile Include="Assets\Asset\Script\Manager\CSVReader.cs" />
     <Compile Include="Assets\Asset\Script\Player\MeleeSE.cs" />
-    <Compile Include="Assets\Asset\Script\Environment\JumpPoint.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\Bat.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\Bat_Anim.cs" />
-    <Compile Include="Assets\Asset\Script\Enemy\Spiral.cs" />
+    <Compile Include="Assets\Asset\Script\Skill\Bullet\Bullet_Missile1.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Boss\Boss5.cs" />
+    <Compile Include="Assets\Asset\Script\Enemy\Boss\Turret.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Asset\Character\Knight Files\Read Me.txt" />
     <None Include="Assets\Asset\Map\2D_Background_SunshineForest\2D_Horizontal_battle_Enviroment_05\Get full backgrounds pack.txt" />
+    <None Include="Assets\2D Space Kit\Backgrounds\Background Tip.txt" />
     <None Include="Assets\Asset\Animation\SpriteSheets\Trap.txt" />
     <None Include="Assets\Asset\Effect\Particle Ribbon by Moonflower Carnivore\readme_Simple_Particle_Ribbon.txt" />
     <None Include="Assets\IdiaSoftware\Blades&amp;Bludgeonings-Free\Documentation-Free.txt" />
     <None Include="Assets\Asset\Sprite\Gothicvania Cemetery Artwork\about.txt" />
     <None Include="Assets\Asset\Animation\Warrior free set\License.txt" />
+    <None Include="Assets\2D Space Kit\Readme.txt" />
     <None Include="Assets\Pixel2DCastleTileset\about.txt" />
     <None Include="Assets\Asset\Sound\ShootingSound\ReadMe.txt" />
     <None Include="Assets\Asset\Map\Cainos\Pixel Art Platformer - Village Props\Changelog.txt" />
@@ -195,12 +200,17 @@
     <None Include="Assets\Asset\Shader\Particle Ribbon by Moonflower Carnivore_Shaders\Particle Alpha Blend HDR.shader" />
     <None Include="Assets\Asset\Shader\NormalMappedSprite-Animated.shader" />
     <None Include="Assets\Asset\Sprite\Martial Hero\License.txt" />
+    <None Include="Assets\2D Space Kit\Background Elements\Planets\Planet Masks\Note.txt" />
     <None Include="Assets\Asset\Sound\FantomMusic\Music\SongList.txt" />
+    <None Include="Assets\2D Space Kit\Background Elements\Stars\Recolor Us!.txt" />
     <None Include="Assets\Asset\UI\Dark_Brown_GUI_kit\Dark_Brown_GUI_kit.txt" />
     <None Include="Assets\Asset\Sound\MentalDreamsAssets\SoldierSoundsPack\ReadMe!.txt" />
+    <None Include="Assets\2D Space Kit\Particles (Sprites)\Note on Flares.txt" />
     <None Include="Assets\Asset\Map\Forest road BG\READ_ME_\READ_ME_.txt" />
+    <None Include="Assets\2D Space Kit\Backgrounds\Fantasy Purple 2048\Note.txt" />
     <None Include="Assets\Asset\Character\Prototype Hero - Pixel Art\ColorSwap\Sprites-ColorSwap.shader" />
     <None Include="Assets\Asset\Sound\Soldier Voice - Military Radio\license.txt" />
+    <None Include="Assets\2D Space Kit\Ships and Stations\Rendering Tip.txt" />
     <None Include="Assets\Asset\Sound\Blade Sounds\Blade Sounds Readme.txt" />
     <None Include="Assets\Asset\Shader\Hovl Studio_Shaders\FireSphere.shader" />
     <None Include="Assets\Asset\Character\Fox\Readme.txt" />

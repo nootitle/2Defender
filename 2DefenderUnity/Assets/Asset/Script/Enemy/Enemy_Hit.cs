@@ -180,6 +180,16 @@ public class Enemy_Hit : MonoBehaviour
                     }
                     break;
                 }
+            case 17:
+                {
+                    if (!this.GetComponent<Turret>().GetDead())
+                    {
+                        this.GetComponent<Turret>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
+                    break;
+                }
         }
     }
 
@@ -270,6 +280,11 @@ public class Enemy_Hit : MonoBehaviour
             case 16:
                 {
                     this.GetComponent<Spiral>().respawn();
+                    break;
+                }
+            case 17:
+                {
+                    this.GetComponent<Turret>().respawn();
                     break;
                 }
         }
@@ -364,6 +379,11 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<Spiral>().CallStun(duration);
                     break;
                 }
+            case 17:
+                {
+                    this.GetComponent<Turret>().CallStun(duration);
+                    break;
+                }
         }
     }
 
@@ -438,6 +458,10 @@ public class Enemy_Hit : MonoBehaviour
             case 16:
                 {
                     return this.GetComponent<Spiral>().GetCenter();
+                }
+            case 17:
+                {
+                    return this.gameObject;
                 }
         }
         return null;

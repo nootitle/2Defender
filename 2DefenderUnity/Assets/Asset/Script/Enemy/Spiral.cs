@@ -174,7 +174,7 @@ public class Spiral : MonoBehaviour
         GameObject gm = Instantiate(_fireBall);
         gm.transform.position = _center.transform.position;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _attack2Distance);
         for(int i = 0; i < co.Length; ++i)
         {
@@ -190,8 +190,6 @@ public class Spiral : MonoBehaviour
                 AL.Hit(_attackDamage);
             }
         }
-
-        yield return new WaitForSeconds(0.5f);
 
         int rnd_x = Random.Range(-10, 10);
         int rnd_y = Random.Range(-10, 10);

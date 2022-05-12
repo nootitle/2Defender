@@ -33514,7 +33514,7 @@ Transform:
   m_GameObject: {fileID: 175022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 5}
   m_Children:
   - {fileID: 417942}
   - {fileID: 402898}
@@ -38261,13 +38261,13 @@ MonoBehaviour:
   _maxHp: 200
   _walkSpeed: 5
   _patrolRange: 10
-  _chaseRange: 4
-  _attackDistance: 4
-  _attack2Distance: 8
+  _chaseRange: 8
+  _attackDistance: 2
+  _attack2Distance: 4
   _attackDelay: 2
   _attackDamage: 15
   _stun: 1
-  _fireBall: {fileID: 175022}
+  _fireBall: {fileID: 3123075737211501182, guid: 852bbc6a862f7af4e85f19180dd628b8, type: 3}
   _hitSE: {fileID: 7559223523976950244}
   _painSE: {fileID: 5363713461559261840}
   _meleeSE: {fileID: 1250968424224121545}

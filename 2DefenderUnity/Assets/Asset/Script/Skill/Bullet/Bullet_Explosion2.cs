@@ -9,6 +9,7 @@ public class Bullet_Explosion2 : MonoBehaviour
     [SerializeField] float _explosionDuration = 5.0f;
     [SerializeField] GameObject _hitFx = null;
     [SerializeField] bool _hitFxExist = false;
+    [SerializeField] bool _isAlies = true;
     Coroutine _co = null;
 
     private void OnEnable()
@@ -21,14 +22,41 @@ public class Bullet_Explosion2 : MonoBehaviour
         Collider2D[] col = Physics2D.OverlapCircleAll(this.transform.position, _radius);
         foreach (Collider2D c in col)
         {
-            Enemy_Hit EH = c.transform.gameObject.GetComponent<Enemy_Hit>();
-            if (EH != null)
+            if(_isAlies)
             {
-                EH.Hit(_splashDamage);
-                if (_hitFxExist)
+                Enemy_Hit EH = c.transform.gameObject.GetComponent<Enemy_Hit>();
+                if (EH != null)
                 {
-                    GameObject gm = Instantiate(_hitFx);
-                    gm.transform.position = c.transform.position;
+                    EH.Hit(_splashDamage);
+                    if (_hitFxExist)
+                    {
+                        GameObject gm = Instantiate(_hitFx);
+                        gm.transform.position = c.transform.position;
+                    }
+                }
+            }
+            else
+            {
+                Player PL = c.gameObject.GetComponent<Player>();
+                if(PL != null)
+                {
+                    PL.Damaged(_splashDamage);
+                    if (_hitFxExist)
+                    {
+                        GameObject gm = Instantiate(_hitFx);
+                        gm.transform.position = c.transform.position;
+                    }
+                }
+
+                Alies AL = c.gameObject.GetComponent<Alies>();
+                if(AL != null)
+                {
+                    AL.Hit(_splashDamage);
+                    if (_hitFxExist)
+                    {
+                        GameObject gm = Instantiate(_hitFx);
+                        gm.transform.position = c.transform.position;
+                    }
                 }
             }
         }
