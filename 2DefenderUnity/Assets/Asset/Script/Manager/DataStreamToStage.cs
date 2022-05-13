@@ -55,6 +55,7 @@ public class DataStreamToStage : MonoBehaviour
             case 2: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 2); break;
             case 3: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 3); break;
             case 4: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 4); break;
+            case 5: PlayerPrefs.SetInt(currentID + "PlayerSetting_Level", 5); break;
         }
     }
 }

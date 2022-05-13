@@ -276,7 +276,7 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        jumpCoolDown();
+        Invoke("jumpCoolDown", 0.1f);
 
         if(_isSliding)
         {

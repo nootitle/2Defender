@@ -149,29 +149,33 @@ public class Bat : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        if(Vector3.Distance(_center.transform.position, _target.transform.position) < _attackDistance)
+        if (!_isDie && !_isStun)
         {
-            if (_target.transform.position.x - _center.transform.position.x > 0)
+            if (Vector3.Distance(_center.transform.position, _target.transform.position) < _attackDistance)
             {
-                if (_reverseFlip) _pc.setFlip(true);
-                else _pc.setFlip(false);
+                if (_target.transform.position.x - _center.transform.position.x > 0)
+                {
+                    if (_reverseFlip) _pc.setFlip(true);
+                    else _pc.setFlip(false);
 
-                GameObject gm = Instantiate(_hitFx);
-                gm.transform.position = _target.transform.position;
-                _player.Damaged(_attackDamage);
-            }
-            else
-            {
-                if (_reverseFlip) _pc.setFlip(false);
-                else _pc.setFlip(true);
+                    GameObject gm = Instantiate(_hitFx);
+                    gm.transform.position = _target.transform.position;
+                    _player.Damaged(_attackDamage);
+                }
+                else
+                {
+                    if (_reverseFlip) _pc.setFlip(false);
+                    else _pc.setFlip(true);
 
-                GameObject gm = Instantiate(_hitFx);
-                gm.transform.position = _target.transform.position;
-                _player.Damaged(_attackDamage);
+                    GameObject gm = Instantiate(_hitFx);
+                    gm.transform.position = _target.transform.position;
+                    _player.Damaged(_attackDamage);
+                }
             }
+            _pc.MoveAnim(0.0f);
         }
+
         _delayCount = 0.0f;
-        _pc.MoveAnim(0.0f);
         _isAttacking = false;
     }
 
@@ -191,26 +195,30 @@ public class Bat : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        Vector3 _angle = Vector3.zero;
-        Vector3 _dir = Vector3.right;
-        for (int i = 0; i < 6; ++i)
+        if (!_isDie && !_isStun)
         {
-            switch (i)
+            Vector3 _angle = Vector3.zero;
+            Vector3 _dir = Vector3.right;
+            for (int i = 0; i < 6; ++i)
             {
-                case 0: _angle = new Vector3(0.0f, 0.0f, 75.0f); _dir = new Vector3(0.8f, 0.5f, 0.0f); break;
-                case 1: _angle = new Vector3(0.0f, 0.0f, 0.0f); _dir = new Vector3(1.0f, 0.0f, 0.0f); break;
-                case 2: _angle = new Vector3(0.0f, 0.0f, -75.0f); _dir = new Vector3(0.8f, -0.50f, 0.0f); break;
-                case 3: _angle = new Vector3(0.0f, 0.0f, 75.0f); _dir = new Vector3(-0.8f, 0.5f, 0.0f); break;
-                case 4: _angle = new Vector3(0.0f, 0.0f, 0.0f); _dir = new Vector3(-1.0f, 0.0f, 0.0f); break;
-                case 5: _angle = new Vector3(0.0f, 0.0f, -75.0f); _dir = new Vector3(-0.8f, -0.5f, 0.0f); break;
-            }
+                switch (i)
+                {
+                    case 0: _angle = new Vector3(0.0f, 0.0f, 75.0f); _dir = new Vector3(0.8f, 0.5f, 0.0f); break;
+                    case 1: _angle = new Vector3(0.0f, 0.0f, 0.0f); _dir = new Vector3(1.0f, 0.0f, 0.0f); break;
+                    case 2: _angle = new Vector3(0.0f, 0.0f, -75.0f); _dir = new Vector3(0.8f, -0.50f, 0.0f); break;
+                    case 3: _angle = new Vector3(0.0f, 0.0f, 75.0f); _dir = new Vector3(-0.8f, 0.5f, 0.0f); break;
+                    case 4: _angle = new Vector3(0.0f, 0.0f, 0.0f); _dir = new Vector3(-1.0f, 0.0f, 0.0f); break;
+                    case 5: _angle = new Vector3(0.0f, 0.0f, -75.0f); _dir = new Vector3(-0.8f, -0.5f, 0.0f); break;
+                }
 
-            GameObject gm = Instantiate(_fireBall);
-            gm.GetComponent<Bullet_straight>().setDirection(_dir, _angle);
-            gm.transform.position = _center.transform.position;
+                GameObject gm = Instantiate(_fireBall);
+                gm.GetComponent<Bullet_straight>().setDirection(_dir, _angle);
+                gm.transform.position = _center.transform.position;
+            }
+            _pc.MoveAnim(0.0f);
         }
+
         _delayCount = 0.0f;
-        _pc.MoveAnim(0.0f);
         _isAttacking = false;
     }
 
@@ -237,7 +245,7 @@ public class Bat : MonoBehaviour
     {
         _pc.DieAnim();
         _isDie = true;
-        _rb.constraints = RigidbodyConstraints2D.None;
+        _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         _rb.AddForce(Vector2.down * 5.0f * Time.deltaTime);
 
         int rnd = Random.Range(0, 100);

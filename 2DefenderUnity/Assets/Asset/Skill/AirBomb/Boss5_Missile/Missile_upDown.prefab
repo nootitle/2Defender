@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8984576466496803721}
   - component: {fileID: 8984576466496803720}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Missile (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: 98be93167ed6cd54d82a8e882da6f3e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -95,13 +95,13 @@ GameObject:
   - component: {fileID: 8984576466916597216}
   - component: {fileID: 8984576466916597215}
   - component: {fileID: 8984576466916597214}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Missile_upDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8984576466916597218
 Transform:
   m_ObjectHideFlags: 0
@@ -288,15 +288,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1080554763449460, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1169958064465980, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1422804397384892, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1845955007268882, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Name
@@ -304,7 +304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1845955007268882, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1845955007268882, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_IsActive
@@ -312,7 +312,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1988778204445182, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4563802948693442, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_RootOrder
@@ -373,6 +373,10 @@ PrefabInstance:
     - target: {fileID: 199424197360268280, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199550515350852312, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 199550515350852312, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Materials.Array.size

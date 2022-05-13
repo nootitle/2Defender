@@ -190,6 +190,16 @@ public class Enemy_Hit : MonoBehaviour
                     }
                     break;
                 }
+            case 18:
+                {
+                    if (!this.GetComponent<Boss5>().GetDead())
+                    {
+                        this.GetComponent<Boss5>().Damaged(value);
+                        ComboManager.Instance.setCombo();
+                        UltBarManager.Instance.updateSlider(4.0f);
+                    }
+                    break;
+                }
         }
     }
 
@@ -285,6 +295,11 @@ public class Enemy_Hit : MonoBehaviour
             case 17:
                 {
                     this.GetComponent<Turret>().respawn();
+                    break;
+                }
+            case 18:
+                {
+                    this.GetComponent<Boss5>().respawn();
                     break;
                 }
         }
@@ -384,6 +399,11 @@ public class Enemy_Hit : MonoBehaviour
                     this.GetComponent<Turret>().CallStun(duration);
                     break;
                 }
+            case 18:
+                {
+                    this.GetComponent<Boss5>().CallStun(duration);
+                    break;
+                }
         }
     }
 
@@ -462,6 +482,10 @@ public class Enemy_Hit : MonoBehaviour
             case 17:
                 {
                     return this.gameObject;
+                }
+            case 18:
+                {
+                    return this.GetComponent<Boss5>().GetCenter();
                 }
         }
         return null;

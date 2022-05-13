@@ -37,6 +37,7 @@ public class Boss5 : MonoBehaviour
     Player _player = null;
 
     [SerializeField] GameObject _grenade = null;
+    [SerializeField] GameObject _beam = null;
 
     public GameObject GetCenter() { return _center; }
 
@@ -53,7 +54,6 @@ public class Boss5 : MonoBehaviour
     Coroutine _superArmorCo = null;
     bool _superArmorBroken = false;
     [SerializeField] AudioSource _superArmorSE = null;
-    [SerializeField] SpriteRenderer _shieldObject = null;
 
     [SerializeField] GameObject _clearCanvas = null;
 
@@ -86,8 +86,6 @@ public class Boss5 : MonoBehaviour
     {
         _isAppear = true;
         _bossCanvas.SetActive(true);
-        _shieldObject.color = new Color(_shieldObject.color.r,
-            _shieldObject.color.g, _shieldObject.color.b, 0.0f);
         SoundManager.Instance.playBossBGM();
         Invoke("appearEnd", 4.0f);
 
@@ -98,7 +96,14 @@ public class Boss5 : MonoBehaviour
     void Update()
     {
         if (_isDie) return;
-        if (_isAppear) return;
+        if (_isAppear)
+        {
+            if (this.transform.position.y < 8.4f)
+                this.transform.position += Vector3.up * 5.0f * Time.deltaTime;
+            else
+                this.transform.position = new Vector3(this.transform.position.x, 8.4f, this.transform.position.z);
+            return;
+        }
         if (_isStun) return;
         if (_isAttacking) return;
         if (StageManager.Instance.pause) return;
@@ -128,8 +133,6 @@ public class Boss5 : MonoBehaviour
     void appearEnd()
     {
         _isAppear = false;
-        _shieldObject.color = new Color(_shieldObject.color.r,
-            _shieldObject.color.g, _shieldObject.color.b, 1.0f);
     }
 
     private void Moving()
@@ -150,6 +153,7 @@ public class Boss5 : MonoBehaviour
         if (_delayCount >= _attackDelay)
         {
             _isAttacking = true;
+            _beam.SetActive(true);
 
             if (_extraHitCo != null) StopCoroutine(_extraHitCo);
             _extraHitCo = StartCoroutine(ExtraHit());
@@ -158,7 +162,7 @@ public class Boss5 : MonoBehaviour
 
     IEnumerator ExtraHit()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         _isAttacking = false;
         _delayCount = 0.0f;
@@ -181,7 +185,7 @@ public class Boss5 : MonoBehaviour
         yield return new WaitForSeconds(0.8f);
 
         _fireSE2.Play();
-        for (int i = 0; i < 3; ++i)
+        for (int i = 0; i < 5; ++i)
         {
             GameObject gm = Instantiate(_grenade);
             gm.transform.position = _throwPosition.transform.position;
@@ -189,11 +193,11 @@ public class Boss5 : MonoBehaviour
 
             if (_target.transform.position.x - _center.transform.position.x > 0)
             {
-                _gmRb.AddForce(Vector3.up * (2.0f * i) + Vector3.right * 30.0f, ForceMode2D.Impulse);
+                _gmRb.AddForce(Vector3.up * (1.0f * i) + Vector3.right * (0.5f * i), ForceMode2D.Impulse);
             }
             else
             {
-                _gmRb.AddForce(Vector3.up * (2.0f * i) + Vector3.left * 30.0f, ForceMode2D.Impulse);
+                _gmRb.AddForce(Vector3.up * (1.0f * i) + Vector3.left * (0.5f * i), ForceMode2D.Impulse);
             }
         }
 
@@ -241,16 +245,12 @@ public class Boss5 : MonoBehaviour
         {
             _superArmor -= value;
             superArmorSlider.value = _superArmor;
-            _shieldObject.color = new Color(_shieldObject.color.r,
-                _shieldObject.color.g, _shieldObject.color.b, _superArmor / _MaxSuperArmor);
         }
         else
         {
             if (_superArmor > 0)
             {
                 value -= _superArmor;
-                _shieldObject.color = new Color(_shieldObject.color.r,
-                    _shieldObject.color.g, _shieldObject.color.b, _superArmor / _MaxSuperArmor);
 
                 if (!_superArmorBroken)
                 {
@@ -301,8 +301,6 @@ public class Boss5 : MonoBehaviour
             _superArmorMaden -= 10;
             _superArmor += 10;
             superArmorSlider.value = _superArmor;
-            _shieldObject.color = new Color(_shieldObject.color.r,
-                _shieldObject.color.g, _shieldObject.color.b, _superArmor / _MaxSuperArmor);
         }
         _superArmorBroken = false;
         _superArmorFx.SetActive(false);

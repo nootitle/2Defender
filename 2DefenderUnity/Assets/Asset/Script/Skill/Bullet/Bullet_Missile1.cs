@@ -12,22 +12,26 @@ public class Bullet_Missile1 : MonoBehaviour
     bool _start = false;
     bool _turnDir = false;
     float _rotatePower = 50.0f;
-    Coroutine _co = null;
     [SerializeField] Rigidbody2D _rb = null;
 
     private void Start()
     {
         _rb = this.GetComponent<Rigidbody2D>();
-    }
-
-    private void OnEnable()
-    {
-        _explosion.SetActive(false);
-        _bulletBody.SetActive(true);
         _start = true;
 
-        if (_co != null) StopCoroutine(_co);
-        StartCoroutine(Turning());
+        int rnd = Random.Range(0, 100);
+        if (rnd < 50)
+        {
+            _turnDir = false;
+            _rotatePower = 50.0f;
+            _rb.AddForce(Vector2.left * _turnPower + Vector2.up * _turnPower, ForceMode2D.Impulse);
+        }
+        else
+        {
+            _turnDir = true;
+            _rotatePower = 50.0f;
+            _rb.AddForce(Vector2.right * _turnPower + Vector2.up * _turnPower, ForceMode2D.Impulse);
+        }
     }
 
     private void Update()
@@ -51,40 +55,14 @@ public class Bullet_Missile1 : MonoBehaviour
             _bulletBody.SetActive(false);
             _explosion.SetActive(true);
             _start = false;
-            if (_co != null) StopCoroutine(_co);
+            StartCoroutine(selfDestroy());
         }
     }
-    IEnumerator Turning()
+
+    IEnumerator selfDestroy()
     {
-        int rnd = Random.Range(0, 100);
-        if(rnd < 50)
-        {
-            _turnDir = false;
-            _rotatePower = 50.0f;
-            _rb.AddForce(Vector2.left * _turnPower + Vector2.up * _turnPower, ForceMode2D.Impulse);
-        }
-        else
-        {
-            _turnDir = true;
-            _rotatePower = 50.0f;
-            _rb.AddForce(Vector2.right * _turnPower + Vector2.up * _turnPower, ForceMode2D.Impulse);
-        }
+        yield return new WaitForSeconds(1.0f);
 
-        yield return new WaitForSeconds(_turnTime);
-
-        /*
-        if (rnd < 50)
-        {
-            _turnDir = true;
-            _rotatePower = 200.0f;
-            _rb.AddForce(Vector2.right * _turnPower, ForceMode2D.Impulse);
-        }
-        else
-        {
-            _turnDir = false;
-            _rotatePower = 200.0f;
-            _rb.AddForce(Vector2.left * _turnPower, ForceMode2D.Impulse);
-        }
-        */
+        Destroy(this.gameObject);
     }
 }

@@ -46,7 +46,7 @@ public class Turret : MonoBehaviour
                 GameObject gm = Instantiate(_bullet);
                 gm.transform.position = this.transform.position;
                 gm.GetComponent<Bullet_straight>().setDirection(dir);
-                gm.transform.eulerAngles = eulerCalc;
+                gm.transform.up = eulerCalc;
             }
             if (_fireFx != null)
                 _fireFx.SetActive(true);
@@ -62,16 +62,23 @@ public class Turret : MonoBehaviour
     {
         if(_target != null)
         {
-            Vector3 dir = _target.transform.position - this.transform.position;
+            Vector3 dir = new Vector3(_target.transform.position.x - this.transform.position.x, _target.transform.position.y - this.transform.position.y, 0.0f);
             dir.Normalize();
-            float angle = Vector3.Angle(Vector3.left, dir);
-            eulerCalc = new Vector3(this.transform.eulerAngles.x, this.transform.eulerAngles.y, angle + 90.0f);
+            /*
+            float angle;
+            if (_target.transform.position.y > this.transform.position.y)
+                angle = Vector3.Angle(Vector3.left, dir);
+            else
+                angle = Mathf.Abs(Vector3.Angle(Vector3.left, dir) + 90.0f);
+            eulerCalc = new Vector3(this.transform.eulerAngles.x, this.transform.eulerAngles.y, angle);
+            */
+            eulerCalc = dir;
         }
     }
 
     void LookAtTarget()
     {
-        this.transform.eulerAngles = Vector3.Lerp(this.transform.eulerAngles, eulerCalc, 2.0f * Time.deltaTime);
+        this.transform.up = Vector3.Lerp(this.transform.up, eulerCalc, 5.0f * Time.deltaTime);
     }
 
     public void Damaged(float value)

@@ -13,12 +13,10 @@ public class Lightning : MonoBehaviour
     public void fire(GameObject _shooter)
     {
         _se.Play();
+        _head.SetActive(true);
         float rnd = Random.Range(-20.0f, 20.0f);
         this.transform.position = new Vector3(_shooter.transform.position.x
-            + rnd, _shooter.transform.position.y + 10.0f, _shooter.transform.position.z);
-
-        if (_co != null) StopCoroutine(_co);
-        _co = StartCoroutine(selfDestroy());
+            + rnd, _shooter.transform.position.y + 10.0f, _shooter.transform.position.z);    
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -32,14 +30,17 @@ public class Lightning : MonoBehaviour
             pl.Damaged(_damage);
         }
 
+        _head.SetActive(false);
         if (_co != null) StopCoroutine(_co);
-        this.gameObject.SetActive(false);
+        _co = StartCoroutine(selfDestroy());
     }
     
     IEnumerator selfDestroy()
     {
-        yield return new WaitForSeconds(10.0f);
+        yield return new WaitForSeconds(1.0f);
 
+        _fx.SetActive(false);
+        _head.SetActive(true);
         this.gameObject.SetActive(false);
     }
 }

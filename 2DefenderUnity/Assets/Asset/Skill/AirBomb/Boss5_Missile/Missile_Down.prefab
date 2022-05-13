@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: 42db57cf6647faf4b9eae8778204ed4d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -93,9 +93,9 @@ GameObject:
   - component: {fileID: 2065201428815305347}
   - component: {fileID: 2065201428815305346}
   - component: {fileID: 2065201428815305349}
-  - component: {fileID: 2065201428815305348}
+  - component: {fileID: 4305377785119510553}
   - component: {fileID: 2065201428815305351}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Missile_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
---- !u!114 &2065201428815305348
+--- !u!114 &4305377785119510553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,12 +174,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2065201428815305350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 759cfcb1cc2673f49a3a5a4883875155, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cf0f2006221efe46ba3458c3b7e49d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletBody: {fileID: 2065201428276834675}
-  _explosion: {fileID: 2067045727127914945}
-  _SE: {fileID: 2065201428815305351}
+  _fx: {fileID: 2067045727127914945}
+  _head: {fileID: 2065201428276834675}
+  _damage: 10
+  _se: {fileID: 2065201428815305351}
 --- !u!82 &2065201428815305351
 AudioSource:
   m_ObjectHideFlags: 0
@@ -283,13 +284,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2065201428815305347}
     m_Modifications:
+    - target: {fileID: 1080554763449460, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1169958064465980, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1422804397384892, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1845955007268882, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Name
       value: Explosion 1
       objectReference: {fileID: 0}
     - target: {fileID: 1845955007268882, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845955007268882, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1988778204445182, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4563802948693442, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_RootOrder
@@ -350,6 +371,10 @@ PrefabInstance:
     - target: {fileID: 199424197360268280, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199550515350852312, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
+      propertyPath: m_SortingOrder
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 199550515350852312, guid: 372cc4e8958026c45ae5e9517a36a079, type: 3}
       propertyPath: m_Materials.Array.size

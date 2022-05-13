@@ -137,21 +137,25 @@ public class Spiral : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        if (Vector3.Distance(_center.transform.position, _target.transform.position) < _attackDistance)
+        if(!_isDie && !_isStun)
         {
-            if (_target.transform.position.x - _center.transform.position.x > 0)
+            if (Vector3.Distance(_center.transform.position, _target.transform.position) < _attackDistance)
             {
-                GameObject gm = Instantiate(_hitFx);
-                gm.transform.position = _target.transform.position;
-                _player.Damaged(_attackDamage);
-            }
-            else
-            {
-                GameObject gm = Instantiate(_hitFx);
-                gm.transform.position = _target.transform.position;
-                _player.Damaged(_attackDamage);
+                if (_target.transform.position.x - _center.transform.position.x > 0)
+                {
+                    GameObject gm = Instantiate(_hitFx);
+                    gm.transform.position = _target.transform.position;
+                    _player.Damaged(_attackDamage);
+                }
+                else
+                {
+                    GameObject gm = Instantiate(_hitFx);
+                    gm.transform.position = _target.transform.position;
+                    _player.Damaged(_attackDamage);
+                }
             }
         }
+
         _delayCount = 0.0f;
         _isAttacking = false;
     }
@@ -171,30 +175,33 @@ public class Spiral : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        GameObject gm = Instantiate(_fireBall);
-        gm.transform.position = _center.transform.position;
-
-        yield return new WaitForSeconds(1.0f);
-        Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _attack2Distance);
-        for(int i = 0; i < co.Length; ++i)
+        if (!_isDie && !_isStun)
         {
-            Player PL = co[i].GetComponent<Player>();
-            if(PL != null)
+            GameObject gm = Instantiate(_fireBall);
+            gm.transform.position = _center.transform.position;
+
+            yield return new WaitForSeconds(1.0f);
+            Collider2D[] co = Physics2D.OverlapCircleAll(this.transform.position, _attack2Distance);
+            for (int i = 0; i < co.Length; ++i)
             {
-                PL.Damaged(_attackDamage);
+                Player PL = co[i].GetComponent<Player>();
+                if (PL != null)
+                {
+                    PL.Damaged(_attackDamage);
+                }
+
+                Alies AL = co[i].GetComponent<Alies>();
+                if (AL != null)
+                {
+                    AL.Hit(_attackDamage);
+                }
             }
 
-            Alies AL = co[i].GetComponent<Alies>();
-            if(AL != null)
-            {
-                AL.Hit(_attackDamage);
-            }
+            int rnd_x = Random.Range(-10, 10);
+            int rnd_y = Random.Range(-10, 10);
+
+            this.transform.position += new Vector3(rnd_x, rnd_y, 0.0f);
         }
-
-        int rnd_x = Random.Range(-10, 10);
-        int rnd_y = Random.Range(-10, 10);
-
-        this.transform.position += new Vector3(rnd_x, rnd_y, 0.0f);
 
         _delayCount = 0.0f;
         _isAttacking = false;
@@ -223,7 +230,7 @@ public class Spiral : MonoBehaviour
     void Die()
     {
         _isDie = true;
-        _rb.constraints = RigidbodyConstraints2D.None;
+        _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         _rb.AddForce(Vector2.down * 5.0f * Time.deltaTime);
 
         int rnd = Random.Range(0, 100);
